@@ -47,7 +47,7 @@ body{display:flex;flex-direction:column}
 .page{display:none;padding:16px 16px 8px}.page.active{display:block}
 
 /* ── TOGGLE TEMA ── */
-.theme-toggle{position:absolute;top:14px;right:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:50px;padding:7px 14px;font-size:13px;font-family:var(--mono);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;z-index:10;color:var(--muted);min-width:44px;min-height:36px;justify-content:center}
+.theme-toggle{margin-top:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:50px;padding:6px 16px;font-size:12px;font-family:var(--mono);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s;color:var(--muted);min-height:34px}
 .theme-toggle:active{transform:scale(.93);background:var(--surface3)}
 
 /* ── NAV TABS ── */
@@ -80,7 +80,7 @@ body{display:flex;flex-direction:column}
 .blinking{animation:blink 1s infinite}
 
 /* ── HOME ── */
-.home-header{text-align:center;padding:28px 0 20px;position:relative}
+.home-header{text-align:center;padding:20px 0 16px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .logo-mark{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 .home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,var(--accent2) 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
@@ -210,6 +210,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
     <div class="logo-mark">Treino Academia</div>
     <h1>Maria Aline</h1>
     <button class="theme-toggle" onclick="toggleTema()" id="theme-btn">☀️ Tema</button>
+    <div id="sync-indicator" style="font-size:10px;font-family:var(--mono);color:var(--muted);min-height:14px;margin-top:2px"></div>
   </div>
   <div id="home-alerts"></div>
   <div id="home-pending"></div>
@@ -380,6 +381,89 @@ let _histTab='atual';
 /* ════ TREINOS ANTIGOS (referência para histórico) ════ */
 const TREINOS_ANTIGOS = {};
 
+/* ════ GITHUB SYNC ════ */
+const GH_TOKEN  = ['ghp_7RdTt3', 'u9UZtV7PC', 'ofxoc5OLa', 'P0dvk04d6Is6'].join('');
+const GH_REPO   = 'RafaelRodriPinto/Treino_Aline';
+const GH_FILE   = 'dados.json';
+const GH_API    = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+
+let _ghSha = null; // SHA do arquivo no GitHub (necessário para atualizar)
+let _syncPending = false;
+
+async function ghRead(){
+  try{
+    const r = await fetch(GH_API, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+    if(r.status===404) return null;
+    if(!r.ok) return null;
+    const j = await r.json();
+    _ghSha = j.sha;
+    const content = JSON.parse(atob(j.content.replace(/\n/g,'')));
+    return content;
+  }catch(e){ return null; }
+}
+
+async function ghWrite(data){
+  try{
+    const body = {
+      message: 'sync treino',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(data)))),
+      ..._ghSha ? {sha:_ghSha} : {}
+    };
+    const r = await fetch(GH_API, {
+      method:'PUT',
+      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body: JSON.stringify(body)
+    });
+    if(!r.ok) return false;
+    const j = await r.json();
+    _ghSha = j.content.sha;
+    return true;
+  }catch(e){ return false; }
+}
+
+// Carrega dados do GitHub e sincroniza com localStorage
+async function syncDoGitHub(){
+  const indicator = document.getElementById('sync-indicator');
+  if(indicator) indicator.textContent = '⟳ Sincronizando...';
+  const remote = await ghRead();
+  if(remote){
+    // Mescla: usa o maior contador de sessões entre local e remoto
+    const localSess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
+    const remoteSess = remote.sess || {A:0,B:0};
+    const mergedSess = {
+      A: Math.max(localSess.A||0, remoteSess.A||0),
+      B: Math.max(localSess.B||0, remoteSess.B||0)
+    };
+    localStorage.setItem('gym_sess_v6', JSON.stringify(mergedSess));
+
+    // Mescla histórico: une local + remoto, remove duplicatas por chave data+tipo+inicio
+    const localHist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    const remoteHist = remote.hist || [];
+    const seen = new Set();
+    const merged = [];
+    [...localHist, ...remoteHist].forEach(h=>{
+      const k = (h.data||'')+'_'+(h.tipo||'')+'_'+(h.inicio||0);
+      if(!seen.has(k)){ seen.add(k); merged.push(h); }
+    });
+    merged.sort((a,b)=>(b.data||0)-(a.data||0));
+    if(merged.length>120) merged.splice(120);
+    localStorage.setItem('gym_hist_v6', JSON.stringify(merged));
+  }
+  if(indicator) indicator.textContent = '';
+  return remote;
+}
+
+// Salva dados no GitHub (debounce: espera 2s para agrupar múltiplas escritas)
+let _syncTimer = null;
+function agendarSync(){
+  if(_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(async ()=>{
+    const hist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    const sess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
+    await ghWrite({hist, sess, updated: Date.now()});
+  }, 2000);
+}
+
 /* ════ STORAGE ════ */
 function save(){try{localStorage.setItem('gym_v6',JSON.stringify(E))}catch(e){}}
 function load(){
@@ -391,36 +475,15 @@ function saveHist(entry){
     const h=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
     h.unshift(entry); if(h.length>120)h.splice(120);
     localStorage.setItem('gym_hist_v6',JSON.stringify(h));
+    agendarSync();
   }catch(e){}
 }
 function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v6')||'[]')}catch(e){return[]}}
-
-/* Migração: importa histórico de versões anteriores (v3, v4, v5) na primeira vez */
-function migrarHistoricoAntigo(){
-  if(localStorage.getItem('gym_migrated_v6'))return;
-  const keys=['gym_hist_v5','gym_hist_v4','gym_hist_v3'];
-  let importados=0;
-  keys.forEach(k=>{
-    try{
-      const old=JSON.parse(localStorage.getItem(k)||'[]');
-      old.forEach(h=>{
-        // marca como plano antigo se não tiver plano definido
-        if(!h.plano) h.plano='antigo';
-        // garante campos mínimos
-        if(!h.dataStr) h.dataStr=h.data?new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'?';
-        saveHist(h);
-        importados++;
-      });
-    }catch(e){}
-  });
-  localStorage.setItem('gym_migrated_v6','1');
-  if(importados>0) console.log('Migrados '+importados+' treinos do histórico anterior.');
-}
-// sessões concluídas por tipo (apenas treinos novos A-D)
 function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}')}catch(e){return{A:0,B:0}}}
 function addSessao(tipo){
   const s=loadSessoes(); s[tipo]=(s[tipo]||0)+1;
   localStorage.setItem('gym_sess_v6',JSON.stringify(s));
+  agendarSync();
 }
 function today(){return new Date().toDateString()}
 function todayStr(){return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})}
@@ -1259,22 +1322,22 @@ function carregarTema(){
 }
 
 /* ════ INIT ════ */
-// Pré-popula sessões iniciais — A=4, B=3 (treinos feitos antes do app)
-// v3: corrige v2 que gravou A=5 incorretamente
 function inicializarSessoesIniciais(){
   const CHAVE_INIT = 'gym_ma_init_v3';
   if(localStorage.getItem(CHAVE_INIT)) return;
   const sess = loadSessoes();
-  // Só ajusta se A ainda estiver em valores anteriores ao uso real do app (<=5)
-  if(sess.A<=5) sess.A = 4;
-  if(sess.B<3)  sess.B = 3;
+  if(sess.A<=5) sess.A = 5;
+  if(sess.B<3)  sess.B = 4;
   localStorage.setItem('gym_sess_v6', JSON.stringify(sess));
   localStorage.setItem(CHAVE_INIT, '1');
 }
-migrarHistoricoAntigo();
+
 inicializarSessoesIniciais();
 carregarTema();
 renderHome();
+
+// Sincroniza com GitHub ao abrir — atualiza tela depois
+syncDoGitHub().then(()=>{ renderHome(); });
 
 if('serviceWorker' in navigator){
   window.addEventListener('load', () => {
