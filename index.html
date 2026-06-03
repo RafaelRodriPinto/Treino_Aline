@@ -209,8 +209,11 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
   <div class="home-header">
     <div class="logo-mark">Treino Academia</div>
     <h1>Maria Aline</h1>
-    <button class="theme-toggle" onclick="toggleTema()" id="theme-btn">☀️ Tema</button>
-    <div id="sync-indicator" style="font-size:10px;font-family:var(--mono);color:var(--muted);min-height:14px;margin-top:2px"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;justify-content:center">
+      <button class="theme-toggle" onclick="abrirModalBackup()" id="backup-cloud-btn">☁️ Backup</button>
+      <button class="theme-toggle" onclick="toggleTema()" id="theme-btn">☀️ Tema</button>
+    </div>
+    <div id="sync-indicator" style="font-size:10px;font-family:var(--mono);color:var(--muted);min-height:14px;margin-top:4px"></div>
   </div>
   <div id="home-alerts"></div>
   <div id="home-pending"></div>
@@ -382,38 +385,37 @@ let _histTab='atual';
 const TREINOS_ANTIGOS = {};
 
 /* ════ GITHUB SYNC ════ */
-const GH_TOKEN  = ['ghp_7RdTt3', 'u9UZtV7PC', 'ofxoc5OLa', 'P0dvk04d6Is6'].join('');
-const GH_REPO   = 'RafaelRodriPinto/Treino_Aline';
-const GH_FILE   = 'dados.json';
-const GH_API    = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+const GH_REPO = 'RafaelRodriPinto/Treino_Aline';
+const GH_FILE = 'dados.json';
+const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
 
-let _ghSha = null; // SHA do arquivo no GitHub (necessário para atualizar)
-let _syncPending = false;
+function getToken(){ return localStorage.getItem('gym_ma_gh_token')||''; }
+function saveToken(t){ localStorage.setItem('gym_ma_gh_token', t.trim()); }
+
+let _ghSha = null;
+let _syncTimer = null;
 
 async function ghRead(){
+  const token = getToken(); if(!token) return null;
   try{
-    const r = await fetch(GH_API, {headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json'}});
+    const r = await fetch(GH_API, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
     if(r.status===404) return null;
     if(!r.ok) return null;
     const j = await r.json();
     _ghSha = j.sha;
-    const content = JSON.parse(atob(j.content.replace(/\n/g,'')));
-    return content;
+    return JSON.parse(atob(j.content.replace(/\n/g,'')));
   }catch(e){ return null; }
 }
 
 async function ghWrite(data){
+  const token = getToken(); if(!token) return false;
   try{
     const body = {
-      message: 'sync treino',
+      message:'sync treino',
       content: btoa(unescape(encodeURIComponent(JSON.stringify(data)))),
-      ..._ghSha ? {sha:_ghSha} : {}
+      ...(_ghSha ? {sha:_ghSha} : {})
     };
-    const r = await fetch(GH_API, {
-      method:'PUT',
-      headers:{'Authorization':'token '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
+    const r = await fetch(GH_API,{method:'PUT',headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
     if(!r.ok) return false;
     const j = await r.json();
     _ghSha = j.content.sha;
@@ -421,47 +423,79 @@ async function ghWrite(data){
   }catch(e){ return false; }
 }
 
-// Carrega dados do GitHub e sincroniza com localStorage
-async function syncDoGitHub(){
-  const indicator = document.getElementById('sync-indicator');
-  if(indicator) indicator.textContent = '⟳ Sincronizando...';
+function setSyncStatus(msg, color){
+  const el = document.getElementById('sync-indicator');
+  if(el){ el.textContent = msg; el.style.color = color||'var(--muted)'; }
+}
+
+async function syncDoGitHub(mostrarStatus){
+  if(!getToken()){ if(mostrarStatus) setSyncStatus('⚠️ Token não configurado','var(--amber)'); return null; }
+  if(mostrarStatus) setSyncStatus('⟳ Sincronizando...');
   const remote = await ghRead();
   if(remote){
-    // Mescla: usa o maior contador de sessões entre local e remoto
     const localSess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
-    const remoteSess = remote.sess || {A:0,B:0};
-    const mergedSess = {
-      A: Math.max(localSess.A||0, remoteSess.A||0),
-      B: Math.max(localSess.B||0, remoteSess.B||0)
-    };
-    localStorage.setItem('gym_sess_v6', JSON.stringify(mergedSess));
-
-    // Mescla histórico: une local + remoto, remove duplicatas por chave data+tipo+inicio
+    const remoteSess = remote.sess||{A:0,B:0};
+    const mergedSess = { A:Math.max(localSess.A||0,remoteSess.A||0), B:Math.max(localSess.B||0,remoteSess.B||0) };
+    localStorage.setItem('gym_sess_v6',JSON.stringify(mergedSess));
     const localHist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
-    const remoteHist = remote.hist || [];
+    const remoteHist = remote.hist||[];
     const seen = new Set();
     const merged = [];
-    [...localHist, ...remoteHist].forEach(h=>{
-      const k = (h.data||'')+'_'+(h.tipo||'')+'_'+(h.inicio||0);
-      if(!seen.has(k)){ seen.add(k); merged.push(h); }
+    [...localHist,...remoteHist].forEach(h=>{
+      const k=(h.data||'')+'_'+(h.tipo||'')+'_'+(h.inicio||0);
+      if(!seen.has(k)){seen.add(k);merged.push(h);}
     });
     merged.sort((a,b)=>(b.data||0)-(a.data||0));
     if(merged.length>120) merged.splice(120);
-    localStorage.setItem('gym_hist_v6', JSON.stringify(merged));
+    localStorage.setItem('gym_hist_v6',JSON.stringify(merged));
+    if(mostrarStatus) setSyncStatus('✓ Sincronizado','var(--green)');
+    setTimeout(()=>setSyncStatus(''),3000);
+  } else {
+    if(mostrarStatus) setSyncStatus('⚠️ Sem conexão','var(--amber)');
+    setTimeout(()=>setSyncStatus(''),3000);
   }
-  if(indicator) indicator.textContent = '';
   return remote;
 }
 
-// Salva dados no GitHub (debounce: espera 2s para agrupar múltiplas escritas)
-let _syncTimer = null;
+async function restaurarDoGitHub(){
+  setSyncStatus('⟳ Restaurando...');
+  const remote = await ghRead();
+  if(!remote){ setSyncStatus('⚠️ Nada encontrado no GitHub','var(--amber)'); setTimeout(()=>setSyncStatus(''),3000); return; }
+  if(remote.sess) localStorage.setItem('gym_sess_v6',JSON.stringify(remote.sess));
+  if(remote.hist) localStorage.setItem('gym_hist_v6',JSON.stringify(remote.hist));
+  setSyncStatus('✓ Histórico restaurado!','var(--green)');
+  setTimeout(()=>setSyncStatus(''),3000);
+  renderHome();
+  fecharModalBackup();
+}
+
 function agendarSync(){
   if(_syncTimer) clearTimeout(_syncTimer);
-  _syncTimer = setTimeout(async ()=>{
+  _syncTimer = setTimeout(async()=>{
     const hist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
     const sess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
-    await ghWrite({hist, sess, updated: Date.now()});
+    const ok = await ghWrite({hist,sess,updated:Date.now()});
+    if(ok) setSyncStatus('✓ Salvo no GitHub','var(--green)');
+    else   setSyncStatus('⚠️ Falha ao salvar','var(--amber)');
+    setTimeout(()=>setSyncStatus(''),3000);
   }, 2000);
+}
+
+/* ── MODAL BACKUP ── */
+function abrirModalBackup(){
+  const token = getToken();
+  document.getElementById('backup-token-input').value = token;
+  document.getElementById('backup-status').textContent = token ? '✅ Token configurado' : 'Nenhum token salvo ainda.';
+  document.getElementById('modal-backup').classList.remove('hidden');
+}
+function fecharModalBackup(){ document.getElementById('modal-backup').classList.add('hidden'); }
+function salvarToken(){
+  const val = document.getElementById('backup-token-input').value.trim();
+  if(!val){ document.getElementById('backup-status').textContent='⚠️ Cole o token antes de salvar.'; return; }
+  saveToken(val);
+  document.getElementById('backup-status').textContent='✅ Token salvo!';
+  document.getElementById('backup-cloud-btn').textContent='☁️';
+  syncDoGitHub(true).then(()=>renderHome());
 }
 
 /* ════ STORAGE ════ */
@@ -1336,14 +1370,38 @@ inicializarSessoesIniciais();
 carregarTema();
 renderHome();
 
-// Sincroniza com GitHub ao abrir — atualiza tela depois
-syncDoGitHub().then(()=>{ renderHome(); });
+// Atualiza ícone do backup conforme token salvo
+if(getToken()) document.getElementById('backup-cloud-btn').textContent='✅ Backup';
+
+// Sincroniza ao abrir se tiver token
+if(getToken()){
+  syncDoGitHub(true).then(()=>renderHome());
+}
 
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
 </script>
+<!-- ══ MODAL BACKUP ══ -->
+<div class="modal-overlay hidden" id="modal-backup" onclick="if(event.target===this)fecharModalBackup()">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3>☁️ Backup GitHub</h3>
+      <button class="modal-close" onclick="fecharModalBackup()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">Cole o seu <b style="color:var(--text)">Personal Access Token</b> do GitHub. Ele fica salvo só no seu celular — nunca vai para o código.</p>
+      <div class="field" style="margin-bottom:12px">
+        <label>Token do GitHub</label>
+        <input type="password" id="backup-token-input" placeholder="ghp_..." style="font-size:13px;padding:10px">
+      </div>
+      <button class="btn btn-primary" onclick="salvarToken()" style="margin-bottom:8px">Salvar token</button>
+      <button class="btn btn-green" onclick="restaurarDoGitHub()" style="margin-bottom:8px">Restaurar histórico do GitHub</button>
+      <button class="btn btn-ghost" onclick="fecharModalBackup()">Fechar</button>
+      <p id="backup-status" style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px;min-height:18px"></p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
