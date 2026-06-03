@@ -385,9 +385,10 @@ let _histTab='atual';
 const TREINOS_ANTIGOS = {};
 
 /* ════ GITHUB SYNC ════ */
-const GH_REPO = 'RafaelRodriPinto/Treino_Aline';
-const GH_FILE = 'dados.json';
-const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+const GH_USER  = 'RafaelRodriPinto';
+const GH_REPO  = 'Treino_Aline';
+const GH_FILE  = 'historico.json';
+const GH_API   = 'https://api.github.com/repos/'+GH_USER+'/'+GH_REPO+'/contents/'+GH_FILE;
 
 function getToken(){ return localStorage.getItem('gym_ma_gh_token')||''; }
 function saveToken(t){ localStorage.setItem('gym_ma_gh_token', t.trim()); }
@@ -399,12 +400,14 @@ async function ghRead(){
   const token = getToken(); if(!token) return null;
   try{
     const r = await fetch(GH_API, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
-    if(r.status===404) return null;
-    if(!r.ok) return null;
+    if(r.status===401){ setSyncStatus('⚠️ Token inválido ou expirado','var(--red)'); return null; }
+    if(r.status===403){ setSyncStatus('⚠️ Token sem permissão (precisa de repo)','var(--red)'); return null; }
+    if(r.status===404){ _ghSha=null; return null; } // arquivo ainda não existe — ok
+    if(!r.ok){ setSyncStatus('⚠️ Erro GitHub: '+r.status,'var(--amber)'); return null; }
     const j = await r.json();
     _ghSha = j.sha;
     return JSON.parse(atob(j.content.replace(/\n/g,'')));
-  }catch(e){ return null; }
+  }catch(e){ setSyncStatus('⚠️ Sem conexão com GitHub','var(--amber)'); return null; }
 }
 
 async function ghWrite(data){
@@ -448,11 +451,17 @@ async function syncDoGitHub(mostrarStatus){
     merged.sort((a,b)=>(b.data||0)-(a.data||0));
     if(merged.length>120) merged.splice(120);
     localStorage.setItem('gym_hist_v6',JSON.stringify(merged));
-    if(mostrarStatus) setSyncStatus('✓ Sincronizado','var(--green)');
-    setTimeout(()=>setSyncStatus(''),3000);
+    if(mostrarStatus){ setSyncStatus('✓ Sincronizado','var(--green)'); setTimeout(()=>setSyncStatus(''),3000); }
   } else {
-    if(mostrarStatus) setSyncStatus('⚠️ Sem conexão','var(--amber)');
-    setTimeout(()=>setSyncStatus(''),3000);
+    // só mostra erro se já havia mensagem de erro específica do ghRead
+    // se for 404 (primeiro uso), não mostra nada
+    const indicator = document.getElementById('sync-indicator');
+    if(mostrarStatus && indicator && !indicator.textContent.includes('⚠️')){
+      setSyncStatus('✓ Pronto — primeiro backup pendente','var(--muted)');
+      setTimeout(()=>setSyncStatus(''),3000);
+    } else {
+      setTimeout(()=>setSyncStatus(''),4000);
+    }
   }
   return remote;
 }
