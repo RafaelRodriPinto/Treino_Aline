@@ -357,7 +357,7 @@ const TREINOS = {
        link2:'https://www.youtube.com/watch?v=thacKNxXjjA',
        series:3, reps:10, reps2:12},
       {tipo:'normal', nome:'Cadeira Abdutora', link:'https://www.youtube.com/watch?v=02Hw1nvierA', series:3,reps:12},
-      {tipo:'normal', nome:'Panturrilha Banco', link:'https://youtu.be/pbkhHeK55zQ?si=vw5AqU79wjghoYyS', series:3,reps:12},
+      {tipo:'normal', nome:'Panturrilha Banco', link:'https://www.youtube.com/watch?v=gwLzBJYoWlI', series:3,reps:15},
       {tipo:'conjugado', nome:'Puxada Aberta', nome2:'Puxada Fechada',
        link:'https://www.youtube.com/watch?v=WEEnNiJwV-8',
        link2:'https://www.youtube.com/watch?v=bhXztQz1FSE',
@@ -385,7 +385,7 @@ const TREINOS_ANTIGOS = {};
 
 /* ════ GITHUB SYNC ════ */
 const GH_REPO = 'RafaelRodriPinto/Treino_Aline';
-const GH_FILE = 'historico.json';
+const GH_FILE = 'dados.json';
 const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
 
 function getToken(){ return localStorage.getItem('gym_ma_gh_token')||''; }
@@ -1002,7 +1002,11 @@ function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
-  E.exIdx=idx;E.serieIdx=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;
+  // Restaura serieIdx baseado nas séries já feitas neste exercício
+  const seriesFeitas=E.series[idx]?E.series[idx].filter(s=>s!==null).length:0;
+  E.serieIdx=seriesFeitas;
+  E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
 }
 
 /* avançar */
@@ -1029,7 +1033,13 @@ function avancarExercicio(){
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
-  if(next<exs.length){E.exIdx=next;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
+  if(next<exs.length){
+    E.exIdx=next;
+    // Restaura serieIdx baseado nas séries já feitas (para intercalação entre exercícios)
+    const seriesFeitas=E.series[next]?E.series[next].filter(s=>s!==null).length:0;
+    E.serieIdx=seriesFeitas;
+    E.serieStartTs=null;save();goExercicio();
+  }
   else finalizarTreino();
 }
 
