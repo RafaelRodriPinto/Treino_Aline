@@ -978,9 +978,21 @@ function abrirLista(){
   document.getElementById('modal-titulo').textContent='Treino '+E.tipo;
   let html='';
   exs.forEach((ex,i)=>{
-    if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim'){
+    if(ex.tipo==='esteira_inicio'){
+      // aquecimento: não clicável (sempre primeiro)
       html+=`<div class="modal-item" style="opacity:.35;cursor:default">
         <span class="mi-num">${i+1}</span><span class="mi-name" style="color:var(--muted)">🏃 ${exNome(ex)}</span></div>`;return;
+    }
+    if(ex.tipo==='esteira_fim'){
+      // finalização: clicável — pode fazer antes do último exercício
+      const esteiraFeita = E.esteiraFimFeita||false;
+      const badge = esteiraFeita?`<span class="tag tag-green">✓</span>`:'';
+      const cls = esteiraFeita?'done-ex':'';
+      const click = esteiraFeita?'':` onclick="irParaEx(${i})"`;
+      html+=`<div class="modal-item ${cls}"${click}>
+        <span class="mi-num">${i+1}</span>
+        <span class="mi-name">🏃 ${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">10 min</span></span>
+        ${badge}</div>`;return;
     }
     const pulado=exFoiPulado(i),done=exFoiConcluido(i),current=i===E.exIdx;
     let badge='';
@@ -1097,7 +1109,17 @@ function atualizarEsteira(){
 }
 function pularEsteira(){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 function terminarEsteira(){
-  if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
+  if(E.esteiraTipo==='esteira_fim'){
+    E.esteiraFimFeita=true; save();
+    // Verifica se ainda há exercícios pendentes — se sim, volta para o modal
+    const exs=TREINOS[E.tipo].exercicios;
+    const temPendente=exs.some((ex,i)=>{
+      if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim') return false;
+      return !exFoiConcluido(i)&&!exFoiPulado(i);
+    });
+    if(temPendente){ abrirModalDireto(); return; }
+    finalizarTreino(); return;
+  }
   E.esteiraTipo=null;save();avancarExercicio();
 }
 
