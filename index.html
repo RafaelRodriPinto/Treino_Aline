@@ -3,92 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Treino">
-<title>Rafael Pinto</title>
+<meta name="apple-mobile-web-app-title" content="Treino MA">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="manifest" href="manifest.json">
+<title>Maria Aline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" onerror="document.getElementById('font-fallback').disabled=false">
-<style id="font-fallback" disabled>
-/* fallback quando offline — usa fontes do sistema */
-:root{
-  --mono: ui-monospace, 'Courier New', monospace;
-  --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── TEMAS ── */
 :root{
   --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;--surface3:#22222f;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#f0f0f5;--muted:#6b6b80;
+  --text:#f0f0f5;--muted:#6b6b80;--muted2:#9090a8;
   --accent:#7c6af7;--accent2:#a599ff;
-  --green:#3ecf8e;--green2:#1a6644;
+  --green:#3ecf8e;--green2:rgba(62,207,142,.15);
   --amber:#f59e0b;--amber2:rgba(245,158,11,0.15);
   --red:#ef4444;--red2:rgba(239,68,68,0.15);
   --blue:#38bdf8;--blue2:rgba(56,189,248,0.12);
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
   --r:14px;--r2:20px;
+  --shadow:none;
 }
 body.light{
-  --bg:#f4f4f8;--surface:#ffffff;--surface2:#eeeef3;--surface3:#e4e4ec;
+  --bg:#f4f4f8;--surface:#ffffff;--surface2:#eeeef4;--surface3:#e4e4ec;
   --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
-  --text:#1a1a2e;--muted:#7070888;
-  --muted:#8080a0;
-  --accent:#6c5ce7;--accent2:#5a4bd1;
-  --green:#059669;--green2:#d1fae5;
+  --text:#1a1a2e;--muted:#7878a0;--muted2:#9090b8;
+  --accent:#6c5ce7;--accent2:#7c6af7;
+  --green:#1a9e68;--green2:rgba(26,158,104,.12);
   --amber:#d97706;--amber2:rgba(217,119,6,0.12);
-  --red:#dc2626;--red2:rgba(220,38,38,0.1);
-  --blue:#0284c7;--blue2:rgba(2,132,199,0.1);
+  --red:#dc2626;--red2:rgba(220,38,38,0.10);
+  --blue:#0284c7;--blue2:rgba(2,132,199,0.10);
+  --shadow:0 1px 4px rgba(0,0,0,0.07);
 }
-body.light .home-header h1{
-  background:linear-gradient(135deg,#1a1a2e 0%,var(--accent) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-body.light .treino-card .tc-letra,
-body.light .sess-letra{
-  background:linear-gradient(135deg,var(--accent),var(--green));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-body.light .prog-fill,body.light .sess-fill{
-  background:linear-gradient(90deg,var(--accent),var(--green));
-}
-*{transition:background-color .2s,color .2s,border-color .2s}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
-body{display:flex;flex-direction:column;height:100%;max-height:100vh}
-.app{flex:1;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 90px;min-height:0}
-.page{display:none;padding:16px 16px 24px}
-.page.active{display:block;overflow-y:auto;-webkit-overflow-scrolling:touch}
-#page-saude.active{padding-bottom:100px}
-/* page-assist é fora do .app — ver HTML */
 
-/* CHAT */
-.msg-user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border-radius:18px 18px 4px 18px;padding:10px 14px;max-width:80%;font-size:14px;line-height:1.5}
-.msg-claude{align-self:flex-start;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:18px 18px 18px 4px;padding:10px 14px;max-width:85%;font-size:14px;line-height:1.6}
-.msg-claude b{color:var(--accent2)}
-.msg-typing{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:12px 16px}
-@keyframes dot{0%,80%,100%{opacity:0.2}40%{opacity:1}}
-.dot{width:7px;height:7px;background:var(--muted);border-radius:50%;display:inline-block;animation:dot 1.4s infinite;margin:0 2px}
-.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+/* ── RESET ── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);transition:background .25s,color .25s}
+body{display:flex;flex-direction:column}
+.app{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 72px}
+.page{display:none;padding:16px 16px 8px}.page.active{display:block}
+
+/* ── TOGGLE TEMA ── */
+.theme-toggle{margin-top:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:50px;padding:6px 16px;font-size:12px;font-family:var(--mono);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s;color:var(--muted);min-height:34px}
+.theme-toggle:active{transform:scale(.93);background:var(--surface3)}
 
 /* ── NAV TABS ── */
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(2,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom);box-shadow:var(--shadow)}
 .nav-btn{padding:10px 4px 8px;font-size:9px;font-family:var(--mono);letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
 .nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--accent2)}
 
 /* ── COMMON ── */
 .section-title{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
 .btn{width:100%;padding:14px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
-.btn-green{background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff}
+.btn-green{background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff}
 .btn-ghost{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
 .btn-amber{background:transparent;border:1px solid rgba(245,158,11,.35);color:var(--amber);font-size:13px;padding:11px}
 .btn-red{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--red);font-size:13px;padding:11px}
 .pill{background:var(--surface2);border-radius:8px;padding:3px 8px;font-size:11px;font-family:var(--mono);color:var(--text)}
-.pill.g{background:rgba(62,207,142,.12);color:var(--green)}
+.pill.g{background:var(--green2);color:var(--green)}
 .pill.a{background:var(--amber2);color:var(--amber)}
 .tag{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:6px}
 .tag-green{background:var(--green2);color:var(--green)}
@@ -101,33 +80,39 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .blinking{animation:blink 1s infinite}
 
 /* ── HOME ── */
-.home-header{text-align:center;padding:24px 0 20px}
+.home-header{text-align:center;padding:20px 0 16px;display:flex;flex-direction:column;align-items:center;gap:6px}
 .logo-mark{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-.home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,var(--accent2) 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 .alert-banner{border-radius:var(--r);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5}
 .alert-red{background:var(--red2);border:1px solid rgba(239,68,68,.3);color:var(--red)}
 .alert-amber{background:var(--amber2);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
+.alert-yellow{background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.45);color:#a16207}
+body.light .alert-yellow{color:#92400e}
+.alert-subtle{background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
 
-.suggest-card{background:linear-gradient(135deg,rgba(124,106,247,.18),rgba(124,106,247,.06));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
+.suggest-card{background:linear-gradient(135deg,rgba(124,106,247,.15),rgba(124,106,247,.05));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),rgba(108,92,231,.02));border-color:rgba(108,92,231,.25)}
 .suggest-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:4px}
 .suggest-name{font-size:16px;font-weight:500;margin-bottom:12px}
 
-.pending-card{background:linear-gradient(135deg,rgba(62,207,142,.12),rgba(62,207,142,.04));border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
+.pending-card{background:linear-gradient(135deg,var(--green2),rgba(62,207,142,.03));border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
 .pending-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
 .pending-name{font-size:15px;font-weight:500;margin-bottom:12px}
 
-/* SESSÕES */
-.sess-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
-.sess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 6px;text-align:center}
-.sess-letra{font-size:20px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sess-num{font-size:18px;font-weight:600;color:var(--text);font-family:var(--mono)}
-.sess-label{font-size:9px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
-.sess-bar{height:3px;background:var(--surface2);border-radius:100px;margin-top:6px;overflow:hidden}
+/* ── SESSÕES ── */
+.sess-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.sess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow)}
+.sess-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.sess-letra{font-size:14px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sess-fraction{font-size:13px;font-family:var(--mono);color:var(--muted)}
+.sess-fraction strong{font-size:20px;font-weight:700;color:var(--text)}
+.sess-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
 .sess-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
 
+/* ── TREINO GRID ── */
 .treino-grid-new{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s}
+.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
 .treino-card:active{transform:scale(.96)}
 .treino-card .tc-letra{font-size:28px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .treino-card .tc-info{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
@@ -139,9 +124,8 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .prog-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
 
-.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text)}
-
-.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px}
+.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text);box-shadow:var(--shadow)}
+.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;box-shadow:var(--shadow)}
 .ex-tag{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:5px}
 .ex-name{font-size:18px;font-weight:500;line-height:1.35}
 .ex-name a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(165,153,255,.3)}
@@ -155,13 +139,13 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .link-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .link-btn{display:inline-flex;align-items:center;gap:5px;background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:5px 10px;font-size:11px;font-family:var(--mono);color:var(--blue);text-decoration:none;cursor:pointer}
 
-.series-done{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px}
+.series-done{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
 .serie-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
 .serie-row:last-child{border-bottom:none}
 .s-label{font-size:11px;font-family:var(--mono);color:var(--muted)}
 .s-data{display:flex;gap:5px}
 
-.timer-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;text-align:center}
+.timer-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;text-align:center;box-shadow:var(--shadow)}
 .timer-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 .timer-num{font-size:48px;font-family:var(--mono);font-weight:500;letter-spacing:-2px;color:var(--green)}
 .timer-num.idle{color:var(--muted)}
@@ -173,7 +157,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .field input:focus{border-color:var(--accent)}
 
 /* ── REST OVERLAY ── */
-.rest-overlay{position:fixed;inset:0;background:rgba(10,10,15,.97);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
+.rest-overlay{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
 .rest-overlay.hidden{display:none}
 .rest-type{font-size:10px;font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .rest-big{font-size:88px;font-family:var(--mono);font-weight:500;letter-spacing:-4px;line-height:1;margin-bottom:6px}
@@ -183,7 +167,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:13px 32px;font-size:13px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer}
 
 /* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-overlay.hidden{display:none}
 .modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;max-height:85vh;display:flex;flex-direction:column}
 .modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -205,15 +189,15 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 
 /* ── FINISHED ── */
 .finish-hero{text-align:center;padding:28px 0 20px}
-.finish-check{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--green),#2aaa70);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:30px}
+.finish-check{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a9e68);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:30px}
 .finish-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;box-shadow:var(--shadow)}
 .stat-num{font-size:22px;font-family:var(--mono);font-weight:500;color:var(--accent2)}
 .stat-label{font-size:10px;color:var(--muted);margin-top:3px;font-family:var(--mono)}
 
-/* ── HISTORICO / EVOLUCAO ── */
+/* ── HISTÓRICO ── */
 .hist-tabs{display:flex;gap:8px;margin-bottom:14px}
-.hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center}
+.hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s}
 .hist-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
 </head>
@@ -223,16 +207,13 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 <!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <div class="home-header">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <button onclick="abrirConfigToken()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
-        <span id="gh-status">☁️</span><span>Backup</span>
-      </button>
-      <button id="theme-btn" onclick="toggleTema()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
-        <span id="theme-icon">☀️</span><span id="theme-label">Claro</span>
-      </button>
-    </div>
     <div class="logo-mark">Treino Academia</div>
-    <h1>Rafael Pinto</h1>
+    <h1>Maria Aline</h1>
+    <div style="display:flex;gap:8px;margin-top:10px;justify-content:center">
+      <button class="theme-toggle" onclick="abrirModalBackup()" id="backup-cloud-btn">☁️ Backup</button>
+      <button class="theme-toggle" onclick="toggleTema()" id="theme-btn">☀️ Tema</button>
+    </div>
+    <div id="sync-indicator" style="font-size:10px;font-family:var(--mono);color:var(--muted);min-height:14px;margin-top:4px"></div>
   </div>
   <div id="home-alerts"></div>
   <div id="home-pending"></div>
@@ -324,296 +305,9 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 </div>
 
 <!-- NAV -->
-<!-- ══ SAÚDE ══ -->
-<div class="page" id="page-saude">
-  <div style="padding-bottom:8px">
-    <!-- HEADER -->
-    <div style="background:linear-gradient(135deg,rgba(62,207,142,.15),rgba(124,106,247,.1));border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div>
-          <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Avaliação Física</div>
-          <div style="font-size:22px;font-weight:600">Rafael Pinto</div>
-          <div style="font-size:12px;color:var(--muted)">11/05/2026 · 41 anos · 186cm</div>
-        </div>
-        <div style="text-align:center;background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--border)">
-          <div style="font-size:32px;font-weight:700;color:var(--amber)">79</div>
-          <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">MÉDIA</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px">
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">93<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
-        </div>
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">26.8</div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IMC</div>
-        </div>
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--green)">82<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDEAL</div>
-        </div>
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--red)">-11<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
-        </div>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:8px;background:var(--surface);border-radius:10px">
-        ⚠️ O relatório indica 76.1kg como ideal, mas para sua altura de 186cm com excelente massa muscular esquelética (40.7kg), a faixa realista é <b style="color:var(--text)">82–86kg</b>. Meta de 82kg é mais adequada e sustentável.
-      </div>
-    </div>
-
-    <!-- COMPOSIÇÃO -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal</div>
-    <div class="card" style="padding:14px;margin-bottom:14px" id="comp-body"></div>
-
-    <!-- SUGESTÕES -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">O que fazer — por métrica</div>
-
-    <!-- PRÉ-TREINO -->
-    <div style="background:linear-gradient(135deg,rgba(124,106,247,.12),rgba(56,189,248,.08));border:1px solid rgba(124,106,247,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--accent2);margin-bottom:12px">💊 Seu pré-treino — análise completa</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Você treina às 08h com pré-treino por volta das 07h30. Ótimo timing!<br><br>
-        <b>✅ Guaraná</b> — estimulante natural (cafeína), aumenta foco e energia. Ideal para manhã pois o cortisol está alto ao acordar. Evite após 14h pois atrapalha o sono.<br><br>
-        <b>✅ Beterraba</b> — rica em nitratos convertidos em óxido nítrico, melhorando fluxo sanguíneo muscular e resistência. Potencializa seus treinos de força.<br><br>
-        <b>✅ Maca peruana</b> — adaptógeno que equilibra hormônios incluindo testosterona. Muito útil aos 41 anos. Melhora disposição e energia.<br><br>
-        <b>✅ Tribulus terrestris</b> — estimula produção de testosterona endógena. Complementa bem a maca.<br><br>
-        <b>✅ Uva (extrato)</b> — resveratrol, antioxidante que reduz inflamação muscular pós-treino e protege o coração.<br><br>
-        <b>✅ Linhaça dourada</b> — ômega-3 vegetal, fibras. Ajuda na redução de gordura e melhora perfil lipídico.<br><br>
-        <b>✅ Picolínato de Cromo</b> — controla glicemia, evitando picos de insulina que favorecem acúmulo de gordura.<br><br>
-        <b>✅ Creatina — você já toma, ótimo!</b><br>
-        Você estava tomando pós-treino e agora vai tomar no pré-treino — <b>boa decisão!</b> Pré-treino é ligeiramente melhor para desempenho, pois os músculos já têm mais creatina disponível durante o esforço. Continue com 5g misturado no pré-treino. ✓<br><br>
-        <b>✅ Própolis 70 — pode continuar junto ao pré-treino!</b><br>
-        Não há nenhuma interação negativa entre própolis e os outros ingredientes. O própolis é antioxidante, anti-inflamatório e imunológico — tomar de manhã é o horário ideal. Continua tudo junto sem problema. ✓<br><br>
-        <b>💡 Para complementar:</b><br>
-        • <b>Vitamina D3 + K2</b> — você já tem a Ecomev! Tomar 1 cápsula junto ao pré-treino às 07h30 ✅
-      </div>
-    </div>
-
-    <!-- VITAMINA D3 K2 -->
-    <div style="background:rgba(62,207,142,.08);border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🌿 Vitamina D3 + K2 — ✅ Você já tem!</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>Produto:</b> Ecomev D3 2.000 UI + K2 MK-7 149mcg — 120 cápsulas ✅<br><br>
-        <b>Como tomar:</b><br>
-        • <b>1 cápsula por dia</b> junto ao pré-treino às 07h30<br>
-        • As 120 cápsulas rendem <b>4 meses</b> (até ~outubro/2026)<br>
-        • Tomar com a refeição leve das 07h — vitamina D é lipossolúvel, absorve melhor com gordura (seus ovos e linhaça ajudam)<br>
-        • Não tomar à noite — D3 pode atrapalhar o sono em algumas pessoas<br><br>
-        <b>Por que D3 + K2 juntas:</b><br>
-        D3 aumenta absorção de cálcio no intestino. A K2 MK-7 direciona esse cálcio para os ossos e dentes, impedindo que se deposite nas artérias. Essenciais para densidade óssea, testosterona e imunidade.
-      </div>
-    </div>
-
-    <!-- PÓS-TREINO -->
-    <div style="background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px">🍳 Sua refeição pós-treino — análise</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>O que você come:</b> tapioca + 1 ovo + 1 fatia de queijo mussarela (na tapioca) + 2 ovos cozidos separados<br><br>
-        <b>Análise nutricional:</b><br>
-        • Tapioca (2 col. de goma) = ~130 kcal, 32g carboidrato<br>
-        • 1 ovo na tapioca = 70 kcal, 7g proteína<br>
-        • 1 fatia mussarela = 60 kcal, 5g proteína, 4g gordura<br>
-        • 2 ovos cozidos = 140 kcal, 14g proteína<br>
-        • <b>Total atual: ~400 kcal | ~26g proteína | ~32g carboidrato</b><br><br>
-        <b>✅ A tapioca é perfeita pós-treino!</b> Carboidrato de absorção rápida que repõe o glicogênio muscular gasto. Os ovos fornecem proteína completa com todos os aminoácidos essenciais. A mussarela adiciona cálcio e gordura saudável.<br><br>
-        <b>⚠️ Proteína abaixo do ideal — meta é 40g pós-treino:</b><br>
-        Faltam <b>14g de proteína</b> para chegar na meta de 40g.<br><br>
-        <div style="background:var(--surface2);border-radius:12px;padding:12px;margin-bottom:8px">
-          <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px">🍗 Solução — Frango desfiado na tapioca:</div>
-          <div style="font-size:13px;line-height:1.8">
-            • Frango grelhado desfiado tem ~31g proteína por 100g<br>
-            • Para fechar os 14g que faltam: <b>~50g de frango desfiado</b><br>
-            • Adicione dentro da tapioca junto com o ovo e a mussarela<br>
-            • Resultado: tapioca + frango desfiado 50g + 1 ovo + mussarela + 2 ovos cozidos = <b>~40g proteína</b> ✓<br>
-            • Calorias extras: ~55 kcal | Total da refeição: ~455 kcal
-          </div>
-        </div>
-        <b>Opção alternativa se não tiver frango:</b><br>
-        • Adicione 1 scoop de whey (24g proteína) → total ~50g proteína ✓✓<br>
-        • Ou adicione 1 ovo cozido extra → total ~33g proteína ✓ (menos ideal mas mais fácil)
-      </div>
-    </div>
-
-    <!-- ÁGUA -->
-    <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">💧 Água — gelada ou temperatura ambiente?</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>Resposta: temperatura ambiente ou levemente fresca (não gelada).</b><br><br>
-        <b>Por que não gelada durante o treino:</b><br>
-        • Água muito gelada (abaixo de 10°C) pode causar cãibras e desconforto gástrico durante o esforço<br>
-        • O corpo gasta energia para aquecer a água gelada, desviando recursos dos músculos<br><br>
-        <b>Quando gelada é aceitável:</b><br>
-        • No pós-treino imediato — ajuda a baixar a temperatura corporal e é bem tolerada na recuperação<br>
-        • Em dias de calor muito intenso<br><br>
-        <b>Protocolo para você:</b><br>
-        • 06h30 ao acordar: temperatura ambiente — hidrata sem choque térmico<br>
-        • Durante o treino (08h-09h): fresca ~15-18°C — não gelada, não quente<br>
-        • Pós-treino imediato: pode ser mais fresca ou gelada — sem problema<br>
-        • Resto do dia: temperatura ambiente ou fresca<br><br>
-        <b>Dica prática:</b> tire a garrafa da geladeira 30 min antes do treino — fica na temperatura ideal naturalmente.
-      </div>
-    </div>
-
-    <!-- ROTINA MATINAL -->
-    <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.15);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">🌅 Rotina completa para treino às 08h</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>06h30:</b> 500ml água temperatura ambiente ao acordar<br><br>
-        <b>07h00:</b> café da manhã leve<br>
-        • 1 banana + 2 ovos mexidos + café preto sem açúcar (~300 kcal)<br>
-        • ⚠️ Evite jejum total — perde músculo e desempenho cai<br><br>
-        <b>07h30:</b> pré-treino completo tudo junto — seu mix + creatina 5g + própolis 70 + D3/K2 ✓<br><br>
-        <b>08h00:</b> treino ✓<br><br>
-        <b>09h30:</b> tapioca + <b>50g frango desfiado</b> + 1 ovo + mussarela + 2 ovos cozidos → <b>~40g proteína</b> ✓<br>
-        • Alternativa sem frango: 1 scoop whey → ~50g proteína ✓✓<br><br>
-        <b>12h30:</b> almoço — arroz integral + feijão + 200g frango + salada (~650 kcal)<br><br>
-        <b>15h30:</b> lanche — iogurte grego + punhado de castanhas (~300 kcal)<br><br>
-        <b>19h00:</b> jantar — omelete 3 ovos + legumes (~450 kcal)<br><br>
-        <b>22h30:</b> Nutrends 5 Magnésio + Treonina — 2 cápsulas antes de dormir ✅
-      </div>
-    </div>
-
-    <!-- RUIM -->
-    <div style="background:var(--red2);border:1px solid rgba(239,68,68,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px">🔴 Prioridade — Reduzir gordura</div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (atual: 9 — limite máximo)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
-        <b>Cardio na esteira:</b><br>
-        • Velocidade 5.5 a 6.5 km/h, inclinação 2-3%, por 25-30 minutos<br>
-        • Nessa velocidade você consegue falar frases curtas — zona 2, ideal para gordura visceral<br>
-        • Estenda para 15+15 min quando der (aquecimento + finalização)<br>
-        • Seu guaraná + beterraba no pré-treino potencializam a queima de gordura matinal<br><br>
-        <b>Sono:</b><br>
-        • Dormir menos de 6h eleva cortisol cronicamente → deposita gordura na barriga<br>
-        • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h melhora qualidade do sono ✅<br><br>
-        <b>Cortar da alimentação:</b><br>
-        • Álcool — 1 cerveja interrompe a queima de gordura por até 48h<br>
-        • Açúcar simples: refrigerante, suco industrializado, biscoito recheado, pão branco<br>
-        • Frituras e fast food
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Déficit calórico (~2300-2400 kcal/dia)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
-        Seu gasto real com 5 treinos/semana é ~2800-3000 kcal/dia. Meta: ~2300-2400 kcal → déficit de ~500 kcal → 0.5-1kg/semana.<br>
-        A distribuição de refeições está na seção "Rotina completa" acima.<br>
-        <b>App para contar:</b> Lifesum ou MyFitnessPal — use por 2-3 semanas para calibrar.
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura subcutânea e relação cintura-quadril</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Reduzem com o mesmo protocolo. Meta cintura-quadril: abaixo de 0.85.<br>
-        Abdominais fortalecem o core mas não eliminam gordura local — dieta e cardio fazem isso.
-      </div>
-    </div>
-
-    <!-- OK -->
-    <div style="background:var(--amber2);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px">🟡 Atenção — Melhorar</div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa proteica (atual: 14.2kg — abaixo do ideal)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Meta: <b>167-204g proteína/dia</b>. Com sua rotina atual chega ~159g — adicione 1 scoop whey pós-treino para fechar ~183g ✓<br>
-        Fontes: frango 100g=31g | atum 170g=40g | ovo=7g | whey 1 scoop=24g | iogurte grego 200g=17g
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular total (atual: 66.5kg)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        • Progressão de carga: quando completar todas as séries facilmente, aumente 2.5kg<br>
-        • Creatina no pré-treino — você já faz ✓<br>
-        • 70% do crescimento muscular acontece nas primeiras 3h de sono profundo
-      </div>
-    </div>
-
-    <!-- BOM -->
-    <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🟢 Pontos fortes — Manter e evoluir</div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular esquelética (40.7kg — Excelente)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Impressionante para 41 anos! Continue os 5 treinos com progressão de carga. Não corte abaixo de 2000 kcal. Maca + tribulus + creatina que você já usa — continue tudo. ✓
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Hidratação (52.3kg — Excelente)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        • 06h30: 500ml temperatura ambiente | 07h30: 300ml com pré-treino<br>
-        • 08h-09h: 500ml fresca durante treino | 09h30: 300ml pós-treino<br>
-        • Resto do dia: 1.5L → Total: ~3.1L ✓<br>
-        • Água de coco pós-treino repõe potássio e magnésio naturalmente
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (4.8kg — Excelente)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>Magnésio — ✅ Nutrends 5 Magnésio + Treonina ✅:</b><br>
-        • <b>2 cápsulas</b> 30-60 min antes de dormir (22h-23h)<br>
-        • É o melhor dos avaliados — 5 formas + Treonina + minerais quelatos + selo TauroMag<br>
-        • Efeito em 2-3 semanas: sono mais profundo + menos dor muscular no dia seguinte<br>
-        • Como você treina às 08h, magnésio às 22h fecha o ciclo perfeitamente<br>
-        • Alimentos ricos para reforçar: castanha-do-pará (1 unidade = 25% da dose!), amêndoas, banana, abacate, chocolate amargo 70%+<br><br>
-        <b>Cálcio:</b> leite, iogurte, queijo mussarela (já come ✓), brócolis, sardinha.<br>
-        <b>Vitamina D3+K2:</b> Ecomev 1 cápsula junto ao pré-treino de manhã ✅
-      </div>
-    </div>
-
-    <!-- META -->
-    <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
-      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px">🎯 Protocolo completo + projeção</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>O que você já faz bem ✅:</b> treino 5x/semana às 08h, creatina 5g, própolis 70, pré-treino com guaraná + beterraba + maca + tribulus, tapioca pós-treino, D3+K2 Ecomev<br><br>
-        <b>O que adicionar ➕:</b><br>
-        • D3/K2 Ecomev 1 cápsula junto ao pré-treino ✅ já tem!<br>
-        • Nutrends 5 Magnésio + Treonina 2 cápsulas às 22h-23h ✅<br>
-        • <b>50g frango desfiado</b> na tapioca → fecha ~40g proteína pós-treino ✓<br>
-        • ~2300-2400 kcal/dia em 5 refeições<br><br>
-        <b>O que reduzir ❌:</b> álcool, açúcar simples, frituras<br><br>
-        <b>Projeção:</b><br>
-        • Em 2 meses (09/07): -4 a 6kg → 87-89kg, cintura -3cm<br>
-        • Em 4 meses: ~84-86kg, gordura visceral 9→6-7, pontuação ~83-85<br>
-        • Em 6 meses: ~82kg, gordura visceral abaixo de 5, pontuação <b>87-90</b>
-      </div>
-    </div>
-
-    <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 16px;line-height:1.6">
-      Baseado na avaliação Unique Health de 11/05/2026 · Treino matinal às 08h.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
-    </div>
-  </div>
-</div>
-
-
-<!-- ══ ASSISTENTE ══ -->
-<div id="page-assist" style="display:none;position:fixed;top:0;left:0;right:0;bottom:calc(56px + env(safe-area-inset-bottom));flex-direction:column;background:var(--bg);z-index:10;overflow:hidden">
-  <div style="padding:14px 16px 10px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg)">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-size:15px;font-weight:600">Assistente Claude</div>
-        <div style="font-size:11px;color:var(--muted);font-family:var(--mono)" id="assist-status">Configure sua chave API para começar</div>
-      </div>
-      <button onclick="abrirConfigApi()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:11px;font-family:var(--mono);color:var(--muted);cursor:pointer" id="assist-key-btn">🔑 Chave</button>
-    </div>
-  </div>
-  <div id="assist-msgs" style="flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;display:flex;flex-direction:column;gap:10px"></div>
-  <div style="padding:10px 12px 14px;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0">
-    <div style="display:flex;gap:8px;align-items:flex-end">
-      <textarea id="assist-input" placeholder="Pergunte sobre treino, alimentação, suplementos..." style="flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:10px 14px;font-size:14px;font-family:var(--sans);color:var(--text);resize:none;outline:none;min-height:42px;max-height:120px;line-height:1.4" rows="1" oninput="autoResize(this)" onkeydown="assistKeydown(event)"></textarea>
-      <button onclick="enviarMensagem()" id="assist-send" style="background:linear-gradient(135deg,var(--accent),#5b4fcf);border:none;border-radius:12px;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
-    <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:6px;font-family:var(--mono)">Claude Haiku · contexto do seu treino incluído</div>
-  </div>
-</div>
-
 <nav class="nav">
   <button class="nav-btn active" id="nav-home" onclick="showNav('home')">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Início
-  </button>
-  <button class="nav-btn" id="nav-saude" onclick="showNav('saude')">
-    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde
-  </button>
-  <button class="nav-btn" id="nav-assist" onclick="showNav('assist')">
-    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Claude
   </button>
   <button class="nav-btn" id="nav-hist" onclick="showNav('hist')">
     <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Histórico
@@ -624,83 +318,60 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 /* ════════════════════════════════════════════
    DADOS DOS TREINOS
 ════════════════════════════════════════════ */
-const PRAZO = new Date('2026-07-09T23:59:59');
-const META_SESSOES = 11;
-const INICIO_PLANO = new Date('2026-05-09T00:00:00');
+const PRAZO = new Date('2026-07-20T23:59:59');
+const META_SESSOES = 20;
+const INICIO_PLANO = new Date('2026-05-20T00:00:00');
 
 // tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
 // conjugado = dois exercícios no mesmo slot
 const TREINOS = {
   A:{
-    nome:'Treino A', info:'Peito · Tríceps · Ombros',
+    nome:'Treino A', info:'Pernas · Peito · Ombros · Tríceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
-      {tipo:'conjugado', nome:'Supino inclinado c/ halter', nome2:'Crucifixo inclinado c/ halter',
-       link:'https://www.youtube.com/watch?v=g9X0oHBuMQc', link2:'https://www.youtube.com/watch?v=ZMFCua60Gus',
-       series:3,reps:10},
-      {tipo:'normal', nome:'Supino reto c/ halter', link:'https://www.youtube.com/watch?v=BZEnjisP_CY', series:3,reps:12},
-      {tipo:'normal', nome:'Crucifixo máquina', link:'https://www.youtube.com/watch?v=SQW-rwYDBWE', series:3,reps:12},
-      {tipo:'normal', nome:'Tríceps barra cross', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/02011305-Cable-Pushdown_Upper-Arms-FIX_360.gif', series:3,reps:12},
-      {tipo:'normal', nome:'Tríceps testa c/ barra', link:'https://www.youtube.com/watch?v=Vhb_zXyeOSc', series:3,reps:12},
-      {tipo:'normal', nome:'Tríceps banco', link:'https://www.youtube.com/watch?v=w7RqgKFygBQ', series:3,reps:12},
-      {tipo:'normal', nome:'Elevação lateral sentado', link:'https://www.youtube.com/watch?v=Y-oDA1AfYTU', series:3,reps:10},
-      {tipo:'normal', nome:'Elevação lateral no cross', link:'https://www.youtube.com/watch?v=U0ZM4qcWB8M', series:3,reps:10},
+      {tipo:'conjugado', nome:'Agachamento', nome2:'Cadeira Extensora',
+       link:'https://w12evostorage.w12app.com.br/exercicios-gifs/04601305-Frog-Hops_Plyometrics_360.gif',
+       link2:'https://www.youtube.com/watch?v=KpXT1dzKUUQ&t=6s',
+       series:3, reps:15, reps2:12},
+      {tipo:'normal', nome:'Cadeira Adutora', link:'https://www.youtube.com/watch?v=eluVAjrSNNQ', series:3,reps:12},
+      {tipo:'normal', nome:'Leg Press 45°', link:'https://www.youtube.com/watch?v=-BDtKDpL-Cg', series:3,reps:12},
+      {tipo:'normal', nome:'Agachamento Articular', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/57881305-Lever-Squat-(plate-loaded)-(female)_Thighs_360.gif', series:3,reps:12},
+      {tipo:'normal', nome:'Supino Máquina', link:'https://www.youtube.com/watch?v=hfuBnc2oZY4', series:3,reps:12},
+      {tipo:'normal', nome:'Crucifixo Máquina', link:'https://www.youtube.com/watch?v=SQW-rwYDBWE', series:3,reps:12},
+      {tipo:'normal', nome:'Remada Alta Cross', link:'https://www.youtube.com/watch?v=F79T4xVRYfg', series:3,reps:12},
+      {tipo:'normal', nome:'Elevação Frontal Alternada', link:'https://www.youtube.com/watch?v=9WXezThR0xw', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps Barra Cross', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/02011305-Cable-Pushdown_Upper-Arms-FIX_360.gif', series:3,reps:12},
+      {tipo:'normal', nome:'Tríceps Corda Unilateral', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/50331305-Cable-Single-Arm-Triceps-Pushdown-(Rope-Attachment)_Upper-Arms_360.gif', series:3,reps:12},
+      {tipo:'normal', nome:'Abdominal Máquina', link:'https://www.youtube.com/watch?v=qpNAYQ8044M', series:3,reps:20},
       {tipo:'esteira_fim'},
     ]
   },
   B:{
-    nome:'Treino B', info:'Costas · Bíceps · Abdômen',
+    nome:'Treino B', info:'Pernas · Glúteos · Costas · Bíceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
-      {tipo:'conjugado', nome:'Puxada aberta', nome2:'Puxada fechada',
-       link:'https://www.youtube.com/watch?v=WEEnNiJwV-8', link2:'https://www.youtube.com/watch?v=bhXztQz1FSE',
-       series:3,reps:10},
-      {tipo:'normal', nome:'Facepull', link:'https://www.youtube.com/watch?v=w0jdtWXUE84', series:3,reps:15},
-      {tipo:'normal', nome:'Remada cavalinho', link:'https://www.youtube.com/watch?v=pM72YW95_DY', series:3,reps:12},
-      {tipo:'normal', nome:'Remada máquina fechada', link:'https://www.youtube.com/watch?v=paOfeVlogwk', series:3,reps:12},
-      {tipo:'normal', nome:'Rosca martelo', link:'https://www.youtube.com/watch?v=SHewBqisWrA', series:3,reps:12},
-      {tipo:'normal', nome:'Rosca bíceps barra W', link:'', series:3,reps:12},
-      {tipo:'normal', nome:'Abdominal remador', link:'https://www.youtube.com/watch?v=PomBnhZH5a0', series:3,reps:12},
-      {tipo:'esteira_fim'},
-    ]
-  },
-  C:{
-    nome:'Treino C', info:'Pernas · Glúteos',
-    exercicios:[
-      {tipo:'esteira_inicio'},
-      {tipo:'normal', nome:'Cadeira extensora', link:'https://www.youtube.com/watch?v=KpXT1dzKUUQ', series:3,reps:12},
-      {tipo:'normal', nome:'Leg press 45°', link:'https://www.youtube.com/watch?v=-BDtKDpL-Cg', series:3,reps:10},
-      {tipo:'normal', nome:'Hack articulado', link:'https://www.youtube.com/watch?v=LjiAtELOQWk', series:3,reps:12},
-      {tipo:'normal', nome:'Mesa flexora', link:'https://www.youtube.com/watch?v=9e3AvkskqVM', series:3,reps:12},
-      {tipo:'normal', nome:'Sky-flexão de joelho máquina', link:'https://www.youtube.com/watch?v=Kk-J3wdxEhU', series:3,reps:10},
-      {tipo:'normal', nome:'Agachamento sumô c/ halter', link:'https://www.youtube.com/watch?v=wd7LPBlSm28', series:3,reps:12},
-      {tipo:'normal', nome:'Cadeira abdutora', link:'https://www.youtube.com/watch?v=02Hw1nvierA', series:3,reps:10},
-      {tipo:'normal', nome:'Cadeira adutora', link:'https://www.youtube.com/watch?v=eluVAjrSNNQ', series:3,reps:15},
-      {tipo:'normal', nome:'Panturrilha Banco', link:'https://youtu.be/pbkhHeK55zQ?si=vw5AqU79wjghoYyS', series:3,reps:12},
-      {tipo:'esteira_fim'},
-    ]
-  },
-  D:{
-    nome:'Treino D', info:'Ombros · Bíceps · Tríceps · Core',
-    exercicios:[
-      {tipo:'esteira_inicio'},
-      {tipo:'normal', nome:'Elevação lateral', link:'https://www.youtube.com/watch?v=1UH9BySUGXg', series:3,reps:12},
-      {tipo:'normal', nome:'Elevação frontal anilha', link:'https://www.youtube.com/watch?v=FzL_52qjNis', series:3,reps:12},
-      {tipo:'normal', nome:'Desenvolvimento c/ halter', link:'https://www.youtube.com/watch?v=Qq3W5a5yalI', series:3,reps:12},
-      {tipo:'normal', nome:'Crucifixo invertido máquina', link:'https://www.youtube.com/watch?v=6vJHWnfmmi0', series:3,reps:15},
-      {tipo:'normal', nome:'Bíceps concentrado', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/16141305-Lever-Preacher-Curl-(version-2)_Upper-Arms_360.gif', series:3,reps:10},
-      {tipo:'normal', nome:'Bíceps martelo', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/24851305-Dumbbell-Hammer-Curl-(female)_Upper-Arms-FIX_360.gif', series:3,reps:10},
-      {tipo:'normal', nome:'Tríceps corda', link:'https://www.youtube.com/watch?v=eXKX6pSYrVE', series:3,reps:12},
-      {tipo:'normal', nome:'Tríceps barra W', link:'https://www.youtube.com/watch?v=yi-MlJARlSg', series:3,reps:10},
-      {tipo:'conjugado', nome:'Prancha ventral', nome2:'Abdômen paralela',
-       link:'https://www.youtube.com/watch?v=ypA5NH4hqTU', link2:'https://www.youtube.com/watch?v=9xAOQbJdq3A',
-       series:3, reps:30, isTime:true, reps2:12, isTime2:false},
+      {tipo:'normal', nome:'Leg 180° Convergente', link:'https://www.youtube.com/watch?v=b1od0xSG_AA', series:3,reps:15},
+      {tipo:'normal', nome:'Glúteo Máquina Extensão', link:'https://www.youtube.com/watch?v=2aEx45AyMYs', series:3,reps:12},
+      {tipo:'conjugado', nome:'Cadeira Flexora Unilateral', nome2:'Cadeira Flexora',
+       link:'https://www.youtube.com/watch?v=3T9SjfGSfBY',
+       link2:'https://www.youtube.com/watch?v=thacKNxXjjA',
+       series:3, reps:10, reps2:12},
+      {tipo:'normal', nome:'Cadeira Abdutora', link:'https://www.youtube.com/watch?v=02Hw1nvierA', series:3,reps:12},
+      {tipo:'normal', nome:'Panturrilha Banco', link:'https://www.youtube.com/watch?v=gwLzBJYoWlI', series:3,reps:15},
+      {tipo:'conjugado', nome:'Puxada Aberta', nome2:'Puxada Fechada',
+       link:'https://www.youtube.com/watch?v=WEEnNiJwV-8',
+       link2:'https://www.youtube.com/watch?v=bhXztQz1FSE',
+       series:3, reps:10, reps2:10},
+      {tipo:'normal', nome:'Remada Máquina Fechada', link:'https://www.youtube.com/watch?v=paOfeVlogwk', series:3,reps:12},
+      {tipo:'normal', nome:'Scott Máquina', link:'https://www.youtube.com/watch?v=HmlOMImb1ZU', series:3,reps:12},
+      {tipo:'normal', nome:'Bíceps Martelo c/ Rotação', link:'https://w12evostorage.w12app.com.br/exercicios-gifs/04161305-Dumbbell-Standing-Biceps-Curl_Upper-Arms-FIX_360.gif', series:3,reps:12},
+      {tipo:'normal', nome:'Abdominal Remador', link:'https://www.youtube.com/watch?v=PomBnhZH5a0', series:3,reps:20},
       {tipo:'esteira_fim'},
     ]
   }
 };
 
-const ORDEM = ['A','B','C','D'];
+const ORDEM = ['A','B'];
 const REST_SERIE = 50, REST_EX = 60;
 
 /* ════ STATE ════ */
@@ -710,240 +381,150 @@ let _restCb=null;
 let _histTab='atual';
 
 /* ════ TREINOS ANTIGOS (referência para histórico) ════ */
-const TREINOS_ANTIGOS = {
-  A:{
-    nome:'Treino A (anterior)', info:'Peito · Tríceps · Pernas',
-    exercicios:[
-      {tipo:'esteira_inicio'},
-      {tipo:'normal',nome:'Supino Máquina',series:3,reps:12},
-      {tipo:'normal',nome:'Voador Peitoral',series:3,reps:12},
-      {tipo:'normal',nome:'Hammer Inclinado',series:3,reps:12},
-      {tipo:'normal',nome:'Crucifixo Aberto c/ HBC',series:3,reps:12},
-      {tipo:'normal',nome:'Tríceps Pulley',series:3,reps:12},
-      {tipo:'normal',nome:'Tríceps Corda',series:3,reps:12},
-      {tipo:'normal',nome:'Tríceps Francês Unilateral',series:3,reps:12},
-      {tipo:'normal',nome:'Cadeira Extensora',series:3,reps:12},
-      {tipo:'normal',nome:'Cadeira Adutora',series:3,reps:15},
-      {tipo:'normal',nome:'Leg Horizontal (pés abduzidos)',series:3,reps:12},
-      {tipo:'normal',nome:'Flexão Quadril c/ Caneleira',series:3,reps:12},
-      {tipo:'normal',nome:'Abdominal Supra (solo)',series:3,reps:15},
-      {tipo:'esteira_fim'},
-    ]
-  },
-  B:{
-    nome:'Treino B (anterior)', info:'Costas · Bíceps · Pernas',
-    exercicios:[
-      {tipo:'esteira_inicio'},
-      {tipo:'normal',nome:'Puxada Frente Aberta',series:3,reps:12},
-      {tipo:'normal',nome:'Remada Sentada (pegada neutra)',series:3,reps:12},
-      {tipo:'normal',nome:'Voador Dorsal',series:3,reps:12},
-      {tipo:'normal',nome:'Puxada Supinada',series:3,reps:12},
-      {tipo:'normal',nome:'Bíceps c/ HBC (supinado)',series:3,reps:12},
-      {tipo:'normal',nome:'Bíceps Martelo c/ HBC (neutro)',series:3,reps:12},
-      {tipo:'normal',nome:'Bíceps Invertido (polia baixa)',series:3,reps:12},
-      {tipo:'normal',nome:'Mesa Flexora',series:3,reps:12},
-      {tipo:'normal',nome:'Cadeira Abdutora',series:3,reps:15},
-      {tipo:'normal',nome:'Flexão Joelho c/ Caneleira',series:3,reps:12},
-      {tipo:'normal',nome:'Panturrilha Máquina',series:3,reps:15},
-      {tipo:'normal',nome:'Abdominal Prancha',series:3,reps:20,isTime:true},
-      {tipo:'esteira_fim'},
-    ]
-  },
-  C:{
-    nome:'Treino C (anterior)', info:'Ombros · Core',
-    exercicios:[
-      {tipo:'esteira_inicio'},
-      {tipo:'normal',nome:'Abdução de Ombros c/ HBC',series:3,reps:12},
-      {tipo:'normal',nome:'Flexão de Ombros c/ HBC',series:3,reps:12},
-      {tipo:'normal',nome:'Desenvolvimento Máquina (neutro)',series:3,reps:12},
-      {tipo:'normal',nome:'Desenvolvimento Arnold c/ HBC',series:3,reps:12},
-      {tipo:'normal',nome:'Remada Alta (polia baixa)',series:3,reps:15},
-      {tipo:'normal',nome:'Encolhimento Ombro c/ HBC',series:3,reps:15},
-      {tipo:'normal',nome:'Abdominal Infra (solo)',series:3,reps:15},
-      {tipo:'esteira_fim'},
-    ]
+const TREINOS_ANTIGOS = {};
+
+/* ════ GITHUB SYNC ════ */
+const GH_REPO = 'RafaelRodriPinto/Treino_Aline';
+const GH_FILE = 'historico.json';
+const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+
+function getToken(){ return localStorage.getItem('gym_ma_gh_token')||''; }
+function saveToken(t){ localStorage.setItem('gym_ma_gh_token', t.trim()); }
+
+let _ghSha = null;
+let _syncTimer = null;
+
+async function ghRead(){
+  const token = getToken(); if(!token) return null;
+  try{
+    const r = await fetch(GH_API, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
+    if(r.status===401){ setSyncStatus('⚠️ Token inválido ou expirado','var(--red)'); return null; }
+    if(r.status===403){ setSyncStatus('⚠️ Token sem permissão (precisa de repo)','var(--red)'); return null; }
+    if(r.status===404){ _ghSha=null; return null; } // arquivo ainda não existe — ok
+    if(!r.ok){ setSyncStatus('⚠️ Erro GitHub: '+r.status,'var(--amber)'); return null; }
+    const j = await r.json();
+    _ghSha = j.sha;
+    return JSON.parse(atob(j.content.replace(/\n/g,'')));
+  }catch(e){ setSyncStatus('⚠️ Sem conexão com GitHub','var(--amber)'); return null; }
+}
+
+async function ghWrite(data){
+  const token = getToken(); if(!token) return false;
+  try{
+    const body = {
+      message:'sync treino',
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(data)))),
+      ...(_ghSha ? {sha:_ghSha} : {})
+    };
+    const r = await fetch(GH_API,{method:'PUT',headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok) return false;
+    const j = await r.json();
+    _ghSha = j.content.sha;
+    return true;
+  }catch(e){ return false; }
+}
+
+function setSyncStatus(msg, color){
+  const el = document.getElementById('sync-indicator');
+  if(el){ el.textContent = msg; el.style.color = color||'var(--muted)'; }
+}
+
+async function syncDoGitHub(mostrarStatus){
+  if(!getToken()){ if(mostrarStatus) setSyncStatus('⚠️ Token não configurado','var(--amber)'); return null; }
+  if(mostrarStatus) setSyncStatus('⟳ Sincronizando...');
+  const remote = await ghRead();
+  if(remote){
+    const localSess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
+    const remoteSess = remote.sess||{A:0,B:0};
+    const mergedSess = { A:Math.max(localSess.A||0,remoteSess.A||0), B:Math.max(localSess.B||0,remoteSess.B||0) };
+    localStorage.setItem('gym_sess_v6',JSON.stringify(mergedSess));
+    const localHist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    const remoteHist = remote.hist||[];
+    const seen = new Set();
+    const merged = [];
+    [...localHist,...remoteHist].forEach(h=>{
+      const k=(h.data||'')+'_'+(h.tipo||'')+'_'+(h.inicio||0);
+      if(!seen.has(k)){seen.add(k);merged.push(h);}
+    });
+    merged.sort((a,b)=>(b.data||0)-(a.data||0));
+    if(merged.length>120) merged.splice(120);
+    localStorage.setItem('gym_hist_v6',JSON.stringify(merged));
+    if(mostrarStatus){ setSyncStatus('✓ Sincronizado','var(--green)'); setTimeout(()=>setSyncStatus(''),3000); }
+  } else {
+    // só mostra erro se já havia mensagem de erro específica do ghRead
+    // se for 404 (primeiro uso), não mostra nada
+    const indicator = document.getElementById('sync-indicator');
+    if(mostrarStatus && indicator && !indicator.textContent.includes('⚠️')){
+      setSyncStatus('✓ Pronto — primeiro backup pendente','var(--muted)');
+      setTimeout(()=>setSyncStatus(''),3000);
+    } else {
+      setTimeout(()=>setSyncStatus(''),4000);
+    }
   }
-};
+  return remote;
+}
+
+async function restaurarDoGitHub(){
+  setSyncStatus('⟳ Restaurando...');
+  const remote = await ghRead();
+  if(!remote){ setSyncStatus('⚠️ Nada encontrado no GitHub','var(--amber)'); setTimeout(()=>setSyncStatus(''),3000); return; }
+  if(remote.sess) localStorage.setItem('gym_sess_v6',JSON.stringify(remote.sess));
+  if(remote.hist) localStorage.setItem('gym_hist_v6',JSON.stringify(remote.hist));
+  setSyncStatus('✓ Histórico restaurado!','var(--green)');
+  setTimeout(()=>setSyncStatus(''),3000);
+  renderHome();
+  fecharModalBackup();
+}
+
+function agendarSync(){
+  if(_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(async()=>{
+    const hist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    const sess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
+    const ok = await ghWrite({hist,sess,updated:Date.now()});
+    if(ok) setSyncStatus('✓ Salvo no GitHub','var(--green)');
+    else   setSyncStatus('⚠️ Falha ao salvar','var(--amber)');
+    setTimeout(()=>setSyncStatus(''),3000);
+  }, 2000);
+}
+
+/* ── MODAL BACKUP ── */
+function abrirModalBackup(){
+  const token = getToken();
+  document.getElementById('backup-token-input').value = token;
+  document.getElementById('backup-status').textContent = token ? '✅ Token configurado' : 'Nenhum token salvo ainda.';
+  document.getElementById('modal-backup').classList.remove('hidden');
+}
+function fecharModalBackup(){ document.getElementById('modal-backup').classList.add('hidden'); }
+function salvarToken(){
+  const val = document.getElementById('backup-token-input').value.trim();
+  if(!val){ document.getElementById('backup-status').textContent='⚠️ Cole o token antes de salvar.'; return; }
+  saveToken(val);
+  document.getElementById('backup-status').textContent='✅ Token salvo!';
+  document.getElementById('backup-cloud-btn').textContent='☁️';
+  syncDoGitHub(true).then(()=>renderHome());
+}
 
 /* ════ STORAGE ════ */
-const GH_USER  = 'RafaelRodriPinto';
-const GH_REPO  = 'Treino';
-const GH_FILE  = 'historico.json';
-const GH_API   = 'https://api.github.com/repos/'+GH_USER+'/'+GH_REPO+'/contents/'+GH_FILE;
-
-function getToken(){try{return localStorage.getItem('gym_gh_token')||''}catch(e){return''}}
-function setToken(t){try{localStorage.setItem('gym_gh_token',t)}catch(e){}}
-
 function save(){try{localStorage.setItem('gym_v6',JSON.stringify(E))}catch(e){}}
 function load(){
   try{const d=JSON.parse(localStorage.getItem('gym_v6')||'null');
     if(!d||d.data!==today())return null; return d}catch(e){return null}
 }
-
-/* LOCAL — sempre rápido, usado em runtime */
-function saveHistLocal(entry){
+function saveHist(entry){
   try{
     const h=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
     h.unshift(entry); if(h.length>120)h.splice(120);
     localStorage.setItem('gym_hist_v6',JSON.stringify(h));
+    agendarSync();
   }catch(e){}
 }
 function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v6')||'[]')}catch(e){return[]}}
-
-/* GITHUB — backup assíncrono */
-async function ghGet(){
-  const token=getToken(); if(!token)return null;
-  try{
-    const r=await fetch(GH_API,{headers:{
-      'Authorization':'token '+token,
-      'Accept':'application/vnd.github.v3+json'
-    }});
-    if(r.status===404)return {content:[],sha:null};
-    if(!r.ok)return null;
-    const d=await r.json();
-    const content=JSON.parse(atob(d.content.replace(/\n/g,'')));
-    return {content, sha:d.sha};
-  }catch(e){return null}
-}
-async function ghPut(data, sha){
-  const token=getToken(); if(!token)return false;
-  try{
-    const body={
-      message:'Histórico atualizado',
-      content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))),
-    };
-    if(sha)body.sha=sha;
-    const r=await fetch(GH_API,{method:'PUT',headers:{
-      'Authorization':'token '+token,
-      'Accept':'application/vnd.github.v3+json',
-      'Content-Type':'application/json'
-    },body:JSON.stringify(body)});
-    return r.ok;
-  }catch(e){return false}
-}
-
-/* Salva local imediatamente + sincroniza GitHub em background */
-function saveHist(entry){
-  saveHistLocal(entry);
-  sincronizarGitHub();
-}
-
-let _syncTimeout=null;
-function sincronizarGitHub(){
-  // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
-  clearTimeout(_syncTimeout);
-  _syncTimeout=setTimeout(async()=>{
-    const token=getToken(); if(!token)return;
-    const local=loadHist();
-    const remoto=await ghGet();
-    if(!remoto)return;
-    // merge: une local + remoto, remove duplicatas por inicio+tipo
-    const todos=[...local,...(remoto.content||[])];
-    const vistos=new Set();
-    const merged=todos.filter(h=>{
-      const k=(h.inicio||0)+'_'+h.tipo;
-      if(vistos.has(k))return false;
-      vistos.add(k);return true;
-    });
-    merged.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
-    if(merged.length>120)merged.splice(120);
-    // salva merged localmente
-    try{localStorage.setItem('gym_hist_v6',JSON.stringify(merged))}catch(e){}
-    // salva no GitHub
-    await ghPut(merged, remoto.sha);
-  },3000);
-}
-
-/* Restaura histórico do GitHub para o localStorage (usado na tela de config) */
-async function restaurarDoGitHub(){
-  mostrarToast('Buscando histórico no GitHub...');
-  const remoto=await ghGet();
-  if(!remoto){mostrarToast('❌ Token inválido ou erro de conexão');return}
-  if(!remoto.content||!remoto.content.length){mostrarToast('Nenhum histórico encontrado no GitHub');return}
-  try{localStorage.setItem('gym_hist_v6',JSON.stringify(remoto.content))}catch(e){}
-  // recalcula sessões
-  const sess={A:0,B:0,C:0,D:0};
-  remoto.content.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
-  try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
-  mostrarToast('✓ '+remoto.content.length+' treinos restaurados!');
-  setTimeout(()=>{renderHome();renderHist(_histTab)},1500);
-}
-
-function mostrarToast(msg){
-  let t=document.getElementById('toast-msg');
-  if(!t){
-    t=document.createElement('div');t.id='toast-msg';
-    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1c1c26;color:#f0f0f5;border:1px solid rgba(255,255,255,.15);padding:10px 18px;border-radius:20px;font-size:13px;font-family:var(--mono);z-index:99;white-space:nowrap;transition:opacity .3s';
-    document.body.appendChild(t);
-  }
-  t.textContent=msg;t.style.opacity='1';
-  clearTimeout(t._to);t._to=setTimeout(()=>t.style.opacity='0',3000);
-}
-
-/* ─── CONFIGURAÇÃO DO TOKEN ─── */
-function abrirConfigToken(){
-  const existing=document.getElementById('modal-token');
-  if(existing)existing.remove();
-  const token=getToken();
-  const div=document.createElement('div');
-  div.id='modal-token';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
-  div.innerHTML=`
-    <div style="background:var(--surface);border-radius:24px;padding:20px;max-height:90vh;overflow-y:auto">
-      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔐 Backup no GitHub</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
-        O histórico fica salvo no seu GitHub e nunca se perde ao limpar o cache.<br><br>
-        <b style="color:var(--text)">Como criar o token:</b><br>
-        1. github.com → foto → Settings<br>
-        2. Developer settings → Personal access tokens → Tokens (classic)<br>
-        3. Generate new token → marque <b>repo</b><br>
-        4. Copie e cole abaixo
-      </div>
-      <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Token atual: ${token?'✓ configurado':'não configurado'}</div>
-      <input id="inp-token" type="password" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${token}">
-      <button onclick="salvarToken()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar token</button>
-      ${token?`<button onclick="restaurarDoGitHub();document.getElementById('modal-token').remove()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">↓ Restaurar histórico do GitHub</button>`:''}
-      <button onclick="document.getElementById('modal-token').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
-    </div>`;
-  document.body.appendChild(div);
-}
-function salvarToken(){
-  const t=document.getElementById('inp-token').value.trim();
-  if(!t){mostrarToast('Cole o token antes de salvar');return}
-  setToken(t);
-  document.getElementById('modal-token').remove();
-  const el=document.getElementById('gh-status');
-  if(el)el.textContent='✅';
-  mostrarToast('✓ Token salvo! Sincronizando...');
-  sincronizarGitHub();
-}
-
-/* ─── MIGRAÇÃO ─── */
-function migrarHistoricoAntigo(){
-  if(localStorage.getItem('gym_migrated_v6'))return;
-  const keys=['gym_hist_v5','gym_hist_v4','gym_hist_v3'];
-  let importados=0;
-  keys.forEach(k=>{
-    try{
-      const old=JSON.parse(localStorage.getItem(k)||'[]');
-      old.forEach(h=>{
-        // marca como plano antigo se não tiver plano definido
-        if(!h.plano) h.plano='antigo';
-        // garante campos mínimos
-        if(!h.dataStr) h.dataStr=h.data?new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'?';
-        saveHist(h);
-        importados++;
-      });
-    }catch(e){}
-  });
-  localStorage.setItem('gym_migrated_v6','1');
-  if(importados>0) console.log('Migrados '+importados+' treinos do histórico anterior.');
-}
-// sessões concluídas por tipo (apenas treinos novos A-D)
-function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0,"C":0,"D":0}')}catch(e){return{A:0,B:0,C:0,D:0}}}
+function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}')}catch(e){return{A:0,B:0}}}
 function addSessao(tipo){
   const s=loadSessoes(); s[tipo]=(s[tipo]||0)+1;
   localStorage.setItem('gym_sess_v6',JSON.stringify(s));
+  agendarSync();
 }
 function today(){return new Date().toDateString()}
 function todayStr(){return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})}
@@ -963,67 +544,35 @@ function diasAtePrazo(){
 
 // sugestão: próximo treino na rotação A→B→C→D→A...
 function sugerirTreino(){
+  const sess=loadSessoes();
   const hist=loadHist();
-  // busca último treino concluído nos treinos novos (que tem 'plano':'novo')
+  // Primeiro tenta pelo último treino registrado no app
   const ultimo=hist.find(h=>h.plano==='novo');
-  if(!ultimo) return 'A';
-  const idx=ORDEM.indexOf(ultimo.tipo);
-  return ORDEM[(idx+1)%ORDEM.length];
+  if(ultimo){
+    const idx=ORDEM.indexOf(ultimo.tipo);
+    return ORDEM[(idx+1)%ORDEM.length];
+  }
+  // Sem histórico no app: sugere o treino com menor número de sessões
+  // Em caso de empate, segue a ordem normal
+  let menorTreino=ORDEM[0];
+  let menorN=sess[ORDEM[0]]||0;
+  ORDEM.forEach(t=>{
+    const n=sess[t]||0;
+    if(n<menorN){menorN=n;menorTreino=t;}
+  });
+  return menorTreino;
 }
 
 /* ════ NAV ════ */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  // esconde o assist se estava visível
-  const assist=document.getElementById('page-assist');
-  if(assist)assist.style.display='none';
-  if(id==='assist'){
-    if(assist){assist.style.display='flex';}
-  }else{
-    const el=document.getElementById('page-'+id);
-    if(el)el.classList.add('active');
-  }
+  document.getElementById('page-'+id).classList.add('active');
   document.getElementById('app').scrollTop=0;
 }
-function buildMetricRow(nome,valor,ideal,status){
-  const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!']};
-  const [bg,cor,icone]=cores[status]||cores.ok;
-  return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
-    <div style="flex:1">
-      <div style="font-size:12px;font-weight:500">${nome}</div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">ideal: ${ideal}</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-size:13px;font-family:var(--mono);font-weight:500">${valor}</span>
-      <span style="background:${bg};color:${cor};border-radius:6px;padding:2px 7px;font-size:10px;font-family:var(--mono)">${icone}</span>
-    </div>
-  </div>`;
-}
-
 function showNav(tab){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('nav-'+tab).classList.add('active');
   if(tab==='home'){showPage('home');renderHome()}
-  if(tab==='saude'){
-    showPage('saude');
-    const metricas=[
-      ['Água corporal total','52.3kg','42.7~52.1','excelente'],
-      ['Massa gorda','21.7kg','9.1~18.2','ruim'],
-      ['Massa proteica','14.2kg','11.4~13.9','ok'],
-      ['Minerais','4.8kg','3.9~4.8','excelente'],
-      ['Massa muscular','66.5kg','54.9~75.5','ok'],
-      ['Massa muscular esquelética','40.7kg','32.8~40','excelente'],
-      ['Gordura visceral','9','1~9','ruim'],
-      ['Gordura subcutânea','19.2kg','6.5~12.7','ruim'],
-      ['Relação cintura-quadril','0.9','0.8~0.9','ruim'],
-      ['Massa livre de gordura','71.3kg','55.6~69.3','excelente'],
-      ['Água intracelular','32.9kg','26.5~32.4','excelente'],
-      ['Água extracelular','19.4kg','16.3~19.9','ok'],
-    ];
-    const el=document.getElementById('comp-body');
-    if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
-  }
-  if(tab==='assist'){showPage('assist');initAssist()}
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
 }
 function voltarHome(){
@@ -1035,7 +584,8 @@ function clearAllTicks(){
 
 /* ════ HOME ════ */
 function renderHome(){
-  // Alertas de prazo — avisa a partir de 09/05
+  // Alertas de prazo — exibidos a partir de 20/05
+  // Níveis: sutil (>30d) → âmbar (<30d) → amarelo forte (<14d) → vermelho (encerrado)
   const dias=diasAtePrazo();
   const now=new Date(); now.setHours(0,0,0,0);
   const inicioPlazo=new Date(INICIO_PLANO); inicioPlazo.setHours(0,0,0,0);
@@ -1043,13 +593,13 @@ function renderHome(){
   let alertHtml='';
   if(planoAtivo){
     if(dias<=0){
-      alertHtml=`<div class="alert-banner alert-red">⚠️ O prazo do plano encerrou em ${PRAZO.toLocaleDateString('pt-BR')}.</div>`;
+      alertHtml=`<div class="alert-banner alert-red">⚠️ Prazo encerrado em ${PRAZO.toLocaleDateString('pt-BR')}. Hora de definir um novo plano!</div>`;
     }else if(dias<=14){
-      alertHtml=`<div class="alert-banner alert-red">🔴 Faltam <b>${dias} dia${dias>1?'s':''}</b> para o fim do plano (${PRAZO.toLocaleDateString('pt-BR')})!</div>`;
+      alertHtml=`<div class="alert-banner alert-yellow">🟡 Atenção — faltam <b>${dias} dia${dias!==1?'s':''}</b> para o fim do plano!</div>`;
     }else if(dias<=30){
-      alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dias</b> para o fim do plano (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
+      alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dias</b> para encerrar o plano (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
     }else{
-      alertHtml=`<div class="alert-banner alert-amber" style="opacity:.75">📅 Plano ativo até ${PRAZO.toLocaleDateString('pt-BR')} · Faltam ${dias} dias.</div>`;
+      alertHtml=`<div class="alert-banner alert-subtle">📅 Plano ativo · Faltam ${dias} dias (${PRAZO.toLocaleDateString('pt-BR')})</div>`;
     }
   }
   document.getElementById('home-alerts').innerHTML=alertHtml;
@@ -1060,7 +610,7 @@ function renderHome(){
     const ex=TREINOS[pend.tipo].exercicios[pend.exIdx];
     document.getElementById('home-pending').innerHTML=`<div class="pending-card">
       <div class="pending-label">● Em andamento</div>
-      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/3</span></div>
+      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${pend.serieIdx+1}/3</span></div>
       <button class="btn btn-primary" onclick="retomar()" style="margin-bottom:6px">↩ Retomar de onde parei</button>
       <button class="btn btn-red" onclick="descartar()">Descartar</button>
     </div>`;
@@ -1083,8 +633,10 @@ function renderHome(){
     const n=sess[t]||0;
     const pct=Math.min(100,Math.round((n/META_SESSOES)*100));
     sgHtml+=`<div class="sess-card">
-      <div class="sess-letra">${t}</div>
-      <div style="font-size:16px;font-weight:600;font-family:var(--mono);color:var(--text)">${n}<span style="font-size:12px;color:var(--muted);font-weight:400">/${META_SESSOES}</span></div>
+      <div class="sess-top">
+        <span class="sess-letra">${t}</span>
+        <span class="sess-fraction"><strong>${n}</strong>/${META_SESSOES}</span>
+      </div>
       <div class="sess-bar"><div class="sess-fill" style="width:${pct}%"></div></div>
     </div>`;
   });
@@ -1114,9 +666,7 @@ function iniciarTreino(tipo){
   if(p&&!p.finalizado){descartar()}
   const tr=TREINOS[tipo];
   E={
-    tipo, plano:'novo', data:today(), exIdx:0,
-    // serieIdx agora é um array por exercício em vez de global
-    serieIdxs:tr.exercicios.map(()=>0),
+    tipo, plano:'novo', data:today(), exIdx:0, serieIdx:0,
     series:tr.exercicios.map(ex=>(ex.tipo==='normal'||ex.tipo==='conjugado')?Array(ex.series||3).fill(null):[]),
     pulados:[], finalizado:false, inicio:Date.now(),
     serieStartTs:null, restStartTs:null, restTotal:0, restTipo:null,
@@ -1126,18 +676,6 @@ function iniciarTreino(tipo){
 }
 function retomar(){
   E=load(); if(!E){voltarHome();return}
-  // migração: se estado antigo tem serieIdx global, converte para array
-  if(typeof E.serieIdx === 'number' && !E.serieIdxs){
-    const tr=TREINOS[E.tipo];
-    E.serieIdxs=tr.exercicios.map((_,i)=>i===E.exIdx?E.serieIdx:0);
-    delete E.serieIdx;
-    save();
-  }
-  // garante que serieIdxs tem o tamanho certo
-  if(!E.serieIdxs){
-    E.serieIdxs=TREINOS[E.tipo].exercicios.map(()=>0);
-    save();
-  }
   if(E.restStartTs&&E.restTotal){
     const rem=restRem(E.restStartTs,E.restTotal);
     if(rem>0){_restCb=E.restTipo==='serie'?()=>goExercicio():()=>avancarExercicio();mostrarDescansoRetomado();return}
@@ -1145,7 +683,7 @@ function retomar(){
     if(E.restTipo==='serie')goExercicio(); else avancarExercicio(); return;
   }
   if(E.esteiraStartTs&&E.esteiraTipo){
-    const rem=restRem(E.esteiraStartTs,esteiraDuracao(E.esteiraTipo));
+    const rem=restRem(E.esteiraStartTs,600);
     if(rem>0){mostrarEsteiraRetomada();return}
     E.esteiraStartTs=null;terminarEsteira();return;
   }
@@ -1189,7 +727,7 @@ function renderExCard(){
 
   let badges='';
   for(let i=0;i<(ex.series||3);i++){
-    const c=i<E.serieIdxs[E.exIdx]?'done':i===E.serieIdxs[E.exIdx]?'current':'';
+    const c=i<E.serieIdx?'done':i===E.serieIdx?'current':'';
     badges+=`<div class="s-badge ${c}">${i+1}</div>`;
   }
 
@@ -1223,7 +761,7 @@ function renderExCard(){
 
 function renderSeriesDone(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
-  const done=E.series[E.exIdx].slice(0,E.serieIdxs[E.exIdx]).filter(Boolean);
+  const done=E.series[E.exIdx].slice(0,E.serieIdx).filter(Boolean);
   if(!done.length){document.getElementById('series-done-wrap').innerHTML='';return}
   const rows=done.map((s,i)=>{
     if(ex.tipo==='conjugado'){
@@ -1274,7 +812,7 @@ function renderActionArea(){
         <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
         <div class="input-grid">
           <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
-          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
+          <div class="field"><label>${ex.isTime2===false?'Repetições':'Meta (seg)'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
         </div>
       </div>`;
   }else{
@@ -1291,12 +829,12 @@ function renderActionArea(){
       <div class="timer-pulse" id="stpulse">${jaRodando?'● gravando':''}</div>
     </div>
     ${inputsHtml}
-    <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdxs[E.exIdx]+1}</button>
-    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdxs[E.exIdx]+1}</button>`;
+    <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdx+1}</button>
+    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdx+1}</button>`;
 }
 
 function getUltimoPeso(){
-  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso)return s.peso}
+  for(let i=E.serieIdx-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso)return s.peso}
   const hist=loadHist();
   for(const h of hist){
     if(h.tipo===E.tipo&&h.plano==='novo'){
@@ -1309,7 +847,7 @@ function getUltimoPeso(){
   return '';
 }
 function getUltimoPeso2(){
-  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso2)return s.peso2}
+  for(let i=E.serieIdx-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso2)return s.peso2}
   const hist=loadHist();
   for(const h of hist){
     if(h.tipo===E.tipo&&h.plano==='novo'){
@@ -1357,27 +895,27 @@ function finalizarSerie(){
     let reps2=parseInt(document.getElementById('inp-reps2').value)||0;
     if(!reps){alert('Informe as repetições do 1º exercício');iniciarSerie();return}
     if(!reps2){alert('Informe as repetições do 2º exercício');iniciarSerie();return}
-    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={peso,reps,peso2,reps2,tempo};
+    E.series[E.exIdx][E.serieIdx]={peso,reps,peso2,reps2,tempo};
   }else{
     if(!reps&&!ex.isTime){alert('Informe as repetições');iniciarSerie();return}
     if(!reps&&ex.isTime)reps=ex.reps;
-    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={peso,reps,tempo};
+    E.series[E.exIdx][E.serieIdx]={peso,reps,tempo};
   }
 
   const totalS=ex.series||3;
-  if(E.serieIdxs[E.exIdx]<totalS-1){
-    E.serieIdxs[E.exIdx]++;
+  if(E.serieIdx<totalS-1){
+    E.serieIdx++;
     E.restStartTs=Date.now();E.restTotal=REST_SERIE;E.restTipo='serie';save();
-    const proxLabel=`${exNome(ex)} — Série ${E.serieIdxs[E.exIdx]+1} de ${totalS}`;
+    const proxLabel=`${exNome(ex)} — Série ${E.serieIdx+1} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
-    E.serieIdxs[E.exIdx]=0;
+    E.serieIdx=0;
     const proxIdx=proximoExPendente(E.exIdx+1);
     E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
     let proxLabel='Finalizar treino';
     if(proxIdx!==-1){
       const pex=TREINOS[E.tipo].exercicios[proxIdx];
-      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':
+      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (10 min)':
         `${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;
     }
     iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
@@ -1440,9 +978,21 @@ function abrirLista(){
   document.getElementById('modal-titulo').textContent='Treino '+E.tipo;
   let html='';
   exs.forEach((ex,i)=>{
-    if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim'){
+    if(ex.tipo==='esteira_inicio'){
+      // aquecimento: não clicável (sempre primeiro)
       html+=`<div class="modal-item" style="opacity:.35;cursor:default">
         <span class="mi-num">${i+1}</span><span class="mi-name" style="color:var(--muted)">🏃 ${exNome(ex)}</span></div>`;return;
+    }
+    if(ex.tipo==='esteira_fim'){
+      // finalização: clicável — pode fazer antes do último exercício
+      const esteiraFeita = E.esteiraFimFeita||false;
+      const badge = esteiraFeita?`<span class="tag tag-green">✓</span>`:'';
+      const cls = esteiraFeita?'done-ex':'';
+      const click = esteiraFeita?'':` onclick="irParaEx(${i})"`;
+      html+=`<div class="modal-item ${cls}"${click}>
+        <span class="mi-num">${i+1}</span>
+        <span class="mi-name">🏃 ${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">10 min</span></span>
+        ${badge}</div>`;return;
     }
     const pulado=exFoiPulado(i),done=exFoiConcluido(i),current=i===E.exIdx;
     let badge='';
@@ -1464,7 +1014,11 @@ function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
-  E.exIdx=idx;E.serieIdxs[idx]=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;
+  // Restaura serieIdx baseado nas séries já feitas neste exercício
+  const seriesFeitas=E.series[idx]?E.series[idx].filter(s=>s!==null).length:0;
+  E.serieIdx=seriesFeitas;
+  E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
 }
 
 /* avançar */
@@ -1491,7 +1045,13 @@ function avancarExercicio(){
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
-  if(next<exs.length){E.exIdx=next;E.serieIdxs[next]=0;E.serieStartTs=null;save();goExercicio()}
+  if(next<exs.length){
+    E.exIdx=next;
+    // Restaura serieIdx baseado nas séries já feitas (para intercalação entre exercícios)
+    const seriesFeitas=E.series[next]?E.series[next].filter(s=>s!==null).length:0;
+    E.serieIdx=seriesFeitas;
+    E.serieStartTs=null;save();goExercicio();
+  }
   else finalizarTreino();
 }
 
@@ -1521,61 +1081,45 @@ function confirmarIrEsteira(){
   // vai direto para esteira_fim
   const exs=TREINOS[E.tipo].exercicios;
   const idxEsteira=exs.findIndex(e=>e.tipo==='esteira_fim');
-  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdxs[idxEsteira]=0;E.serieStartTs=null;save();goExercicio()}
+  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 
 /* esteira */
-const ESTEIRA_INICIO_SECS = 600;  // 10 min aquecimento
-const ESTEIRA_FIM_SECS   = 1200; // 20 min finalização
-
-function esteiraDuracao(tipo){ return tipo==='esteira_fim'?ESTEIRA_FIM_SECS:ESTEIRA_INICIO_SECS; }
-
 function goEsteira(tipo){
-  E.esteiraTipo=tipo;
-  if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();
-  // inicializa log de esteiras se não existir
-  if(!E.esteiraLog)E.esteiraLog=[];
-  save();
+  E.esteiraTipo=tipo;if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();save();
   showPage('esteira');
-  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
-  document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! 20 minutos de recuperação.';
+  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
+  document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho!';
   atualizarEsteira();
   clearInterval(esteiraTickInterval);
   esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function mostrarEsteiraRetomada(){
   showPage('esteira');
-  const tipo=E.esteiraTipo;
-  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
+  document.getElementById('esteira-title').textContent=E.esteiraTipo==='esteira_inicio'?'Esteira — aquecimento':'Esteira — finalização';
   document.getElementById('esteira-sub').textContent='Retomando...';
   atualizarEsteira();clearInterval(esteiraTickInterval);esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function atualizarEsteira(){
   if(!E||!E.esteiraStartTs)return;
-  const dur=esteiraDuracao(E.esteiraTipo);
-  const rem=restRem(E.esteiraStartTs,dur);
+  const rem=restRem(E.esteiraStartTs,600);
   document.getElementById('esteira-timer').textContent=fmtMS(rem);
-  if(rem<=0){clearInterval(esteiraTickInterval);registrarEsteira('concluida');E.esteiraStartTs=null;save();terminarEsteira()}
+  if(rem<=0){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 }
-function pularEsteira(){
-  clearInterval(esteiraTickInterval);
-  registrarEsteira('pulada');
-  E.esteiraStartTs=null;save();terminarEsteira();
-}
-function registrarEsteira(status){
-  if(!E.esteiraLog)E.esteiraLog=[];
-  const dur=esteiraDuracao(E.esteiraTipo);
-  const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
-  E.esteiraLog.push({
-    tipo:E.esteiraTipo,
-    status, // 'concluida' ou 'pulada'
-    duracaoMeta:dur,
-    duracaoFeita:Math.min(feito,dur),
-  });
-}
+function pularEsteira(){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 function terminarEsteira(){
-  if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
+  if(E.esteiraTipo==='esteira_fim'){
+    E.esteiraFimFeita=true; save();
+    // Verifica se ainda há exercícios pendentes — se sim, volta para o modal
+    const exs=TREINOS[E.tipo].exercicios;
+    const temPendente=exs.some((ex,i)=>{
+      if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim') return false;
+      return !exFoiConcluido(i)&&!exFoiPulado(i);
+    });
+    if(temPendente){ abrirModalDireto(); return; }
+    finalizarTreino(); return;
+  }
   E.esteiraTipo=null;save();avancarExercicio();
 }
 
@@ -1587,35 +1131,10 @@ function finalizarTreino(){
     tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
     exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
-    series:E.series,pulados:E.pulados||[],
-    esteiraLog:E.esteiraLog||[]
+    series:E.series,pulados:E.pulados||[]
   });
   showPage('finished');renderFinished();
 }
-function buildEsteiraHtml(log){
-  if(!log||!log.length)return '';
-  let html='';
-  log.forEach(e=>{
-    const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
-    const meta=e.tipo==='esteira_inicio'?'10min':'20min';
-    const pulada=e.status==='pulada';
-    const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
-    const cor=pulada?'var(--amber)':'var(--green)';
-    const icon=pulada?'⏭':'🏃';
-    html+=`<div class="card" style="padding:11px 14px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:13px;font-weight:500">${icon} ${nome}</span>
-        <div style="display:flex;gap:6px;align-items:center">
-          <span class="pill">${meta}</span>
-          <span style="font-size:12px;font-family:var(--mono);color:${cor};font-weight:500">${feito}</span>
-          ${pulada?'<span class="tag tag-amber">pulada</span>':'<span class="tag tag-green">✓</span>'}
-        </div>
-      </div>
-    </div>`;
-  });
-  return html;
-}
-
 function renderFinished(){
   const exs=TREINOS[E.tipo].exercicios;
   const dur=E.fim-E.inicio;
@@ -1629,8 +1148,6 @@ function renderFinished(){
     <div class="stat-card"><div class="stat-num">${Math.round(vol)}</div><div class="stat-label">Volume kg×rep</div></div>
     <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>`;
   let html='';
-  // esteiras primeiro
-  html+=buildEsteiraHtml(E.esteiraLog||[]);
   exs.forEach((ex,i)=>{
     if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
     const ss=E.series[i].filter(Boolean);
@@ -1663,7 +1180,8 @@ function renderFinished(){
 function switchHistTab(tab){
   _histTab=tab;
   ['atual','antigo','evol','treinos'].forEach(t=>{
-    document.getElementById('htab-'+t).classList.toggle('active',t===tab);
+    const el=document.getElementById('htab-'+t);
+    if(el) el.classList.toggle('active',t===tab);
   });
   renderHist(tab);
 }
@@ -1773,10 +1291,10 @@ function renderHist(tab){
     });
     div.innerHTML=html||'<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Dados insuficientes para evolução.</p>';
   }else if(tab==='treinos'){
-    // Lista dos treinos antigos A, B, C para referência
-    let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
-    Object.keys(TREINOS_ANTIGOS).forEach(t=>{
-      const tr=TREINOS_ANTIGOS[t];
+    // Lista dos treinos atuais A e B para consulta/referência
+    let html='<div class="card" style="margin-bottom:14px;background:rgba(124,106,247,.07);border-color:rgba(124,106,247,.2)"><div style="font-size:12px;color:var(--accent2);line-height:1.6">📋 Treinos atuais para consulta rápida.</div></div>';
+    ORDEM.forEach(t=>{
+      const tr=TREINOS[t];
       const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado');
       html+=`<div class="card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -1798,7 +1316,7 @@ function renderHist(tab){
             <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
           </div>`).join('')}
         <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
+          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 10min</span>
         </div>
       </div>`;
     });
@@ -1811,36 +1329,6 @@ function buildHistCard(h){
     ||(TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null)
     ||[];
   let exHtml='';
-  // esteiras primeiro
-  if(h.esteiraLog&&h.esteiraLog.length){
-    h.esteiraLog.forEach(e=>{
-      const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
-      const meta=e.tipo==='esteira_inicio'?'10min':'20min';
-      const pulada=e.status==='pulada';
-      const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
-      const cor=pulada?'var(--amber)':'var(--green)';
-      const icon=pulada?'⏭':'🏃';
-      exHtml+=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;padding:6px 8px;background:var(--surface2);border-radius:8px">
-        <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
-        <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>
-      </div>`;
-    });
-  }
-  // esteiras primeiro, se houver registro
-  if(h.esteiraLog&&h.esteiraLog.length){
-    h.esteiraLog.forEach(e=>{
-      const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
-      const meta=e.tipo==='esteira_inicio'?'10min':'20min';
-      const pulada=e.status==='pulada';
-      const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
-      const cor=pulada?'var(--amber)':'var(--green)';
-      const icon=pulada?'⏭':'🏃';
-      exHtml+=`<div style="margin-bottom:7px;display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
-        <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>
-      </div>`;
-    });
-  }
   if(exs.length>0){
     exs.forEach((ex,i)=>{
       if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
@@ -1889,244 +1377,70 @@ document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&E&&!E.finalizado)retomar();
 });
 
-/* ════ ASSISTENTE CLAUDE ════ */
-const ASSIST_MODEL = 'claude-haiku-4-5-20251001';
-
-function getApiKey(){try{return localStorage.getItem('gym_api_key')||''}catch(e){return''}}
-function setApiKey(k){try{localStorage.setItem('gym_api_key',k)}catch(e){}}
-
-let assistMsgs = []; // histórico da conversa
-let assistInited = false;
-
-function initAssist(){
-  const key = getApiKey();
-  const statusEl = document.getElementById('assist-status');
-  const keyBtn = document.getElementById('assist-key-btn');
-  if(key){
-    if(statusEl) statusEl.textContent = '✅ Conectado · Claude Haiku';
-    if(keyBtn) keyBtn.textContent = '🔑 Chave ✓';
-  }else{
-    if(statusEl) statusEl.textContent = 'Configure sua chave API para começar';
-  }
-  if(!assistInited){
-    assistInited = true;
-    // mensagem de boas-vindas
-    if(!getApiKey()){
-      appendMsgClaude('Olá Rafael! 👋 Para ativar o assistente, toque em **🔑 Chave** acima e cole sua chave da API da Anthropic (console.anthropic.com). Após configurar, pode me perguntar sobre treinos, alimentação, suplementos ou qualquer dúvida de saúde!');
-    }else{
-      appendMsgClaude('Olá Rafael! 💪 Estou pronto para ajudar. Pode me perguntar sobre seus treinos, alimentação, suplementos, ou qualquer dúvida relacionada à sua saúde e performance!');
-    }
-  }
-}
-
-function appendMsgUser(text){
-  const div = document.createElement('div');
-  div.className = 'msg-user';
-  div.textContent = text;
-  document.getElementById('assist-msgs').appendChild(div);
-  scrollChat();
-}
-
-function appendMsgClaude(text){
-  const div = document.createElement('div');
-  div.className = 'msg-claude';
-  // formata markdown básico
-  div.innerHTML = text
-    .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
-    .replace(/\*(.*?)\*/g,'<i>$1</i>')
-    .replace(/\n/g,'<br>');
-  document.getElementById('assist-msgs').appendChild(div);
-  scrollChat();
-  return div;
-}
-
-function showTyping(){
-  const div = document.createElement('div');
-  div.className = 'msg-typing';
-  div.id = 'typing-indicator';
-  div.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
-  document.getElementById('assist-msgs').appendChild(div);
-  scrollChat();
-}
-function hideTyping(){
-  const t = document.getElementById('typing-indicator');
-  if(t) t.remove();
-}
-
-function scrollChat(){
-  const msgs = document.getElementById('assist-msgs');
-  if(msgs) setTimeout(()=>msgs.scrollTop=msgs.scrollHeight, 50);
-}
-
-function autoResize(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,120)+'px';
-}
-
-function assistKeydown(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem()}
-}
-
-function buildSystemPrompt(){
-  const sess = loadSessoes();
-  return `Você é um assistente pessoal de treino e saúde do Rafael Pinto, integrado ao app de treino dele.
-
-CONTEXTO DO RAFAEL:
-- Idade: 41 anos | Altura: 186cm | Peso: 93kg | Meta: 82kg
-- Treina de segunda a sexta às 08h na academia
-- Plano atual: Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps), C (Pernas), D (Ombros/Bíceps/Tríceps/Core) — 11 sessões cada até 09/07/2026
-- Sessões concluídas: A=${sess.A||0}/11, B=${sess.B||0}/11, C=${sess.C||0}/11, D=${sess.D||0}/11
-- Pré-treino: guaraná, tribulus, uva, beterraba, picolínato de cromo, maca peruana, linhaça dourada (5g/dia) + creatina 5g + própolis 70
-- Pós-treino: tapioca + 50g frango desfiado + 1 ovo + mussarela + 2 ovos cozidos (~40g proteína)
-- Suplementos: creatina 5g (pré-treino), D3+K2 Ecomev 1 cápsula (manhã), Nutrends 5 Magnésio + Treonina 2 cápsulas (22h-23h)
-- Avaliação física (11/05/2026): pontuação 79, gordura visceral 9 (limite), massa muscular esquelética 40.7kg (excelente)
-- Meta proteína: 167-204g/dia | Meta calórica: 2300-2400 kcal/dia
-
-Responda de forma direta, prática e personalizada. Use os dados do Rafael para respostas específicas. Seja conciso mas completo. Escreva em português brasileiro.`;
-}
-
-async function enviarMensagem(){
-  const input = document.getElementById('assist-input');
-  const text = input.value.trim();
-  if(!text) return;
-  const key = getApiKey();
-  if(!key){ abrirConfigApi(); return; }
-
-  input.value=''; input.style.height='42px';
-  appendMsgUser(text);
-  assistMsgs.push({role:'user', content:text});
-  showTyping();
-
-  const btn = document.getElementById('assist-send');
-  if(btn) btn.disabled=true;
-
-  try{
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': key,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body: JSON.stringify({
-        model: ASSIST_MODEL,
-        max_tokens: 1024,
-        system: buildSystemPrompt(),
-        messages: assistMsgs.slice(-10) // últimas 10 mensagens de contexto
-      })
-    });
-    const data = await resp.json();
-    hideTyping();
-    if(data.error){
-      appendMsgClaude('❌ Erro: '+data.error.message+'\n\nVerifique se sua chave API está correta.');
-      assistMsgs.pop();
-    }else{
-      const reply = data.content[0].text;
-      assistMsgs.push({role:'assistant', content:reply});
-      appendMsgClaude(reply);
-    }
-  }catch(e){
-    hideTyping();
-    appendMsgClaude('❌ Erro de conexão. Verifique sua internet e tente novamente.');
-    assistMsgs.pop();
-  }finally{
-    if(btn) btn.disabled=false;
-    input.focus();
-  }
-}
-
-function abrirConfigApi(){
-  const existing=document.getElementById('modal-api');if(existing)existing.remove();
-  const key=getApiKey();
-  const div=document.createElement('div');
-  div.id='modal-api';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
-  div.innerHTML=`
-    <div style="background:var(--surface);border-radius:24px;padding:20px">
-      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔑 Chave API Anthropic</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
-        <b style="color:var(--text)">Como obter:</b><br>
-        1. Acesse <b>console.anthropic.com</b><br>
-        2. Crie conta → API Keys → Create Key<br>
-        3. Adicione crédito mínimo de $5 (dura meses)<br>
-        4. Cole a chave abaixo<br><br>
-        <span style="color:var(--amber)">⚠️ A chave fica salva só no seu celular</span>
-      </div>
-      <input id="inp-api-key" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${key}">
-      <button onclick="salvarApiKey()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar chave</button>
-      ${key?`<button onclick="limparApiKey()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:13px;font-family:var(--sans);cursor:pointer;margin-bottom:8px">Remover chave</button>`:''}
-      <button onclick="document.getElementById('modal-api').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
-    </div>`;
-  document.body.appendChild(div);
-}
-function salvarApiKey(){
-  const k=document.getElementById('inp-api-key').value.trim();
-  if(!k){mostrarToast('Cole a chave antes de salvar');return}
-  setApiKey(k);
-  document.getElementById('modal-api').remove();
-  mostrarToast('✅ Chave salva!');
-  assistInited=false;
-  initAssist();
-}
-function limparApiKey(){
-  try{localStorage.removeItem('gym_api_key')}catch(e){}
-  document.getElementById('modal-api').remove();
-  assistInited=false;
-  document.getElementById('assist-msgs').innerHTML='';
-  assistMsgs=[];
-  initAssist();
-  mostrarToast('Chave removida');
-}
 
 /* ════ TEMA ════ */
-function aplicarTema(tema){
-  if(tema==='light'){
-    document.body.classList.add('light');
-    document.getElementById('theme-icon').textContent='🌙';
-    document.getElementById('theme-label').textContent='Escuro';
-  }else{
-    document.body.classList.remove('light');
-    document.getElementById('theme-icon').textContent='☀️';
-    document.getElementById('theme-label').textContent='Claro';
-  }
-}
 function toggleTema(){
-  const isLight=document.body.classList.contains('light');
-  const novoTema=isLight?'dark':'light';
-  try{localStorage.setItem('gym_tema',novoTema)}catch(e){}
-  aplicarTema(novoTema);
+  const light = document.body.classList.toggle('light');
+  localStorage.setItem('gym_ma_tema', light ? 'light' : 'dark');
+  const btn = document.getElementById('theme-btn');
+  if(btn) btn.textContent = light ? '🌙 Tema' : '☀️ Tema';
 }
 function carregarTema(){
-  try{
-    const t=localStorage.getItem('gym_tema')||'dark';
-    aplicarTema(t);
-  }catch(e){}
+  const t = localStorage.getItem('gym_ma_tema');
+  if(t === 'light'){
+    document.body.classList.add('light');
+    const btn = document.getElementById('theme-btn');
+    if(btn) btn.textContent = '🌙 Tema';
+  }
 }
 
 /* ════ INIT ════ */
+function inicializarSessoesIniciais(){
+  const CHAVE_INIT = 'gym_ma_init_v3';
+  if(localStorage.getItem(CHAVE_INIT)) return;
+  const sess = loadSessoes();
+  if(sess.A<=5) sess.A = 4;
+  if(sess.B<3)  sess.B = 3;
+  localStorage.setItem('gym_sess_v6', JSON.stringify(sess));
+  localStorage.setItem(CHAVE_INIT, '1');
+}
+
+inicializarSessoesIniciais();
 carregarTema();
-migrarHistoricoAntigo();
 renderHome();
 
-// atualiza ícone de status do backup
-(function(){
-  const token=getToken();
-  const el=document.getElementById('gh-status');
-  if(el)el.textContent=token?'✅':'☁️';
-})();
+// Atualiza ícone do backup conforme token salvo
+if(getToken()) document.getElementById('backup-cloud-btn').textContent='✅ Backup';
 
-// sincroniza histórico com GitHub ao abrir (se tiver token)
+// Sincroniza ao abrir se tiver token
 if(getToken()){
-  sincronizarGitHub();
+  syncDoGitHub(true).then(()=>renderHome());
 }
 
-/* ════ SERVICE WORKER (offline) ════ */
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js',{scope:'./'})
-    .then(()=>console.log('Service Worker registrado — app funciona offline'))
-    .catch(e=>console.log('SW não registrado:',e));
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
 }
 </script>
+<!-- ══ MODAL BACKUP ══ -->
+<div class="modal-overlay hidden" id="modal-backup" onclick="if(event.target===this)fecharModalBackup()">
+  <div class="modal-sheet">
+    <div class="modal-header">
+      <h3>☁️ Backup GitHub</h3>
+      <button class="modal-close" onclick="fecharModalBackup()">✕</button>
+    </div>
+    <div class="modal-body" style="padding:18px">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">Cole o seu <b style="color:var(--text)">Personal Access Token</b> do GitHub. Ele fica salvo só no seu celular — nunca vai para o código.</p>
+      <div class="field" style="margin-bottom:12px">
+        <label>Token do GitHub</label>
+        <input type="password" id="backup-token-input" placeholder="ghp_..." style="font-size:13px;padding:10px">
+      </div>
+      <button class="btn btn-primary" onclick="salvarToken()" style="margin-bottom:8px">Salvar token</button>
+      <button class="btn btn-green" onclick="restaurarDoGitHub()" style="margin-bottom:8px">Restaurar histórico do GitHub</button>
+      <button class="btn btn-ghost" onclick="fecharModalBackup()">Fechar</button>
+      <p id="backup-status" style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px;min-height:18px"></p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
