@@ -1101,7 +1101,27 @@ function atualizarEsteira(){
 }
 function pularEsteira(){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
 function terminarEsteira(){
-  if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
+  if(E.esteiraTipo==='esteira_fim'){
+    const exs=TREINOS[E.tipo].exercicios;
+    const temPendente=exs.some((ex,i)=>
+      (ex.tipo==='normal'||ex.tipo==='conjugado') && !exFoiConcluido(i) && !exFoiPulado(i)
+    );
+    if(temPendente){
+      // Ainda há exercícios — não finaliza. Vai para o primeiro pendente e abre a lista por cima.
+      const idxPendente=exs.findIndex((ex,i)=>
+        (ex.tipo==='normal'||ex.tipo==='conjugado') && !exFoiConcluido(i) && !exFoiPulado(i)
+      );
+      E.esteiraTipo=null;
+      E.exIdx=idxPendente;
+      const seriesFeitas=E.series[idxPendente]?E.series[idxPendente].filter(s=>s!==null).length:0;
+      E.serieIdx=seriesFeitas;
+      E.serieStartTs=null;save();
+      goExercicio();
+      abrirLista();
+      return;
+    }
+    finalizarTreino();return;
+  }
   E.esteiraTipo=null;save();avancarExercicio();
 }
 
