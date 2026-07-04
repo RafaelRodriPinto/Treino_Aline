@@ -392,6 +392,8 @@ const TREINOS = {
 
 const ORDEM = ['A','B'];
 const REST_SERIE = 50, REST_EX = 60;
+const ESTEIRA_INICIO_SECS = 600;  // 10 min
+const ESTEIRA_FIM_SECS    = 600;  // 10 min
 
 /* ════ STATE ════ */
 let E = null;
@@ -412,6 +414,7 @@ function setToken(t){try{localStorage.setItem('gym_ma_gh_token',t)}catch(e){}}
 
 let _ghSha = null;
 let _syncTimer = null;
+let _syncTimeout = null;
 
 async function ghGet(){
   const token=getToken(); if(!token)return null;
@@ -467,7 +470,7 @@ function atualizarStatusBackup(){
 function getUltimaSinc(){try{return parseInt(localStorage.getItem('gym_ultima_sinc')||'0')||null}catch(e){return null}}
 function setUltimaSinc(ts){try{localStorage.setItem('gym_ultima_sinc',String(ts))}catch(e){}}
 
-async function montarPayloadCompleto(treinos){
+function montarPayloadCompleto(treinos){
   return { treinos, sess: loadSessoes(), updated: Date.now() };
 }
 function normalizarRemoto(remotoContent){
@@ -558,12 +561,15 @@ function abrirModalBackup(){
 }
 function fecharModalBackup(){ document.getElementById('modal-backup').classList.add('hidden'); }
 function salvarToken(){
-  const val = document.getElementById('backup-token-input').value.trim();
-  if(!val){ document.getElementById('backup-status').textContent='⚠️ Cole o token antes de salvar.'; return; }
-  saveToken(val);
-  document.getElementById('backup-status').textContent='✅ Token salvo!';
-  document.getElementById('backup-cloud-btn').textContent='☁️';
-  syncDoGitHub(true).then(()=>renderHome());
+  const el = document.getElementById('inp-token') || document.getElementById('backup-token-input');
+  if(!el){ mostrarToast('⚠️ Campo não encontrado'); return; }
+  const val = el.value.trim();
+  if(!val){ mostrarToast('⚠️ Cole o token antes de salvar'); return; }
+  setToken(val);
+  atualizarStatusBackup();
+  mostrarToast('✅ Token salvo!');
+  document.getElementById('modal-token') && document.getElementById('modal-token').remove();
+  sincronizarGitHub();
 }
 
 function mostrarToast(msg){
@@ -1304,12 +1310,12 @@ function confirmarPularEsteira(){
   }
 }
 function pararEsteira(){
-  // para a esteira ANTES do tempo e salva o tempo real feito até agora
   clearInterval(esteiraTickInterval);
   if(!E.esteiraRegistrada){
     E.esteiraRegistrada=true;
-    registrarEsteira('parada');
-    E.esteiraStartTs=null;save();
+    registrarEsteira('parada');  // registra antes de zerar
+    E.esteiraStartTs=null;
+    save();
     terminarEsteira();
   }
 }
@@ -1319,7 +1325,7 @@ function registrarEsteira(status){
   const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
   E.esteiraLog.push({
     tipo:E.esteiraTipo,
-    status, // 'concluida' | 'parada' (tempo parcial salvo) | 'pulada' (compat. com versões antigas)
+    status,
     duracaoMeta:dur,
     duracaoFeita:Math.min(feito,dur),
   });
