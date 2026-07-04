@@ -1,6 +1,110 @@
 {
   "treinos": [
     {
+      "tipo": "B",
+      "plano": "novo",
+      "data": "Sat Jul 04 2026",
+      "dataStr": "04/07/26",
+      "inicio": 1783172571755,
+      "fim": 1783172753805,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Leg 180° Convergente",
+        "Glúteo Máquina Extensão",
+        "Cadeira Flexora Unilateral",
+        "Cadeira Abdutora",
+        "Panturrilha Banco",
+        "Puxada Aberta",
+        "Remada Máquina Fechada",
+        "Scott Máquina",
+        "Bíceps Martelo c/ Rotação",
+        "Abdominal Remador",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 8
+          },
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 2
+          },
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 1
+          }
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        []
+      ],
+      "pulados": [
+        1,
+        2,
+        4,
+        5,
+        7,
+        8,
+        9,
+        10
+      ]
+    },
+    {
       "tipo": "A",
       "plano": "novo",
       "data": "Thu Jul 02 2026",
@@ -3331,7 +3435,7 @@
   ],
   "sess": {
     "A": 14,
-    "B": 12
+    "B": 13
   },
-  "updated": 1783172491718
+  "updated": 1783172757580
 }
