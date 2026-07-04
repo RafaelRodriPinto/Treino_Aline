@@ -887,7 +887,7 @@ function editarSerie(idx){
   const existing=document.getElementById('modal-edit-serie');if(existing)existing.remove();
   const div=document.createElement('div');
   div.id='modal-edit-serie';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px calc(20px + env(safe-area-inset-bottom))';
 
   let camposHtml='';
   if(ex.tipo==='conjugado'){
@@ -951,15 +951,15 @@ function renderActionArea(){
       <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
         <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">① ${ex.nome}</div>
         <div class="input-grid">
-          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}" value="${ur}"></div>
+          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" placeholder="${up||'0'}"></div>
+          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}" placeholder="${ur||repsPlaceholder}"></div>
         </div>
       </div>
       <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
         <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
         <div class="input-grid">
-          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
-          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}" value="${ur2}"></div>
+          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" placeholder="${up2||'0'}"></div>
+          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}" placeholder="${ur2||ex.reps2||ex.reps||'0'}"></div>
         </div>
       </div>`;
   }else{
@@ -1130,14 +1130,14 @@ function pularExercicio(){
   const existing=document.getElementById('modal-pular');if(existing)existing.remove();
   const div=document.createElement('div');
   div.id='modal-pular';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px calc(20px + env(safe-area-inset-bottom))';
   div.innerHTML=`
     <div style="background:var(--surface);border-radius:24px;padding:20px">
       <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⏭ Pular exercício</div>
       <div style="font-size:15px;font-weight:500;margin-bottom:6px">${nome}</div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5">Você pode retomar este exercício depois pela lista.</div>
-      <button onclick="confirmarPularExercicio()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#b45309);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, pular</button>
-      <button onclick="document.getElementById('modal-pular').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
+      <button onclick="confirmarPularExercicio()" style="width:100%;padding:18px 14px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#b45309);color:#fff;font-size:15px;font-family:var(--sans);font-weight:600;border:none;cursor:pointer;margin-bottom:10px;min-height:56px;width:100%">Sim, pular</button>
+      <button onclick="document.getElementById('modal-pular').remove()" style="width:100%;padding:16px 14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;min-height:52px">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
 }
@@ -1273,7 +1273,7 @@ function mostrarConfirmacaoEsteira(naoFeitos, pulados){
 
   const div=document.createElement('div');
   div.id='modal-esteira-confirm';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px calc(20px + env(safe-area-inset-bottom))';
   div.innerHTML=`
     <div style="background:var(--surface);border-radius:24px;padding:20px">
       <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⚠️ Atenção — exercícios pendentes</div>
@@ -1281,7 +1281,7 @@ function mostrarConfirmacaoEsteira(naoFeitos, pulados){
       <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5">Deseja ir para a esteira de finalização mesmo assim?<br><span style="font-size:12px">O treino será finalizado após a esteira, mesmo se parar antes do tempo.</span></div>
       <button onclick="confirmarIrEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">✅ Sim, ir para a esteira e finalizar</button>
       <button onclick="voltarAosExercicios()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">💪 Voltar e fazer os pendentes</button>
-      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
+      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:16px 14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;min-height:52px">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
 }
@@ -1303,13 +1303,13 @@ function confirmarPararEsteira(){
   const existing=document.getElementById('modal-esteira-stop');if(existing)existing.remove();
   const div=document.createElement('div');
   div.id='modal-esteira-stop';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px calc(20px + env(safe-area-inset-bottom))';
   div.innerHTML=`
     <div style="background:var(--surface);border-radius:24px;padding:20px">
       <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px">⏹ Parar esteira</div>
       <div style="font-size:15px;font-weight:500;margin-bottom:6px">Salvar ${tempoTxt} feitos?</div>
-      <button onclick="document.getElementById('modal-esteira-stop').remove();pararEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, salvar e continuar</button>
-      <button onclick="document.getElementById('modal-esteira-stop').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar — continuar na esteira</button>
+      <button onclick="document.getElementById('modal-esteira-stop').remove();pararEsteira()" style="width:100%;padding:18px 14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff;font-size:15px;font-family:var(--sans);font-weight:600;border:none;cursor:pointer;margin-bottom:10px;min-height:56px;width:100%">Sim, salvar e continuar</button>
+      <button onclick="document.getElementById('modal-esteira-stop').remove()" style="width:100%;padding:16px 14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;min-height:52px;width:100%">Cancelar — continuar na esteira</button>
     </div>`;
   document.body.appendChild(div);
 }
@@ -1317,13 +1317,13 @@ function confirmarPularEsteira(){
   const existing=document.getElementById('modal-esteira-skip');if(existing)existing.remove();
   const div=document.createElement('div');
   div.id='modal-esteira-skip';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px 20px calc(20px + env(safe-area-inset-bottom))';
   div.innerHTML=`
     <div style="background:var(--surface);border-radius:24px;padding:20px">
       <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⏭ Pular esteira</div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5">Pular esta esteira sem fazer nada? Será registrada como pulada (0 min).</div>
-      <button onclick="document.getElementById('modal-esteira-skip').remove();pularEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#b45309);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, pular</button>
-      <button onclick="document.getElementById('modal-esteira-skip').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
+      <button onclick="document.getElementById('modal-esteira-skip').remove();pularEsteira()" style="width:100%;padding:18px 14px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#b45309);color:#fff;font-size:15px;font-family:var(--sans);font-weight:600;border:none;cursor:pointer;margin-bottom:10px;min-height:56px;width:100%">Sim, pular</button>
+      <button onclick="document.getElementById('modal-esteira-skip').remove()" style="width:100%;padding:16px 14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;min-height:52px">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
 }
@@ -1746,7 +1746,7 @@ function abrirConfigToken(){
   const token=getToken();
   const div=document.createElement('div');
   div.id='modal-token';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
   div.innerHTML=`
     <div style="background:var(--surface);border-radius:24px;padding:20px;max-height:90vh;overflow-y:auto">
       <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔐 Backup no GitHub</div>
