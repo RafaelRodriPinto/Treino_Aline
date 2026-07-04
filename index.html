@@ -1138,12 +1138,13 @@ function abrirLista(){
     }
     const pulado=exFoiPulado(i),done=exFoiConcluido(i),current=i===E.exIdx;
     let badge='';
-    if(pulado)badge=`<span class="tag tag-red">pulado</span>`;
-    else if(done)badge=`<span class="tag tag-green">✓</span>`;
-    else if(current)badge=`<span class="tag tag-blue">atual</span>`;
-    const locked=done||pulado;
-    const cls=locked?'done-ex':current?'current-ex':'';
-    const click=locked?'':`onclick="irParaEx(${i})"`;
+    if(pulado) badge=`<span class="tag tag-amber">↩ retomar</span>`;
+    else if(done) badge=`<span class="tag tag-green">✓</span>`;
+    else if(current) badge=`<span class="tag tag-blue">atual</span>`;
+    // concluídos ficam bloqueados; pulados e pendentes são clicáveis
+    const locked = done && !pulado;
+    const cls = locked?'done-ex':current?'current-ex':'';
+    const click = locked ? '' : pulado ? `onclick="retornarPulado(${i})"` : `onclick="irParaEx(${i})"`;
     html+=`<div class="modal-item ${cls}" ${click}>
       <span class="mi-num">${i+1}</span>
       <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span></span>
@@ -1677,6 +1678,18 @@ function carregarTema(){
     const t=localStorage.getItem('gym_ma_tema')||'dark';
     aplicarTema(t);
   }catch(e){}
+}
+
+function salvarToken(){
+  const el=document.getElementById('inp-token');
+  if(!el){mostrarToast('⚠️ Campo não encontrado');return;}
+  const val=el.value.trim();
+  if(!val){mostrarToast('⚠️ Cole o token antes de salvar');return;}
+  setToken(val);
+  atualizarStatusBackup();
+  mostrarToast('✅ Token salvo!');
+  document.getElementById('modal-token')&&document.getElementById('modal-token').remove();
+  sincronizarGitHub();
 }
 
 function abrirConfigToken(){
