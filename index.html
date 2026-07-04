@@ -406,7 +406,7 @@ const TREINOS_ANTIGOS = {};
 
 /* ════ GITHUB SYNC ════ */
 const GH_REPO = 'RafaelRodriPinto/Treino_Aline';
-const GH_FILE = 'dados.json';
+const GH_FILE = 'historico.json';
 const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
 
 function getToken(){ return localStorage.getItem('gym_ma_gh_token')||''; }
@@ -417,18 +417,21 @@ let _syncTimer = null;
 let _syncTimeout = null;
 
 async function ghGet(){
-  const token=getToken(); if(!token)return null;
+  const token=getToken();
+  if(!token){mostrarToast('⚠️ Token não configurado');return null;}
   try{
     const r=await fetch(GH_API,{headers:{
       'Authorization':'token '+token,
       'Accept':'application/vnd.github.v3+json'
     }});
-    if(r.status===404)return {content:[],sha:null};
-    if(!r.ok)return null;
+    if(r.status===401){mostrarToast('❌ Token inválido ou expirado');return null;}
+    if(r.status===403){mostrarToast('❌ Token sem permissão repo');return null;}
+    if(r.status===404)return {content:null,sha:null};
+    if(!r.ok){mostrarToast('❌ Erro GitHub: '+r.status);return null;}
     const d=await r.json();
     const content=JSON.parse(atob(d.content.replace(/\n/g,'')));
     return {content, sha:d.sha};
-  }catch(e){return null}
+  }catch(e){mostrarToast('❌ Sem conexão com GitHub');return null;}
 }
 
 async function ghPut(data, sha){
@@ -516,28 +519,30 @@ function sincronizarGitHub(){
     if(ok){
       setUltimaSinc(Date.now());
       atualizarStatusBackup();
+      renderHome();
       mostrarToast('✓ Sincronizado com GitHub');
     }
   },3000);
 }
 
-function restaurarDoGitHub(){
-  mostrarToast('⟳ Buscando histórico...');
-  ghGet().then(remoto=>{
-    if(!remoto){mostrarToast('❌ Token inválido ou sem conexão');return;}
-    const r=normalizarRemoto(remoto.content);
-    if(!r.treinos.length){mostrarToast('Nenhum dado encontrado no GitHub');return;}
-    try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos))}catch(e){}
-    const sess={A:0,B:0};
-    if(r.sess&&(r.sess.A||r.sess.B)){
-      sess.A=r.sess.A||0; sess.B=r.sess.B||0;
-    } else {
-      r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++;});
-    }
-    try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
-    mostrarToast('✓ '+r.treinos.length+' treinos restaurados!');
-    setTimeout(()=>{renderHome();renderHist(_histTab);},800);
-  });
+async function restaurarDoGitHub(){
+  mostrarToast('⟳ Buscando no GitHub...');
+  const remoto=await ghGet();
+  if(!remoto)return; // ghGet já mostrou o erro
+  if(!remoto.content){mostrarToast('⚠️ Nenhum backup encontrado ainda');return;}
+  const r=normalizarRemoto(remoto.content);
+  if(!r.treinos||!r.treinos.length){mostrarToast('⚠️ Backup vazio no GitHub');return;}
+  try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos));}catch(e){mostrarToast('❌ Erro ao salvar local');return;}
+  const sess={A:0,B:0};
+  if(r.sess&&(r.sess.A||r.sess.B)){
+    sess.A=r.sess.A||0; sess.B=r.sess.B||0;
+  } else {
+    r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++;});
+  }
+  try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess));}catch(e){}
+  mostrarToast('✅ '+r.treinos.length+' treinos restaurados!');
+  const mt=document.getElementById('modal-token');if(mt)mt.remove();
+  setTimeout(()=>{renderHome();renderHist(_histTab);},800);
 }
 
 
@@ -1713,7 +1718,7 @@ function abrirConfigToken(){
       <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Token atual: ${token?'✓ configurado':'não configurado'}</div>
       <input id="inp-token" type="password" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${token}">
       <button onclick="salvarToken()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar token</button>
-      ${token?`<button onclick="restaurarDoGitHub();document.getElementById('modal-token').remove()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">↓ Restaurar histórico do GitHub</button>`:''}
+      ${token?`<button onclick="restaurarDoGitHub()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">↓ Restaurar histórico do GitHub</button>`:''}
       <button onclick="document.getElementById('modal-token').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
     </div>`;
   document.body.appendChild(div);
