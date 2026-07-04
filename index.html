@@ -254,7 +254,6 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
     <div id="ex-card" class="ex-card"></div>
     <div id="series-done-wrap"></div>
     <div id="action-area"></div>
-    <button class="btn btn-amber" onclick="pularExercicio()">Pular este exercício</button>
   </div>
 </div>
 
@@ -619,16 +618,20 @@ function diasAtePrazo(){
 // sugestão: próximo treino na rotação A→B→C→D→A...
 function sugerirTreino(){
   const sess=loadSessoes();
+  // Sempre compara por número de sessões — quem tem menos é sugerido
+  // Em caso de empate, olha o último treino feito no histórico
+  const counts=ORDEM.map(t=>sess[t]||0);
+  const minN=Math.min(...counts);
+  const emEmpate=ORDEM.filter(t=>(sess[t]||0)===minN);
+  if(emEmpate.length===1) return emEmpate[0];
+  // Empate: sugere o próximo após o último feito
   const hist=loadHist();
-  const ultimo=hist.find(h=>h.plano==='novo');
+  const ultimo=hist.find(h=>ORDEM.includes(h.tipo));
   if(ultimo){
     const idx=ORDEM.indexOf(ultimo.tipo);
     return ORDEM[(idx+1)%ORDEM.length];
   }
-  // sem histórico: sugere o com menos sessões
-  let menorTreino=ORDEM[0], menorN=sess[ORDEM[0]]||0;
-  ORDEM.forEach(t=>{const n=sess[t]||0;if(n<menorN){menorN=n;menorTreino=t;}});
-  return menorTreino;
+  return ORDEM[0];
 }
 
 /* ════ NAV ════ */
@@ -974,7 +977,8 @@ function renderActionArea(){
     </div>
     ${inputsHtml}
     <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdxs[E.exIdx]+1}</button>
-    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdxs[E.exIdx]+1}</button>`;
+    <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdxs[E.exIdx]+1}</button>
+    <button class="btn btn-amber" style="margin-top:4px" onclick="pularExercicio()">⏭ Pular este exercício</button>`;
 }
 
 function getUltimaReps(){
@@ -1122,9 +1126,30 @@ function esconderDescanso(){document.getElementById('rest-overlay').classList.ad
 function pularExercicio(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const nome=exNome(ex);
-  if(!confirm('Pular "'+nome+'"?\n\nVocê pode voltar a ele depois pela lista de exercícios.')){return}
+  // usa modal próprio — confirm() é bloqueado em PWA/Android
+  const existing=document.getElementById('modal-pular');if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='modal-pular';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⏭ Pular exercício</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">${nome}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5">Você pode retomar este exercício depois pela lista.</div>
+      <button onclick="confirmarPularExercicio()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#b45309);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, pular</button>
+      <button onclick="document.getElementById('modal-pular').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function confirmarPularExercicio(){
+  document.getElementById('modal-pular')&&document.getElementById('modal-pular').remove();
   if(!E.pulados)E.pulados=[];
-  E.pulados.push(E.exIdx);E.serieStartTs=null;save();avancarExercicio();
+  E.pulados.push(E.exIdx);
+  E.serieStartTs=null;
+  // Zera as séries parciais deste exercício
+  if(E.series[E.exIdx]) E.series[E.exIdx]=E.series[E.exIdx].map(()=>null);
+  E.serieIdxs[E.exIdx]=0;
+  save();avancarExercicio();
 }
 
 /* lista */
@@ -1275,14 +1300,32 @@ function confirmarPararEsteira(){
   const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
   const min=Math.floor(feito/60), seg=feito%60;
   const tempoTxt=min+'min'+(seg?' '+seg+'s':'');
-  if(confirm('Parar a esteira e salvar '+tempoTxt+' feitos?')){
-    pararEsteira();
-  }
+  const existing=document.getElementById('modal-esteira-stop');if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='modal-esteira-stop';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:8px">⏹ Parar esteira</div>
+      <div style="font-size:15px;font-weight:500;margin-bottom:6px">Salvar ${tempoTxt} feitos?</div>
+      <button onclick="document.getElementById('modal-esteira-stop').remove();pararEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, salvar e continuar</button>
+      <button onclick="document.getElementById('modal-esteira-stop').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar — continuar na esteira</button>
+    </div>`;
+  document.body.appendChild(div);
 }
 function confirmarPularEsteira(){
-  if(confirm('Pular esta esteira sem fazer nada? Será registrada como pulada (0min).')){
-    pularEsteira();
-  }
+  const existing=document.getElementById('modal-esteira-skip');if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='modal-esteira-skip';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⏭ Pular esteira</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.5">Pular esta esteira sem fazer nada? Será registrada como pulada (0 min).</div>
+      <button onclick="document.getElementById('modal-esteira-skip').remove();pularEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--amber),#b45309);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, pular</button>
+      <button onclick="document.getElementById('modal-esteira-skip').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
+    </div>`;
+  document.body.appendChild(div);
 }
 function pararEsteira(){
   clearInterval(esteiraTickInterval);
