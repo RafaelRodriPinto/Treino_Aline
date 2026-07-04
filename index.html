@@ -481,7 +481,6 @@ function normalizarRemoto(remotoContent){
   };
 }
 function sincronizarGitHub(){
-  // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
   clearTimeout(_syncTimeout);
   _syncTimeout=setTimeout(async()=>{
     const token=getToken(); if(!token)return;
@@ -490,7 +489,7 @@ function sincronizarGitHub(){
     if(!remoto)return;
     const r=normalizarRemoto(remoto.content);
 
-    // merge treinos: une local + remoto, remove duplicatas por inicio+tipo
+    // merge treinos — remove duplicatas por inicio+tipo
     const todos=[...localTreinos,...r.treinos];
     const vistos=new Set();
     const mergedTreinos=todos.filter(h=>{
@@ -502,75 +501,45 @@ function sincronizarGitHub(){
     if(mergedTreinos.length>120)mergedTreinos.splice(120);
     try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
 
-    // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
-    const localPeso=loadPesoLog();
-    const pesoPorData={};
-    r.peso.forEach(p=>pesoPorData[p.data]=p);
-    localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
-    const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
-    savePesoLog(mergedPeso);
+    // merge sessões — usa o maior contador
+    const localSess=loadSessoes();
+    const remoteSess=r.sess||{A:0,B:0};
+    const mergedSess={
+      A:Math.max(localSess.A||0,remoteSess.A||0),
+      B:Math.max(localSess.B||0,remoteSess.B||0)
+    };
+    try{localStorage.setItem('gym_sess_v6',JSON.stringify(mergedSess))}catch(e){}
 
-    // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
-    const localHidrat=loadHidratHoje();
-    const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
-    saveHidratHoje(mergedHidrat);
-
-    const localSuple=loadSupleHoje();
-    const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
-    saveSupleHoje(mergedSuple);
-
-    // avaliações: une por data, local tem prioridade
-    const localAvals=loadAvaliacoes();
-    const avalsPorData={};
-    (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
-    localAvals.forEach(a=>avalsPorData[a.data]=a);
-    const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
-    try{localStorage.setItem('gym_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
-
-    // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
-    const localDC=loadDiasCompletos();
-    const remotoDC=r.diasCompletos||{};
-    const mergedDC={};
-    ['hidrat','suple'].forEach(tipo=>{
-      const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
-      mergedDC[tipo]=Array.from(setDias).sort();
-    });
-    saveDiasCompletos(mergedDC);
-
-    // estoque: local tem prioridade (datas de início não mudam, mas se editar localmente prevalece)
-    const localEstoque=loadEstoque();
-    const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_estoque'))?r.estoque:localEstoque;
-    saveEstoque(mergedEstoque);
-
-    // salva tudo no GitHub
+    // salva no GitHub
     const payload=montarPayloadCompleto(mergedTreinos);
-    const ok=await ghPut(payload, remoto.sha);
+    const ok=await ghPut(payload,remoto.sha);
     if(ok){
       setUltimaSinc(Date.now());
       atualizarStatusBackup();
+      mostrarToast('✓ Sincronizado com GitHub');
     }
   },3000);
 }
 
-/* ── MODAL BACKUP ── */
-function abrirModalBackup(){
-  const token = getToken();
-  document.getElementById('backup-token-input').value = token;
-  document.getElementById('backup-status').textContent = token ? '✅ Token configurado' : 'Nenhum token salvo ainda.';
-  document.getElementById('modal-backup').classList.remove('hidden');
+function restaurarDoGitHub(){
+  mostrarToast('⟳ Buscando histórico...');
+  ghGet().then(remoto=>{
+    if(!remoto){mostrarToast('❌ Token inválido ou sem conexão');return;}
+    const r=normalizarRemoto(remoto.content);
+    if(!r.treinos.length){mostrarToast('Nenhum dado encontrado no GitHub');return;}
+    try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos))}catch(e){}
+    const sess={A:0,B:0};
+    if(r.sess&&(r.sess.A||r.sess.B)){
+      sess.A=r.sess.A||0; sess.B=r.sess.B||0;
+    } else {
+      r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++;});
+    }
+    try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
+    mostrarToast('✓ '+r.treinos.length+' treinos restaurados!');
+    setTimeout(()=>{renderHome();renderHist(_histTab);},800);
+  });
 }
-function fecharModalBackup(){ document.getElementById('modal-backup').classList.add('hidden'); }
-function salvarToken(){
-  const el = document.getElementById('inp-token') || document.getElementById('backup-token-input');
-  if(!el){ mostrarToast('⚠️ Campo não encontrado'); return; }
-  const val = el.value.trim();
-  if(!val){ mostrarToast('⚠️ Cole o token antes de salvar'); return; }
-  setToken(val);
-  atualizarStatusBackup();
-  mostrarToast('✅ Token salvo!');
-  document.getElementById('modal-token') && document.getElementById('modal-token').remove();
-  sincronizarGitHub();
-}
+
 
 function mostrarToast(msg){
   let t=document.getElementById('toast-msg');
