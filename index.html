@@ -59,7 +59,7 @@ body{display:flex;flex-direction:column}
 /* ── COMMON ── */
 .section-title{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
-.btn{width:100%;padding:14px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center}
+.btn{width:100%;padding:16px 14px;min-height:52px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
 .btn-green{background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff}
@@ -164,7 +164,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .rest-big.gc{color:var(--green)}.rest-big.ac{color:var(--amber)}
 .rest-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
 .rest-next{font-size:14px;font-weight:500;color:var(--text);margin-bottom:32px;max-width:280px;line-height:1.6;padding:12px 18px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
-.rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:13px 32px;font-size:13px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer}
+.rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:18px 32px;min-height:56px;font-size:14px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer;display:block;width:100%;text-align:center}
 
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
@@ -268,7 +268,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
     </div>
     <button class="btn btn-primary" id="btn-iniciar-esteira" onclick="iniciarEsteira()">▶ Iniciar esteira</button>
     <button class="btn btn-green" id="btn-parar-esteira" style="display:none" onclick="confirmarPararEsteira()">⏹ Parar e salvar tempo</button>
-    <button class="btn" id="btn-pular-esteira" style="background:transparent;border:1px solid var(--border2);color:var(--muted);margin-top:8px" onclick="confirmarPularEsteira()">⏭ Pular sem fazer</button>
+    <button class="btn" id="btn-pular-esteira" style="background:transparent;border:1px solid var(--border2);color:var(--muted);margin-top:8px;min-height:52px" onclick="confirmarPularEsteira()">⏭ Pular sem fazer</button>
   </div>
 </div>
 
@@ -283,7 +283,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
     <div class="finish-stats" id="fin-stats"></div>
     <div class="section-title">Resumo</div>
     <div id="fin-detail"></div>
-    <button class="btn btn-primary" style="margin-top:14px" onclick="voltarHome()">Voltar ao início</button>
+    <button class="btn btn-primary" style="margin-top:14px;min-height:56px" onclick="voltarHome()">Voltar ao início</button>
   </div>
 </div>
 
@@ -913,8 +913,8 @@ function editarSerie(idx){
     <div style="background:var(--surface);border-radius:24px;padding:20px">
       <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:12px">✎ Corrigir Série ${idx+1}</div>
       ${camposHtml}
-      <button onclick="salvarEdicaoSerie(${idx})" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar correção</button>
-      <button onclick="document.getElementById('modal-edit-serie').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;cursor:pointer">Cancelar</button>
+      <button onclick="salvarEdicaoSerie(${idx})" style="width:100%;padding:18px 14px;min-height:56px;border-radius:14px;font-size:15px;font-family:var(--sans);font-weight:600;border:none;cursor:pointer;margin-bottom:10px;display:block;text-align:center;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff">Salvar correção</button>
+      <button onclick="document.getElementById('modal-edit-serie').remove()" style="width:100%;padding:16px 14px;min-height:52px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;display:block;text-align:center">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
 }
@@ -1279,9 +1279,9 @@ function mostrarConfirmacaoEsteira(naoFeitos, pulados){
       <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⚠️ Atenção — exercícios pendentes</div>
       <div style="margin-bottom:16px;max-height:220px;overflow-y:auto">${listaHtml}</div>
       <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5">Deseja ir para a esteira de finalização mesmo assim?<br><span style="font-size:12px">O treino será finalizado após a esteira, mesmo se parar antes do tempo.</span></div>
-      <button onclick="confirmarIrEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">✅ Sim, ir para a esteira e finalizar</button>
-      <button onclick="voltarAosExercicios()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">💪 Voltar e fazer os pendentes</button>
-      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:16px 14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;min-height:52px">Cancelar</button>
+      <button onclick="confirmarIrEsteira()" style="width:100%;padding:18px 14px;min-height:56px;border-radius:14px;font-size:15px;font-family:var(--sans);font-weight:600;border:none;cursor:pointer;margin-bottom:10px;display:block;text-align:center;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff">✅ Sim, ir para a esteira e finalizar</button>
+      <button onclick="voltarAosExercicios()" style="width:100%;padding:16px 14px;min-height:52px;border-radius:14px;font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;margin-bottom:8px;display:block;text-align:center;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none">💪 Voltar e fazer os pendentes</button>
+      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:16px 14px;min-height:52px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;display:block;text-align:center">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
 }
@@ -1760,9 +1760,9 @@ function abrirConfigToken(){
       </div>
       <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Token atual: ${token?'✓ configurado':'não configurado'}</div>
       <input id="inp-token" type="password" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${token}">
-      <button onclick="salvarToken()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar token</button>
-      ${token?`<button onclick="restaurarDoGitHub()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">↓ Restaurar histórico do GitHub</button>`:''}
-      <button onclick="document.getElementById('modal-token').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
+      <button onclick="salvarToken()" style="width:100%;padding:18px 14px;min-height:56px;border-radius:14px;font-size:15px;font-family:var(--sans);font-weight:600;border:none;cursor:pointer;margin-bottom:10px;display:block;text-align:center;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff">Salvar token</button>
+      ${token?`<button onclick="restaurarDoGitHub()" style="width:100%;padding:16px 14px;min-height:52px;border-radius:14px;font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;margin-bottom:8px;display:block;text-align:center;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;border:none">↓ Restaurar histórico do GitHub</button>`:''}
+      <button onclick="document.getElementById('modal-token').remove()" style="width:100%;padding:16px 14px;min-height:52px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);cursor:pointer;display:block;text-align:center">Fechar</button>
     </div>`;
   document.body.appendChild(div);
 }
