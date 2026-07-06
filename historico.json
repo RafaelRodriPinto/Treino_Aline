@@ -3,6 +3,215 @@
     {
       "tipo": "B",
       "plano": "novo",
+      "data": "Mon Jul 06 2026",
+      "dataStr": "06/07/26",
+      "inicio": 1783336557346,
+      "fim": 1783342530127,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Leg 180° Convergente",
+        "Glúteo Máquina Extensão",
+        "Cadeira Flexora Unilateral",
+        "Cadeira Abdutora",
+        "Panturrilha Banco",
+        "Puxada Aberta",
+        "Remada Máquina Fechada",
+        "Scott Máquina",
+        "Bíceps Martelo c/ Rotação",
+        "Abdominal Remador",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 40,
+            "reps": 15,
+            "tempo": 85
+          },
+          {
+            "peso": 40,
+            "reps": 15,
+            "tempo": 48
+          },
+          {
+            "peso": 40,
+            "reps": 15,
+            "tempo": 43
+          }
+        ],
+        [
+          {
+            "peso": 1180,
+            "reps": 12,
+            "tempo": 76
+          },
+          {
+            "peso": 1180,
+            "reps": 12,
+            "tempo": 65
+          },
+          {
+            "peso": 1180,
+            "reps": 12,
+            "tempo": 59
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 3
+          },
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 3
+          },
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 3
+          }
+        ],
+        [
+          {
+            "peso": 3900,
+            "reps": 12,
+            "tempo": 59
+          },
+          {
+            "peso": 3900,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 3900,
+            "reps": 12,
+            "tempo": 57
+          }
+        ],
+        [
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 38
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 82
+          },
+          {
+            "peso": 40,
+            "reps": 12,
+            "tempo": 57
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 1860,
+            "reps2": 10,
+            "tempo": 54
+          },
+          {
+            "peso": 1060,
+            "reps": 10,
+            "peso2": 1860,
+            "reps2": 10,
+            "tempo": 11
+          },
+          {
+            "peso": 1860,
+            "reps": 10,
+            "peso2": 1860,
+            "reps2": 10,
+            "tempo": 8
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 27
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 45
+          }
+        ],
+        [
+          {
+            "peso": 1180,
+            "reps": 12,
+            "tempo": 36
+          },
+          {
+            "peso": 1180,
+            "reps": 12,
+            "tempo": 38
+          },
+          {
+            "peso": 1180,
+            "reps": 12,
+            "tempo": 35
+          }
+        ],
+        [
+          {
+            "peso": 4,
+            "reps": 12,
+            "tempo": 28
+          },
+          {
+            "peso": 4,
+            "reps": 12,
+            "tempo": 32
+          },
+          {
+            "peso": 4,
+            "reps": 12,
+            "tempo": 36
+          }
+        ],
+        [
+          {
+            "peso": 2540,
+            "reps": 20,
+            "tempo": 48
+          },
+          {
+            "peso": 2540,
+            "reps": 20,
+            "tempo": 57
+          },
+          {
+            "peso": 2540,
+            "reps": 20,
+            "tempo": 81
+          }
+        ],
+        []
+      ],
+      "pulados": []
+    },
+    {
+      "tipo": "B",
+      "plano": "novo",
       "data": "Sat Jul 04 2026",
       "dataStr": "04/07/26",
       "inicio": 1783172571755,
@@ -3435,7 +3644,7 @@
   ],
   "sess": {
     "A": 14,
-    "B": 13
+    "B": 14
   },
-  "updated": 1783336544915
+  "updated": 1783342533891
 }
