@@ -52,15 +52,18 @@ body{display:flex;flex-direction:column}
 
 /* ── NAV TABS ── */
 .nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(2,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom);box-shadow:var(--shadow)}
-.nav-btn{padding:10px 4px 8px;font-size:9px;font-family:var(--mono);letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
+.nav-btn{padding:10px 4px 8px;font-size:9px;font-family:var(--mono);letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;min-height:48px}
 .nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--accent2)}
 
 /* ── COMMON ── */
 .section-title{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
-.btn{width:100%;padding:16px 14px;min-height:52px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center}
+.btn{width:100%;padding:16px 14px;min-height:52px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center;box-sizing:border-box;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative}
 .btn:active{transform:scale(.97)}
+button *{pointer-events:none}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+
 .btn-primary{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
 .btn-green{background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff}
 .btn-ghost{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
@@ -112,7 +115,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 
 /* ── TREINO GRID ── */
 .treino-grid-new{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .treino-card:active{transform:scale(.96)}
 .treino-card .tc-letra{font-size:28px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .treino-card .tc-info{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
@@ -124,7 +127,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .prog-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
 
-.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text);box-shadow:var(--shadow)}
+.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;min-height:52px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text);box-shadow:var(--shadow);touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;box-shadow:var(--shadow)}
 .ex-tag{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:5px}
 .ex-name{font-size:18px;font-weight:500;line-height:1.35}
@@ -164,7 +167,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .rest-big.gc{color:var(--green)}.rest-big.ac{color:var(--amber)}
 .rest-sub{font-size:13px;color:var(--muted);margin-bottom:16px}
 .rest-next{font-size:14px;font-weight:500;color:var(--text);margin-bottom:32px;max-width:280px;line-height:1.6;padding:12px 18px;background:var(--surface);border-radius:var(--r);border:1px solid var(--border)}
-.rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:18px 32px;min-height:56px;font-size:14px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer;display:block;width:100%;text-align:center}
+.rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:18px 32px;min-height:56px;font-size:14px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer;display:block;width:100%;text-align:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
 
 /* ── MODAL ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
@@ -197,7 +200,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 
 /* ── HISTÓRICO ── */
 .hist-tabs{display:flex;gap:8px;margin-bottom:14px}
-.hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s}
+.hist-tab{flex:1;padding:10px 8px;min-height:44px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .hist-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
 </head>
