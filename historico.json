@@ -1,6 +1,227 @@
 {
   "treinos": [
     {
+      "tipo": "A",
+      "plano": "novo",
+      "data": "Tue Jul 07 2026",
+      "dataStr": "07/07/26",
+      "inicio": 1783422875468,
+      "fim": 1783429621875,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Agachamento",
+        "Cadeira Adutora",
+        "Leg Press 45°",
+        "Agachamento Articular",
+        "Supino Máquina",
+        "Crucifixo Máquina",
+        "Remada Alta Cross",
+        "Elevação Frontal Alternada",
+        "Tríceps Barra Cross",
+        "Tríceps Corda Unilateral",
+        "Abdominal Máquina",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 2540,
+            "reps": 15,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 74
+          },
+          {
+            "peso": 2540,
+            "reps": 15,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 2540,
+            "reps": 15,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 57
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 41
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 2
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 42
+          }
+        ],
+        [
+          {
+            "peso": 50,
+            "reps": 12,
+            "tempo": 38
+          },
+          {
+            "peso": 50,
+            "reps": 12,
+            "tempo": 37
+          },
+          {
+            "peso": 50,
+            "reps": 12,
+            "tempo": 35
+          }
+        ],
+        [
+          {
+            "peso": 60,
+            "reps": 12,
+            "tempo": 48
+          },
+          {
+            "peso": 60,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 60,
+            "reps": 12,
+            "tempo": 43
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 90
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 54
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 27
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 41
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 45
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 41
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 53
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 49
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 76
+          }
+        ],
+        [
+          {
+            "peso": 4,
+            "reps": 12,
+            "tempo": 36
+          },
+          {
+            "peso": 4,
+            "reps": 12,
+            "tempo": 46
+          },
+          {
+            "peso": 4,
+            "reps": 12,
+            "tempo": 46
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 30
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 30
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 33
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 58
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 49
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 50
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 76
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 49
+          }
+        ],
+        []
+      ],
+      "pulados": []
+    },
+    {
       "tipo": "B",
       "plano": "novo",
       "data": "Mon Jul 06 2026",
@@ -3643,8 +3864,8 @@
     }
   ],
   "sess": {
-    "A": 14,
+    "A": 15,
     "B": 14
   },
-  "updated": 1783423420557
+  "updated": 1783429625610
 }
