@@ -1,6 +1,203 @@
 {
   "treinos": [
     {
+      "tipo": "A",
+      "plano": "novo",
+      "data": "Thu Jul 09 2026",
+      "dataStr": "09/07/26",
+      "inicio": 1783597236140,
+      "fim": 1783602879315,
+      "exNames": [
+        "Esteira (aquecimento)",
+        "Agachamento",
+        "Cadeira Adutora",
+        "Leg Press 45°",
+        "Agachamento Articular",
+        "Supino Máquina",
+        "Crucifixo Máquina",
+        "Remada Alta Cross",
+        "Elevação Frontal Alternada",
+        "Tríceps Barra Cross",
+        "Tríceps Corda Unilateral",
+        "Abdominal Máquina",
+        "Esteira (finalização)"
+      ],
+      "series": [
+        [],
+        [
+          {
+            "peso": 0,
+            "reps": 15,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 6
+          },
+          {
+            "peso": 0,
+            "reps": 15,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 90
+          },
+          {
+            "peso": 0,
+            "reps": 15,
+            "peso2": 2540,
+            "reps2": 12,
+            "tempo": 86
+          }
+        ],
+        [
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 2
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 28
+          },
+          {
+            "peso": 45,
+            "reps": 12,
+            "tempo": 70
+          }
+        ],
+        [
+          {
+            "peso": 50,
+            "reps": 12,
+            "tempo": 39
+          },
+          {
+            "peso": 50,
+            "reps": 12,
+            "tempo": 44
+          },
+          {
+            "peso": 50,
+            "reps": 12,
+            "tempo": 43
+          }
+        ],
+        [
+          {
+            "peso": 60,
+            "reps": 12,
+            "tempo": 70
+          },
+          {
+            "peso": 60,
+            "reps": 12,
+            "tempo": 51
+          },
+          {
+            "peso": 60,
+            "reps": 12,
+            "tempo": 72
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 2
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 37
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 35
+          }
+        ],
+        [
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 47
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 35
+          },
+          {
+            "peso": 1860,
+            "reps": 12,
+            "tempo": 36
+          }
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 37
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 39
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 46
+          }
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        [
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 1
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 37
+          },
+          {
+            "peso": 15,
+            "reps": 12,
+            "tempo": 96
+          }
+        ],
+        [
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 46
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 38
+          },
+          {
+            "peso": 0,
+            "reps": 12,
+            "tempo": 49
+          }
+        ],
+        [
+          null,
+          null,
+          null
+        ],
+        []
+      ],
+      "pulados": []
+    },
+    {
       "tipo": "B",
       "plano": "novo",
       "data": "Wed Jul 08 2026",
@@ -4073,8 +4270,8 @@
     }
   ],
   "sess": {
-    "A": 15,
+    "A": 16,
     "B": 15
   },
-  "updated": 1783514662865
+  "updated": 1783605645802
 }
