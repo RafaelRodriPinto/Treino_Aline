@@ -1068,7 +1068,7 @@ function finalizarSerie(){
     const proxLabel=`${exNome(ex)} — Série ${E.serieIdxs[E.exIdx]+1} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
-    E.serieIdxs[E.exIdx]=0;
+    E.serieIdxs[E.exIdx]=ex.series||3; // marca como concluído (não zera)
     const proxIdx=proximoExPendente(E.exIdx+1);
     E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
     let proxLabel='Finalizar treino';
@@ -1190,7 +1190,10 @@ function fecharListaFora(e){if(e.target.id==='modal-lista')fecharModalDireto()}
 function fecharModalDireto(){document.getElementById('modal-lista').classList.add('hidden')}
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
-  E.exIdx=idx;E.serieIdxs[idx]=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;
+  // NÃO zera serieIdxs — preserva onde parou para intercalação
+  E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;
+  save();goExercicio();
 }
 
 /* avançar */
@@ -1198,7 +1201,7 @@ function retornarPulado(idx){
   fecharModalDireto();clearAllTicks();
   // remove da lista de pulados para poder fazer normalmente
   E.pulados=E.pulados.filter(p=>p!==idx);
-  E.exIdx=idx;E.serieIdxs[idx]=0;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  E.exIdx=idx;E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
   mostrarToast('↩ Retomando "'+exNome(TREINOS[E.tipo].exercicios[idx])+'"');
 }
 function voltarAosExercicios(){
@@ -1216,7 +1219,7 @@ function voltarAosExercicios(){
     if(exFoiPulado(primeiro)){
       E.pulados=E.pulados.filter(p=>p!==primeiro);
     }
-    E.exIdx=primeiro;E.serieIdxs[primeiro]=0;E.serieStartTs=null;save();goExercicio();
+    E.exIdx=primeiro;E.serieStartTs=null;save();goExercicio();
   }
 }
 function confirmarIrEsteira(){
@@ -1224,7 +1227,7 @@ function confirmarIrEsteira(){
   if(modal)modal.remove();
   const exs=TREINOS[E.tipo].exercicios;
   const idxEsteira=exs.findIndex(e=>e.tipo==='esteira_fim');
-  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdxs[idxEsteira]=0;E.serieStartTs=null;save();goExercicio()}
+  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 function avancarExercicio(){
@@ -1256,7 +1259,7 @@ function avancarExercicio(){
     if(exFoiConcluido(next)||exFoiPulado(next)){next++;continue}
     break;
   }
-  if(next<exs.length){E.exIdx=next;E.serieIdxs[next]=0;E.serieStartTs=null;save();goExercicio()}
+  if(next<exs.length){E.exIdx=next;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 
