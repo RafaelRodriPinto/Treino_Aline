@@ -3,71 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Treino MA">
-<meta name="theme-color" content="#0a0a0f">
-<link rel="manifest" href="manifest.json">
 <title>Maria Aline</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" onerror="document.getElementById('font-fallback').disabled=false">
+<style id="font-fallback" disabled>
+/* fallback quando offline — usa fontes do sistema */
+:root{
+  --mono: ui-monospace, 'Courier New', monospace;
+  --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+}
+
+/* ── ANDROID COMPAT ── */
+button *{pointer-events:none}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
+</style>
 <style>
-/* ── TEMAS ── */
 :root{
   --bg:#0a0a0f;--surface:#13131a;--surface2:#1c1c26;--surface3:#22222f;
   --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#f0f0f5;--muted:#6b6b80;--muted2:#9090a8;
+  --text:#f0f0f5;--muted:#6b6b80;
   --accent:#7c6af7;--accent2:#a599ff;
-  --green:#3ecf8e;--green2:rgba(62,207,142,.15);
+  --green:#3ecf8e;--green2:#1a6644;
   --amber:#f59e0b;--amber2:rgba(245,158,11,0.15);
   --red:#ef4444;--red2:rgba(239,68,68,0.15);
   --blue:#38bdf8;--blue2:rgba(56,189,248,0.12);
   --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
   --r:14px;--r2:20px;
-  --shadow:none;
 }
 body.light{
-  --bg:#f4f4f8;--surface:#ffffff;--surface2:#eeeef4;--surface3:#e4e4ec;
+  --bg:#f4f4f8;--surface:#ffffff;--surface2:#eeeef3;--surface3:#e4e4ec;
   --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
-  --text:#1a1a2e;--muted:#7878a0;--muted2:#9090b8;
-  --accent:#6c5ce7;--accent2:#7c6af7;
-  --green:#1a9e68;--green2:rgba(26,158,104,.12);
+  --text:#1a1a2e;--muted:#7070888;
+  --muted:#8080a0;
+  --accent:#6c5ce7;--accent2:#5a4bd1;
+  --green:#059669;--green2:#d1fae5;
   --amber:#d97706;--amber2:rgba(217,119,6,0.12);
-  --red:#dc2626;--red2:rgba(220,38,38,0.10);
-  --blue:#0284c7;--blue2:rgba(2,132,199,0.10);
-  --shadow:0 1px 4px rgba(0,0,0,0.07);
+  --red:#dc2626;--red2:rgba(220,38,38,0.1);
+  --blue:#0284c7;--blue2:rgba(2,132,199,0.1);
 }
-
-/* ── RESET ── */
+body.light .home-header h1{
+  background:linear-gradient(135deg,#1a1a2e 0%,var(--accent) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+body.light .treino-card .tc-letra,
+body.light .sess-letra{
+  background:linear-gradient(135deg,var(--accent),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+body.light .prog-fill,body.light .sess-fill{
+  background:linear-gradient(90deg,var(--accent),var(--green));
+}
+*{transition:background-color .2s,color .2s,border-color .2s}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans);transition:background .25s,color .25s}
-body{display:flex;flex-direction:column}
-.app{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 72px}
-.page{display:none;padding:16px 16px 8px}.page.active{display:block}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--sans)}
+body{display:flex;flex-direction:column;height:100%;max-height:100vh}
+.app{flex:1;overflow-y:scroll;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 0 90px;min-height:0}
+.page{display:none;padding:16px 16px 24px}
+.page.active{display:block;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#page-saude.active{padding-bottom:100px}
+/* page-assist é fora do .app — ver HTML */
 
-/* ── TOGGLE TEMA ── */
-.theme-toggle{margin-top:10px;background:var(--surface2);border:1px solid var(--border2);border-radius:50px;padding:6px 16px;font-size:12px;font-family:var(--mono);cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .2s;color:var(--muted);min-height:34px}
-.theme-toggle:active{transform:scale(.93);background:var(--surface3)}
+/* CHAT */
+.msg-user{align-self:flex-end;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border-radius:18px 18px 4px 18px;padding:10px 14px;max-width:80%;font-size:14px;line-height:1.5}
+.msg-claude{align-self:flex-start;background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:18px 18px 18px 4px;padding:10px 14px;max-width:85%;font-size:14px;line-height:1.6}
+.msg-claude b{color:var(--accent2)}
+.msg-typing{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:12px 16px}
+@keyframes dot{0%,80%,100%{opacity:0.2}40%{opacity:1}}
+.dot{width:7px;height:7px;background:var(--muted);border-radius:50%;display:inline-block;animation:dot 1.4s infinite;margin:0 2px}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 
 /* ── NAV TABS ── */
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(3,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom);box-shadow:var(--shadow)}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(3,1fr);z-index:20;padding-bottom:env(safe-area-inset-bottom)}
 .nav-btn{padding:10px 4px 8px;font-size:9px;font-family:var(--mono);letter-spacing:.5px;color:var(--muted);background:none;border:none;cursor:pointer;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s}
 .nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .nav-btn.active{color:var(--accent2)}
 
 /* ── COMMON ── */
 .section-title{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px 16px;margin-bottom:10px}
 .btn{width:100%;padding:14px;border-radius:var(--r);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer;border:none;transition:all .15s;margin-bottom:8px;display:block;text-align:center}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff}
-.btn-green{background:linear-gradient(135deg,var(--green),#1a9e68);color:#fff}
+.btn-green{background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff}
 .btn-ghost{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
 .btn-amber{background:transparent;border:1px solid rgba(245,158,11,.35);color:var(--amber);font-size:13px;padding:11px}
 .btn-red{background:transparent;border:1px solid rgba(239,68,68,.35);color:var(--red);font-size:13px;padding:11px}
 .pill{background:var(--surface2);border-radius:8px;padding:3px 8px;font-size:11px;font-family:var(--mono);color:var(--text)}
-.pill.g{background:var(--green2);color:var(--green)}
+.pill.g{background:rgba(62,207,142,.12);color:var(--green)}
 .pill.a{background:var(--amber2);color:var(--amber)}
 .tag{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:6px}
 .tag-green{background:var(--green2);color:var(--green)}
@@ -80,39 +105,33 @@ body{display:flex;flex-direction:column}
 .blinking{animation:blink 1s infinite}
 
 /* ── HOME ── */
-.home-header{text-align:center;padding:20px 0 16px;display:flex;flex-direction:column;align-items:center;gap:6px}
+.home-header{text-align:center;padding:24px 0 20px}
 .logo-mark{font-family:var(--mono);font-size:10px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
-.home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,var(--accent2) 0%,var(--green) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.home-header h1{font-size:26px;font-weight:600;background:linear-gradient(135deg,#fff 0%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 .alert-banner{border-radius:var(--r);padding:12px 14px;margin-bottom:12px;font-size:13px;line-height:1.5}
 .alert-red{background:var(--red2);border:1px solid rgba(239,68,68,.3);color:var(--red)}
 .alert-amber{background:var(--amber2);border:1px solid rgba(245,158,11,.3);color:var(--amber)}
-.alert-yellow{background:rgba(250,204,21,.12);border:1px solid rgba(250,204,21,.45);color:#a16207}
-body.light .alert-yellow{color:#92400e}
-.alert-subtle{background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
 
-.suggest-card{background:linear-gradient(135deg,rgba(124,106,247,.15),rgba(124,106,247,.05));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
-body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),rgba(108,92,231,.02));border-color:rgba(108,92,231,.25)}
+.suggest-card{background:linear-gradient(135deg,rgba(124,106,247,.18),rgba(124,106,247,.06));border:1px solid rgba(124,106,247,.3);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
 .suggest-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:4px}
 .suggest-name{font-size:16px;font-weight:500;margin-bottom:12px}
 
-.pending-card{background:linear-gradient(135deg,var(--green2),rgba(62,207,142,.03));border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow)}
+.pending-card{background:linear-gradient(135deg,rgba(62,207,142,.12),rgba(62,207,142,.04));border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px 16px;margin-bottom:12px}
 .pending-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px}
 .pending-name{font-size:15px;font-weight:500;margin-bottom:12px}
 
-/* ── SESSÕES ── */
+/* SESSÕES */
 .sess-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-.sess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;box-shadow:var(--shadow)}
-.sess-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.sess-letra{font-size:14px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sess-fraction{font-size:13px;font-family:var(--mono);color:var(--muted)}
-.sess-fraction strong{font-size:20px;font-weight:700;color:var(--text)}
-.sess-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
+.sess-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 6px;text-align:center}
+.sess-letra{font-size:20px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sess-num{font-size:18px;font-weight:600;color:var(--text);font-family:var(--mono)}
+.sess-label{font-size:9px;color:var(--muted);margin-top:2px;font-family:var(--mono)}
+.sess-bar{height:3px;background:var(--surface2);border-radius:100px;margin-top:6px;overflow:hidden}
 .sess-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
 
-/* ── TREINO GRID ── */
 .treino-grid-new{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.treino-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px 12px;cursor:pointer;transition:all .2s}
 .treino-card:active{transform:scale(.96)}
 .treino-card .tc-letra{font-size:28px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .treino-card .tc-info{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
@@ -124,8 +143,9 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .prog-bar{height:3px;background:var(--surface2);border-radius:100px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:100px;transition:width .4s}
 
-.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text);box-shadow:var(--shadow)}
-.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.ex-list-btn{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:9px 14px;cursor:pointer;margin-bottom:10px;width:100%;font-family:var(--sans);color:var(--text)}
+
+.ex-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px}
 .ex-tag{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:5px}
 .ex-name{font-size:18px;font-weight:500;line-height:1.35}
 .ex-name a{color:var(--accent2);text-decoration:none;border-bottom:1px solid rgba(165,153,255,.3)}
@@ -139,13 +159,13 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .link-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 .link-btn{display:inline-flex;align-items:center;gap:5px;background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:5px 10px;font-size:11px;font-family:var(--mono);color:var(--blue);text-decoration:none;cursor:pointer}
 
-.series-done{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px;box-shadow:var(--shadow)}
+.series-done{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px}
 .serie-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
 .serie-row:last-child{border-bottom:none}
 .s-label{font-size:11px;font-family:var(--mono);color:var(--muted)}
 .s-data{display:flex;gap:5px}
 
-.timer-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;text-align:center;box-shadow:var(--shadow)}
+.timer-block{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:10px;text-align:center}
 .timer-label{font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px}
 .timer-num{font-size:48px;font-family:var(--mono);font-weight:500;letter-spacing:-2px;color:var(--green)}
 .timer-num.idle{color:var(--muted)}
@@ -157,7 +177,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .field input:focus{border-color:var(--accent)}
 
 /* ── REST OVERLAY ── */
-.rest-overlay{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
+.rest-overlay{position:fixed;inset:0;background:rgba(10,10,15,.97);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;text-align:center}
 .rest-overlay.hidden{display:none}
 .rest-type{font-size:10px;font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
 .rest-big{font-size:88px;font-family:var(--mono);font-weight:500;letter-spacing:-4px;line-height:1;margin-bottom:6px}
@@ -167,7 +187,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .rest-skip{background:transparent;border:1px solid var(--border2);border-radius:var(--r);padding:13px 32px;font-size:13px;font-family:var(--sans);font-weight:500;color:var(--muted);cursor:pointer}
 
 /* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:60;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-overlay.hidden{display:none}
 .modal-sheet{background:var(--surface);border-radius:24px 24px 0 0;max-height:85vh;display:flex;flex-direction:column}
 .modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -179,6 +199,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 .modal-item:last-child{border-bottom:none}
 .modal-item.done-ex .mi-name{color:var(--muted)}
 .modal-item.current-ex{background:rgba(124,106,247,.08)}
+.modal-item.pulado-ex{background:rgba(245,158,11,.06);border-left:2px solid var(--amber)}
 .mi-num{font-size:10px;font-family:var(--mono);color:var(--muted);min-width:20px}
 .mi-name{font-size:13px;flex:1;line-height:1.4}
 
@@ -189,31 +210,47 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 
 /* ── FINISHED ── */
 .finish-hero{text-align:center;padding:28px 0 20px}
-.finish-check{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--green),#1a9e68);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:30px}
+.finish-check{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--green),#2aaa70);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:30px}
 .finish-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;box-shadow:var(--shadow)}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center}
 .stat-num{font-size:22px;font-family:var(--mono);font-weight:500;color:var(--accent2)}
 .stat-label{font-size:10px;color:var(--muted);margin-top:3px;font-family:var(--mono)}
 
-/* ── HISTÓRICO ── */
+/* ── HISTORICO / EVOLUCAO ── */
 .hist-tabs{display:flex;gap:8px;margin-bottom:14px}
-.hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center;transition:all .2s}
+.hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center}
 .hist-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
 </head>
 <body>
+<!-- SPLASH SCREEN -->
+<div id="splash" style="position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .4s">
+  <div style="font-size:42px">💪</div>
+  <div style="font-size:18px;font-weight:600;font-family:var(--sans);background:linear-gradient(135deg,var(--accent),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Treino Academia</div>
+  <div style="width:32px;height:32px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<!-- INDICADOR OFFLINE -->
+<div id="offline-bar" style="display:none;position:fixed;top:0;left:0;right:0;background:var(--amber);color:#1a1a1a;text-align:center;font-size:12px;font-family:var(--mono);padding:6px;z-index:60;font-weight:500">
+  📡 Sem conexão — dados salvos localmente, sincroniza ao reconectar
+</div>
+
 <div class="app" id="app">
 
 <!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <div class="home-header">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <button onclick="abrirConfigToken()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
+        <span id="gh-status">☁️</span><span id="gh-status-label">Backup</span>
+      </button>
+      <button id="theme-btn" onclick="toggleTema()" style="background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:6px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--mono);display:flex;align-items:center;gap:5px">
+        <span id="theme-icon">☀️</span><span id="theme-label">Claro</span>
+      </button>
+    </div>
     <div class="logo-mark">Treino Academia</div>
     <h1>Maria Aline</h1>
-    <div style="display:flex;gap:8px;margin-top:10px;justify-content:center">
-      <button class="theme-toggle" onclick="abrirModalBackup()" id="backup-cloud-btn">☁️ Backup</button>
-      <button class="theme-toggle" onclick="toggleTema()" id="theme-btn">☀️ Tema</button>
-    </div>
-    <div id="sync-indicator" style="font-size:10px;font-family:var(--mono);color:var(--muted);min-height:14px;margin-top:4px"></div>
   </div>
   <div id="home-alerts"></div>
   <div id="home-weekly-summary"></div>
@@ -251,7 +288,9 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
       <div style="font-size:13px;color:var(--muted)" id="esteira-sub">Prepare-se</div>
       <div class="esteira-timer" id="esteira-timer">10:00</div>
     </div>
-    <button class="btn btn-green" onclick="pularEsteira()">Pular esteira</button>
+    <button class="btn btn-primary" id="btn-iniciar-esteira" onclick="iniciarEsteira()">▶ Iniciar esteira</button>
+    <button class="btn btn-green" id="btn-parar-esteira" style="display:none" onclick="confirmarPararEsteira()">⏹ Parar e salvar tempo</button>
+    <button class="btn" id="btn-pular-esteira" style="background:transparent;border:1px solid var(--border2);color:var(--muted);margin-top:8px" onclick="confirmarPularEsteira()">⏭ Pular sem fazer</button>
   </div>
 </div>
 
@@ -270,144 +309,6 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
   </div>
 </div>
 
-<!-- ══ SAÚDE ══ -->
-<div class="page" id="page-saude">
-  <div style="padding-bottom:8px">
-
-    <!-- HEADER avaliação -->
-    <div style="background:linear-gradient(135deg,rgba(62,207,142,.15),rgba(124,106,247,.1));border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div>
-          <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Avaliação Física</div>
-          <div style="font-size:22px;font-weight:600">Maria Aline</div>
-          <div style="font-size:12px;color:var(--muted)">27/07/2026 · 45 anos · 171cm</div>
-        </div>
-        <div style="text-align:center;background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--border)">
-          <div style="font-size:32px;font-weight:700;color:var(--amber)">69</div>
-          <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">PONTOS</div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px">
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">73.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
-        </div>
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">25.1</div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IMC</div>
-        </div>
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--green)">61.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDEAL</div>
-        </div>
-        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--red)">-12<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
-        </div>
-      </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:8px;background:var(--surface);border-radius:10px">
-        ✅ Massa muscular dentro do normal (25.8kg). Boa base para manter durante a perda de gordura. ⚠️ Foco em reduzir gordura visceral (12→&lt;10) e gordura total (35.6%→25%).
-      </div>
-    </div>
-
-    <!-- 1. PESO & CINTURA -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📈 Peso & Cintura</div>
-    <div class="card" style="padding:14px;margin-bottom:14px">
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <div style="flex:1;min-width:0">
-          <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Peso (kg)</label>
-          <input type="number" id="peso-input" placeholder="0.0" step="0.1" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
-        </div>
-        <div style="flex:1;min-width:0">
-          <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Cintura (cm)</label>
-          <input type="number" id="cintura-input" placeholder="0.0" step="0.5" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
-        </div>
-      </div>
-      <button onclick="registrarPeso()" style="width:100%;box-sizing:border-box;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:14px 16px;min-height:52px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:12px;touch-action:manipulation">Salvar medidas de hoje</button>
-      <div id="peso-chart-wrap"></div>
-      <div id="peso-lista" style="margin-top:8px"></div>
-    </div>
-
-    <!-- 2. HIDRATAÇÃO -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💧 Hidratação de Hoje</div>
-    <div class="card" style="padding:14px;margin-bottom:14px">
-      <div id="hidrat-checklist"></div>
-      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;font-family:var(--mono)" id="hidrat-total">0 / 5 etapas</div>
-    </div>
-
-    <!-- 3. SUPLEMENTOS -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💊 Suplementos de Hoje</div>
-    <div class="card" style="padding:14px;margin-bottom:14px">
-      <div id="suple-checklist"></div>
-      <div style="font-size:11px;text-align:center;margin-top:10px;font-family:var(--mono)" id="suple-streak"></div>
-      <button onclick="toggleNotificacao()" id="notif-btn" style="width:100%;margin-top:12px;min-height:48px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:12px;font-family:var(--mono);color:var(--muted);cursor:pointer;touch-action:manipulation">
-        <span id="notif-btn-label">🔕 Ativar lembrete magnésio às 22h</span>
-      </button>
-    </div>
-
-    <!-- 4. HISTÓRICO DE AVALIAÇÕES -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📋 Histórico de Avaliações</div>
-    <div class="card" style="padding:14px;margin-bottom:14px">
-      <div id="avaliacoes-lista"></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">Ao fazer nova avaliação na Unique Health, envie os dados para registrar aqui e comparar a evolução.</div>
-    </div>
-
-    <!-- 5. COMPOSIÇÃO CORPORAL -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal</div>
-    <div class="card" style="padding:14px;margin-bottom:14px" id="comp-body"></div>
-
-    <!-- 6. SUGESTÕES -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">O que fazer — por métrica</div>
-
-    <div style="background:linear-gradient(135deg,rgba(124,106,247,.12),rgba(56,189,248,.08));border:1px solid rgba(124,106,247,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--accent2);margin-bottom:12px">💊 Suplementação — análise completa</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Você treina de segunda a sexta. Os suplementos foram escolhidos para apoiar a <b>perda de gordura visceral</b>, manutenção muscular e saúde aos 45 anos.<br><br>
-        <b>✅ Magnésio (junto com Rafael — 22h):</b><br>
-        Magnésio é essencial para mais de 300 reações metabólicas. Ajuda a reduzir cortisol (hormônio que favorece gordura visceral), melhora qualidade do sono (fundamental para perda de gordura) e apoia a função muscular. Perfeito tomar à noite pois tem leve efeito relaxante.<br><br>
-        <b>✅ Vitamina D3 + K2 (manhã com refeição):</b><br>
-        Deficiência de vitamina D é extremamente comum em mulheres de 45 anos e está diretamente ligada ao acúmulo de gordura visceral e pré-menopausa. D3 regula o metabolismo da gordura. K2 direciona o cálcio para os ossos, prevenindo osteoporose. Dose: 2000 UI D3 diária.<br><br>
-        <b>✅ Ômega 3 (com refeição principal):</b><br>
-        A gordura visceral da Maria (nível 12, meta &lt;10) está ligada à inflamação crônica de baixo grau. O ômega 3 é o anti-inflamatório natural mais estudado. 2g/dia com a refeição principal reduz triglicerídeos, inflamação e apoia a perda de gordura visceral especificamente.<br><br>
-        <b>✅ Colágeno Hidrolisado (manhã em jejum):</b><br>
-        Durante a perda de 12kg de gordura, existe risco de perda muscular associada. O colágeno preserva a massa magra, melhora articulações (que suportam maior carga no treino) e a pele. Tomar com vitamina C potencializa a absorção. Em jejum pela manhã é o horário ideal.<br><br>
-        <b>✅ Pré-treino + Creatina + Própolis 70 — junto com Rafael (07h30):</b><br>
-        O mix do Rafael (que a Maria toma junto): guaraná + beterraba + farinha de uva + maca peruana + tribulus terrestre — 30g de cada, total ~150g. Misturado com água antes do treino. A creatina 5g e o própolis 70 vão junto na mesma mistura.<br><br>
-        <b>• Guaraná + Beterraba:</b> energia e aumento do fluxo sanguíneo nos músculos — melhora a oxigenação durante o treino e potencializa a queima de gordura.<br>
-        <b>• Maca Peruana + Tribulus:</b> equilíbrio hormonal — especialmente importante para mulheres de 45 anos em período peri/pós-menopausa. Ajuda no ânimo, libido e energia.<br>
-        <b>• Creatina 5g:</b> preserva os 25.8kg de massa muscular durante o déficit calórico. Aumenta força e recuperação.<br>
-        <b>• Própolis 70:</b> anti-inflamatório e imunológico natural — auxilia a recuperação muscular e combate inflamação crônica (associada à gordura visceral).
-      </div>
-    </div>
-
-    <div style="background:rgba(62,207,142,.08);border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🎯 Estratégia para atingir a meta (−12kg)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>O treino já está adequado</b> — A e B cobrem todos os grupos musculares e mantêm a massa muscular. A diferença virá principalmente da alimentação.<br><br>
-        <b>Calorias:</b> BMR 1391kcal. Com atividade física: 1808kcal/dia recomendado. Para perda de gordura eficiente: <b>1500–1600kcal/dia</b> com déficit moderado (sem passar fome).<br><br>
-        <b>Proteína:</b> manter ≥100g/dia para preservar a massa muscular (25.8kg) durante a perda de peso.<br><br>
-        <b>Gordura visceral:</b> além do déficit calórico, a gordura visceral responde muito bem a: redução de açúcar e farinhas brancas, sono de qualidade (7–8h), controle do estresse (cortisol) e os suplementos acima.<br><br>
-        <b>Ritmo realista:</b> 0.5–1kg por semana → meta de −12kg em 3–6 meses com consistência.
-      </div>
-    </div>
-
-    <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">💧 Hidratação — por que é prioridade</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Água corporal total de 34.7kg (dentro do normal ✓). Mas a hidratação é especialmente importante para a <b>redução de gordura visceral</b>.<br><br>
-        <b>Protocolo recomendado:</b><br>
-        • 300–500ml ao acordar (em jejum) — ativa o metabolismo<br>
-        • 500ml 30min antes do treino — performance e gordura como combustível<br>
-        • Gole a cada série durante o treino — hidratação muscular<br>
-        • 500ml em até 1h após o treino — recuperação<br>
-        • Completar 2L ao longo do dia<br><br>
-        <b>Meta diária: 2–2.5L.</b> Água gelada durante o treino pode causar cãibras — prefira fresca (~15–18°C).
-      </div>
-    </div>
-
-  </div>
-</div>
-
 <!-- ══ HISTÓRICO ══ -->
 <div class="page" id="page-hist">
   <div>
@@ -415,6 +316,7 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
       <button class="hist-tab active" id="htab-atual" onclick="switchHistTab('atual')">Atual</button>
       <button class="hist-tab" id="htab-antigo" onclick="switchHistTab('antigo')">Anteriores</button>
       <button class="hist-tab" id="htab-evol" onclick="switchHistTab('evol')">Evolução</button>
+      <button class="hist-tab" id="htab-semanas" onclick="switchHistTab('semanas')">Semanas</button>
       <button class="hist-tab" id="htab-treinos" onclick="switchHistTab('treinos')">Treinos</button>
     </div>
     <div id="hist-content"></div>
@@ -444,13 +346,253 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 </div>
 
 <!-- NAV -->
+<!-- ══ SAÚDE ══ -->
+<div class="page" id="page-saude">
+  <div style="padding-bottom:8px">
+
+    <!-- HEADER AVALIAÇÃO -->
+    <div style="background:linear-gradient(135deg,rgba(62,207,142,.15),rgba(124,106,247,.1));border:1px solid rgba(62,207,142,.2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+        <div>
+          <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Avaliação Física · Unique Health</div>
+          <div style="font-size:22px;font-weight:600">Maria Aline</div>
+          <div style="font-size:12px;color:var(--muted)">27/07/2026 · 45 anos · 171cm</div>
+        </div>
+        <div style="text-align:center;background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--border)">
+          <div style="font-size:32px;font-weight:700;color:var(--amber)">69</div>
+          <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">PONTOS</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px">
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">73.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">25.1</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IMC</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--green)">61.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDEAL</div>
+        </div>
+        <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
+          <div style="font-size:17px;font-weight:600;color:var(--red)">-12<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:8px;background:var(--surface);border-radius:10px">
+        Tipo corporal: <b style="color:var(--text)">Muscular acima do peso</b> — boa base muscular (25.8kg esquelético ✓). O excesso é gordura, não músculo. BMR 1391kcal · Ingestão recomendada 1808kcal/dia.
+      </div>
+    </div>
+
+    <!-- TRACKER PESO & CINTURA -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📈 Peso & Cintura</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <div style="flex:1;min-width:0">
+          <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Peso (kg)</label>
+          <input type="number" id="peso-input" placeholder="0.0" step="0.1" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        </div>
+        <div style="flex:1;min-width:0">
+          <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Cintura (cm)</label>
+          <input type="number" id="cintura-input" placeholder="0.0" step="0.5" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+        </div>
+      </div>
+      <button onclick="registrarPeso()" style="width:100%;box-sizing:border-box;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:14px 16px;min-height:52px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:12px;touch-action:manipulation">Salvar medidas de hoje</button>
+      <div id="peso-chart-wrap"></div>
+      <div id="peso-lista" style="margin-top:8px"></div>
+    </div>
+
+    <!-- HIDRATAÇÃO -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💧 Hidratação de Hoje</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="hidrat-checklist"></div>
+      <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;font-family:var(--mono)" id="hidrat-total">0 / 5 etapas</div>
+    </div>
+
+    <!-- SUPLEMENTOS -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">💊 Suplementos de Hoje</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="suple-checklist"></div>
+      <div style="font-size:11px;text-align:center;margin-top:10px;font-family:var(--mono)" id="suple-streak"></div>
+      <button onclick="toggleNotificacao()" id="notif-btn" style="width:100%;margin-top:12px;min-height:48px;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:12px;font-family:var(--mono);color:var(--muted);cursor:pointer;touch-action:manipulation">
+        <span id="notif-btn-label">🔕 Ativar lembrete magnésio às 22h</span>
+      </button>
+    </div>
+
+    <!-- HISTÓRICO AVALIAÇÕES -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📋 Histórico de Avaliações</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="avaliacoes-lista"></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">Ao fazer nova avaliação na Unique Health, envie os dados para registrar aqui e comparar a evolução.</div>
+    </div>
+
+    <!-- COMPOSIÇÃO CORPORAL -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal</div>
+    <div class="card" style="padding:14px;margin-bottom:14px" id="comp-body"></div>
+
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">O que fazer — por métrica</div>
+
+    <!-- PRÉ-TREINO -->
+    <div style="background:linear-gradient(135deg,rgba(124,106,247,.12),rgba(56,189,248,.08));border:1px solid rgba(124,106,247,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--accent2);margin-bottom:12px">💊 Pré-treino — análise completa</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        Maria treina às 08h com pré-treino às 07h30 junto com o Rafael. Mix idêntico, timing perfeito!<br><br>
+        <b>Mistura atual — 5 ingredientes em partes iguais (30g cada, 150g total):</b><br><br>
+        <b>✅ Guaraná em pó (30g)</b> — estimulante natural (cafeína), aumenta foco e energia. Ideal para manhã com cortisol alto. Para mulheres aos 45 anos é especialmente útil pois combate a fadiga hormonal da pré-menopausa.<br><br>
+        <b>✅ Beterraba em pó (30g)</b> — nitratos → óxido nítrico → mais fluxo sanguíneo muscular. Melhora resistência e queima de gordura durante o treino. Excelente para reduzir gordura visceral.<br><br>
+        <b>✅ Farinha de uva (30g)</b> — resveratrol e antioxidantes reduzem inflamação pós-treino. Importante: gordura visceral (nível 12) está associada a inflamação crônica — a farinha de uva ajuda a combater.<br><br>
+        <b>✅ Maca peruana em pó (30g)</b> — adaptógeno que equilibra hormônios femininos. Aos 45 anos (pré-menopausa), a maca ajuda a estabilizar estrogênio, melhora disposição, energia e humor.<br><br>
+        <b>✅ Tribulus terrestre (30g)</b> — estimula hormônios anabólicos naturais. Em mulheres, ajuda na libido, energia e composição corporal.<br><br>
+        <b>✅ Creatina 5g</b> — preserva os 25.8kg de massa muscular esquelética durante o déficit calórico de -12kg. Fundamental para não perder músculo ao perder gordura.<br><br>
+        <b>✅ Própolis 70</b> — anti-inflamatório e imunológico. Complementa a beterraba no combate à inflamação associada à gordura visceral.<br><br>
+        <b>✅ Vitamina D3+K2</b> — 1 cápsula junto ao pré-treino às 07h30. D3 regula metabolismo de gordura e é essencial aos 45 anos. K2 protege os ossos.
+      </div>
+    </div>
+
+    <!-- ROTINA COMPLETA -->
+    <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.15);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">🌅 Rotina completa para treino às 08h</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        <b>06h30:</b> 500ml água temperatura ambiente ao acordar (ativa metabolismo)<br><br>
+        <b>07h00:</b> café da manhã leve<br>
+        • 1 banana + 2 ovos mexidos + café preto sem açúcar (~300 kcal)<br>
+        • ⚠️ Não treinar em jejum — perde músculo e desempenho cai<br><br>
+        <b>07h30:</b> pré-treino completo junto com Rafael — mix 150g + creatina 5g + própolis 70 + D3/K2 ✓<br><br>
+        <b>08h00:</b> treino ✓<br><br>
+        <b>09h30:</b> refeição pós-treino — foco em proteína<br>
+        • Opção A: 150g frango grelhado + arroz integral + salada (~45g proteína) ✓<br>
+        • Opção B: omelete 3 ovos + legumes + iogurte grego (~35g proteína) ✓<br>
+        • Meta pós-treino: <b>≥35g proteína</b> nas primeiras 2h<br><br>
+        <b>12h30:</b> almoço — arroz integral + feijão + 150g frango + salada (~550 kcal)<br><br>
+        <b>15h30:</b> lanche — iogurte grego 200g + castanhas (~250 kcal, 17g proteína)<br><br>
+        <b>19h00:</b> jantar — proteína leve + legumes (~400 kcal)<br>
+        • 150g peixe ou frango + salada + 1 ovo<br><br>
+        <b>22h00:</b> Magnésio junto com Rafael — 2 cápsulas antes de dormir ✅<br><br>
+        <b>Meta calórica diária: 1500–1600 kcal</b> (déficit moderado para -12kg em ~6 meses sem perder músculo)
+      </div>
+    </div>
+
+    <!-- PRIORIDADE -->
+    <div style="background:var(--red2);border:1px solid rgba(239,68,68,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px">🔴 Prioridade — Reduzir gordura</div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (atual: 12 — alta, meta &lt;10)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
+        A gordura visceral nível 12 é a métrica mais importante a reduzir — está ligada a risco cardiovascular e síndrome metabólica.<br><br>
+        <b>Esteira — zona 2 (prioridade):</b><br>
+        • Velocidade 4.5 a 5.5 km/h, inclinação 1-2%, 20-25 minutos<br>
+        • Nessa velocidade consegue conversar — zona 2, ideal para gordura visceral<br>
+        • As esteiras do treino (aquecimento 10min + finalização 20min) já ajudam muito<br>
+        • Pré-treino com guaraná + beterraba potencializa a queima de gordura matinal<br><br>
+        <b>Sono — fundamental:</b><br>
+        • Menos de 6h eleva cortisol → deposita gordura na região abdominal<br>
+        • Magnésio às 22h (junto com Rafael) melhora qualidade do sono ✅<br><br>
+        <b>Cortar da alimentação:</b><br>
+        • Açúcar simples: refrigerante, suco industrializado, biscoito recheado, pão branco<br>
+        • Frituras e alimentos ultraprocessados<br>
+        • Álcool — interrompe a queima de gordura por até 48h
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura corporal total (35.6% — alta, meta ~25%)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
+        26.2kg de massa gorda (ideal seria 8-17kg para mulheres ativas). A estratégia é déficit calórico moderado (1500-1600 kcal/dia) com treino 5x/semana para preservar os 25.8kg de músculo.<br><br>
+        <b>Déficit calórico:</b> BMR 1391kcal + atividade = ~2000-2100kcal gastos. Meta 1500-1600 kcal → déficit de ~500 kcal → 0.5kg/semana de gordura.<br>
+        <b>App para montar cardápio:</b> Lifesum ou MyFitnessPal — use por 2-3 semanas para calibrar.
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Relação cintura/quadril (0.9 — alta, meta &lt;0.85)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        Concentração de gordura na região abdominal. Reduz com o mesmo protocolo de cardio + déficit calórico. Os abdominais dos treinos (Twist, Paralela, Canivete) fortalecem o core mas a gordura local sai pela dieta.
+      </div>
+    </div>
+
+    <!-- ATENÇÃO -->
+    <div style="background:var(--amber2);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px">🟡 Atenção — Melhorar</div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa proteica (9.3kg — abaixo do ideal 11-13.9kg)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Meta: <b>100-130g proteína/dia</b> (1.4-1.8g por kg de peso corporal).<br>
+        Fontes práticas: frango 100g=31g · ovo=7g · iogurte grego 200g=17g · atum 100g=26g · queijo cottage 100g=12g<br>
+        A creatina no pré-treino ajuda a reter e usar melhor a proteína disponível. ✓
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Pontuação de saúde (69 pts — moderada, meta &gt;80)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        A pontuação sobe automaticamente com a redução de gordura e melhora da composição corporal. Com 3-4 meses de consistência, a projeção é chegar a 78-82 pts.<br>
+        • Progressão de carga nos treinos: quando completar todas as séries facilmente, aumente 2.5kg<br>
+        • 70% do crescimento muscular acontece nas primeiras 3h de sono profundo
+      </div>
+    </div>
+
+    <!-- PONTOS FORTES -->
+    <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🟢 Pontos fortes — Manter e evoluir</div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular esquelética (25.8kg — dentro do normal ✓)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Excelente base muscular para 45 anos! A creatina + o treino 5x/semana garantem que ela seja mantida durante a perda de 12kg de gordura. Não corte abaixo de 1500 kcal — perde músculo junto. Continue todos os suplementos. ✓
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Água corporal total (34.7kg — Excelente ✓)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Hidratação excelente! Manter e reforçar nos dias de treino:<br>
+        • 06h30: 500ml temperatura ambiente | 07h30: 300ml com pré-treino<br>
+        • 08h-09h: 500ml durante treino | 09h30: 300ml pós-treino<br>
+        • Resto do dia: 1.5L → <b>Total: ~2.6L ✓</b><br>
+        • Água gelada durante o treino pode causar cãibras — prefira fresca (~15-18°C)
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (3.3kg — Excelente ✓)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        <b>Magnésio às 22h (junto com Rafael) ✅</b><br>
+        • Reduz cortisol (hormônio que deposita gordura na barriga)<br>
+        • Melhora qualidade do sono (fundamental para perda de gordura e equilíbrio hormonal aos 45 anos)<br>
+        • Efeito em 2-3 semanas: sono mais profundo + menos dor muscular<br>
+        • Alimentos ricos: castanha-do-pará, amêndoas, banana, abacate, chocolate amargo 70%+<br><br>
+        <b>Vitamina D3+K2 ✅</b> — 1 cápsula junto ao pré-treino (manhã com refeição leve).<br>
+        Deficiência de D3 é muito comum em mulheres de 45 anos e está diretamente ligada ao acúmulo de gordura visceral. K2 protege os ossos durante a perda de peso.
+      </div>
+    </div>
+
+    <!-- PROTOCOLO E PROJEÇÃO -->
+    <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px">🎯 Protocolo completo + projeção</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        <b>O que já faz bem ✅:</b> treino 5x/semana às 08h, pré-treino igual ao Rafael (mix 150g + creatina + própolis), magnésio às 22h, D3+K2<br><br>
+        <b>O que adicionar ➕:</b><br>
+        • Vitamina D3+K2 — 1 cápsula junto ao pré-treino ✅<br>
+        • Ômega 3 — 2g com refeição principal (anti-inflamatório, reduz gordura visceral)<br>
+        • Colágeno Hidrolisado — 10g manhã em jejum (preserva músculo durante perda de peso)<br>
+        • Meta proteína: ≥100g/dia em 4-5 refeições<br>
+        • 1500-1600 kcal/dia com déficit moderado<br><br>
+        <b>O que reduzir ❌:</b> açúcar simples, frituras, ultraprocessados, álcool<br><br>
+        <b>Projeção (com consistência):</b><br>
+        • Em 2 meses (27/09): -4 a 5kg → ~68-69kg, gordura visceral 12→10<br>
+        • Em 4 meses (27/11): ~66-67kg, gordura visceral →8-9, pontuação ~74-76<br>
+        • Em 6 meses (27/01): ~62-63kg, gordura visceral →6-7, pontuação <b>~80+</b>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 16px;line-height:1.6">
+      Baseado na avaliação Unique Health de 27/07/2026 · Treino matinal às 08h.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
+    </div>
+  </div>
+</div>
+
+<!-- ══ ASSISTENTE ══ -->
+
+
 <nav class="nav">
   <button class="nav-btn active" id="nav-home" onclick="showNav('home')">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Início
   </button>
   <button class="nav-btn" id="nav-saude" onclick="showNav('saude')">
-    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Saúde
+    <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Saúde
   </button>
+  <!-- assistente removido -->
   <button class="nav-btn" id="nav-hist" onclick="showNav('hist')">
     <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Histórico
   </button>
@@ -460,13 +602,22 @@ body.light .suggest-card{background:linear-gradient(135deg,rgba(108,92,231,.08),
 /* ════════════════════════════════════════════
    DADOS DOS TREINOS
 ════════════════════════════════════════════ */
+const AVALIACAO_INICIAL={
+  data:'2026-07-27', dataStr:'27/07/2026', local:'Unique Health',
+  peso:73.5, altura:171, imc:25.1, pontuacao:69,
+  aguaCorporal:34.7, massaGorda:26.2, massaProteica:9.3, minerais:3.3,
+  massaMuscEsq:25.8, gorduraVisceral:12, gorduraSubcut:22.8,
+  massaLivreGordura:47.3, bmr:1391, kcalRecomendada:1808,
+  relacaoGordura:35.6, tipoCorporal:'Muscular acima do peso',
+  obs:'Tipo muscular acima do peso. Foco: reduzir gordura visceral (12→<10) e gordura total (35.6%→~25%). Manter massa muscular (25.8kg). Meta: −12kg em 6 meses.'
+};
+const META_PESO=61.5, META_CINTURA=80;
 const PRAZO = new Date('2026-10-27T23:59:59');
 const META_SESSOES = 21;
 const INICIO_PLANO = new Date('2026-07-27T00:00:00');
 
-// tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'|'progressivo'
-// progressivo = série com 3 mini-cargas crescentes antes do descanso
-// obs = observação exibida abaixo do nome
+// tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
+// conjugado = dois exercícios no mesmo slot
 const TREINOS = {
   A:{
     nome:'Treino A', info:'Pernas · Tríceps · Abdômen',
@@ -478,7 +629,7 @@ const TREINOS = {
        link:'https://youtu.be/l4rzHC_Z3oM'},
       {tipo:'normal', nome:'Leg Horizontal Unilateral', series:3, reps:12},
       {tipo:'progressivo', nome:'Cadeira Extensora', series:3, reps:8,
-       obs:'Progressivo: 8×carga1 → 8×carga2 → 8×carga3, depois descansa',
+       obs:'Progressivo: dentro de cada série faça 8×carga1 → 8×carga2 → 8×carga3, depois descansa',
        link:'https://www.youtube.com/watch?v=KpXT1dzKUUQ&t=6s'},
       {tipo:'normal', nome:'Adução de Quadril Cross', series:3, reps:12,
        link:'https://w12evostorage.w12app.com.br/exercicios-gifs/23131305-Cable-Hip-Adduction-(female)_Hips_360.gif'},
@@ -497,7 +648,7 @@ const TREINOS = {
       {tipo:'normal', nome:'Supino Máquina', series:3, reps:12,
        link:'https://www.youtube.com/watch?v=hfuBnc2oZY4'},
       {tipo:'progressivo', nome:'Crucifixo Máquina', series:3, reps:8,
-       obs:'Progressivo: 8×carga1 → 8×carga2 → 8×carga3, depois descansa',
+       obs:'Progressivo: dentro de cada série faça 8×carga1 → 8×carga2 → 8×carga3, depois descansa',
        link:'https://www.youtube.com/watch?v=SQW-rwYDBWE'},
       {tipo:'normal', nome:'Puxada Barra Romana', series:3, reps:12},
       {tipo:'normal', nome:'Remada Máquina Aberta', series:3, reps:12,
@@ -524,10 +675,10 @@ const TREINOS = {
        series:3, reps:15, reps2:15,
        link:'https://youtu.be/KY8edn9d1QM'},
       {tipo:'progressivo', nome:'Cadeira Flexora', series:3, reps:6,
-       obs:'Progressivo: 6×carga1 → 6×carga2 → 6×carga3, depois descansa',
+       obs:'Progressivo: dentro de cada série faça 6×carga1 → 6×carga2 → 6×carga3, depois descansa',
        link:'https://www.youtube.com/watch?v=thacKNxXjjA'},
       {tipo:'normal', nome:'Glúteo Coice na Polia', series:3, reps:12,
-       obs:'Mais 10 cruzados ao final de cada série'},
+       obs:'+ 10 cruzados ao final de cada série'},
       {tipo:'normal', nome:'Glúteo 4 Apoios com Caneleira', series:3, reps:12},
       {tipo:'normal', nome:'Bíceps Martelo com Rotação', series:3, reps:12,
        link:'https://w12evostorage.w12app.com.br/exercicios-gifs/04161305-Dumbbell-Standing-Biceps-Curl_Upper-Arms-FIX_360.gif'},
@@ -549,150 +700,365 @@ let _restCb=null;
 let _histTab='atual';
 
 /* ════ TREINOS ANTIGOS (referência para histórico) ════ */
-const TREINOS_ANTIGOS = {};
-
-/* ════ GITHUB SYNC ════ */
-const GH_REPO = 'RafaelRodriPinto/Treino_Aline';
-const GH_FILE = 'historico.json';
-const GH_API  = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
-
-function getToken(){ return localStorage.getItem('gym_ma_gh_token')||''; }
-function saveToken(t){ localStorage.setItem('gym_ma_gh_token', t.trim()); }
-
-let _ghSha = null;
-let _syncTimer = null;
-
-async function ghRead(){
-  const token = getToken(); if(!token) return null;
-  try{
-    const r = await fetch(GH_API, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
-    if(r.status===401){ setSyncStatus('⚠️ Token inválido ou expirado','var(--red)'); return null; }
-    if(r.status===403){ setSyncStatus('⚠️ Token sem permissão (precisa de repo)','var(--red)'); return null; }
-    if(r.status===404){ _ghSha=null; return null; } // arquivo ainda não existe — ok
-    if(!r.ok){ setSyncStatus('⚠️ Erro GitHub: '+r.status,'var(--amber)'); return null; }
-    const j = await r.json();
-    _ghSha = j.sha;
-    return JSON.parse(atob(j.content.replace(/\n/g,'')));
-  }catch(e){ setSyncStatus('⚠️ Sem conexão com GitHub','var(--amber)'); return null; }
-}
-
-async function ghWrite(data){
-  const token = getToken(); if(!token) return false;
-  try{
-    const body = {
-      message:'sync treino',
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(data)))),
-      ...(_ghSha ? {sha:_ghSha} : {})
-    };
-    const r = await fetch(GH_API,{method:'PUT',headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},body:JSON.stringify(body)});
-    if(!r.ok) return false;
-    const j = await r.json();
-    _ghSha = j.content.sha;
-    return true;
-  }catch(e){ return false; }
-}
-
-function setSyncStatus(msg, color){
-  const el = document.getElementById('sync-indicator');
-  if(el){ el.textContent = msg; el.style.color = color||'var(--muted)'; }
-}
-
-async function syncDoGitHub(mostrarStatus){
-  if(!getToken()){ if(mostrarStatus) setSyncStatus('⚠️ Token não configurado','var(--amber)'); return null; }
-  if(mostrarStatus) setSyncStatus('⟳ Sincronizando...');
-  const remote = await ghRead();
-  if(remote){
-    const localSess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
-    const remoteSess = remote.sess||{A:0,B:0};
-    const mergedSess = { A:Math.max(localSess.A||0,remoteSess.A||0), B:Math.max(localSess.B||0,remoteSess.B||0) };
-    localStorage.setItem('gym_sess_v6',JSON.stringify(mergedSess));
-    const localHist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
-    const remoteHist = remote.hist||[];
-    const seen = new Set();
-    const merged = [];
-    [...localHist,...remoteHist].forEach(h=>{
-      const k=(h.data||'')+'_'+(h.tipo||'')+'_'+(h.inicio||0);
-      if(!seen.has(k)){seen.add(k);merged.push(h);}
-    });
-    merged.sort((a,b)=>(b.data||0)-(a.data||0));
-    if(merged.length>120) merged.splice(120);
-    localStorage.setItem('gym_hist_v6',JSON.stringify(merged));
-    if(mostrarStatus){ setSyncStatus('✓ Sincronizado','var(--green)'); setTimeout(()=>setSyncStatus(''),3000); }
-  } else {
-    // só mostra erro se já havia mensagem de erro específica do ghRead
-    // se for 404 (primeiro uso), não mostra nada
-    const indicator = document.getElementById('sync-indicator');
-    if(mostrarStatus && indicator && !indicator.textContent.includes('⚠️')){
-      setSyncStatus('✓ Pronto — primeiro backup pendente','var(--muted)');
-      setTimeout(()=>setSyncStatus(''),3000);
-    } else {
-      setTimeout(()=>setSyncStatus(''),4000);
-    }
+const TREINOS_ANTIGOS = {
+  A:{
+    nome:'Treino A (anterior)', info:'Pernas · Peito · Ombros · Tríceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'conjugado',nome:'Agachamento',nome2:'Cadeira Extensora',series:3,reps:15,reps2:12},
+      {tipo:'normal',nome:'Cadeira Adutora',series:3,reps:12},
+      {tipo:'normal',nome:'Leg Press 45°',series:3,reps:12},
+      {tipo:'normal',nome:'Agachamento Articular',series:3,reps:12},
+      {tipo:'normal',nome:'Supino Máquina',series:3,reps:12},
+      {tipo:'normal',nome:'Crucifixo Máquina',series:3,reps:12},
+      {tipo:'normal',nome:'Remada Alta Cross',series:3,reps:12},
+      {tipo:'normal',nome:'Elevação Frontal Alternada',series:3,reps:12},
+      {tipo:'normal',nome:'Tríceps Barra Cross',series:3,reps:12},
+      {tipo:'normal',nome:'Tríceps Corda Unilateral',series:3,reps:12},
+      {tipo:'normal',nome:'Abdominal Máquina',series:3,reps:20},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  B:{
+    nome:'Treino B (anterior)', info:'Pernas · Glúteos · Costas · Bíceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal',nome:'Leg 180° Convergente',series:3,reps:15},
+      {tipo:'normal',nome:'Glúteo Máquina Extensão',series:3,reps:12},
+      {tipo:'conjugado',nome:'Cadeira Flexora Unilateral',nome2:'Cadeira Flexora',series:3,reps:10,reps2:12},
+      {tipo:'normal',nome:'Cadeira Abdutora',series:3,reps:12},
+      {tipo:'normal',nome:'Panturrilha Banco',series:3,reps:15},
+      {tipo:'conjugado',nome:'Puxada Aberta',nome2:'Puxada Fechada',series:3,reps:10,reps2:10},
+      {tipo:'normal',nome:'Remada Máquina Fechada',series:3,reps:12},
+      {tipo:'normal',nome:'Scott Máquina',series:3,reps:12},
+      {tipo:'normal',nome:'Bíceps Martelo c/ Rotação',series:3,reps:12},
+      {tipo:'normal',nome:'Abdominal Remador',series:3,reps:20},
+      {tipo:'esteira_fim'},
+    ]
   }
-  return remote;
-}
+};
 
-async function restaurarDoGitHub(){
-  setSyncStatus('⟳ Restaurando...');
-  const remote = await ghRead();
-  if(!remote){ setSyncStatus('⚠️ Nada encontrado no GitHub','var(--amber)'); setTimeout(()=>setSyncStatus(''),3000); return; }
-  if(remote.sess) localStorage.setItem('gym_sess_v6',JSON.stringify(remote.sess));
-  if(remote.hist) localStorage.setItem('gym_hist_v6',JSON.stringify(remote.hist));
-  setSyncStatus('✓ Histórico restaurado!','var(--green)');
-  setTimeout(()=>setSyncStatus(''),3000);
-  renderHome();
-  fecharModalBackup();
-}
-
-function agendarSync(){
-  if(_syncTimer) clearTimeout(_syncTimer);
-  _syncTimer = setTimeout(async()=>{
-    const hist = JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
-    const sess = JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0}');
-    const ok = await ghWrite({hist,sess,updated:Date.now()});
-    if(ok) setSyncStatus('✓ Salvo no GitHub','var(--green)');
-    else   setSyncStatus('⚠️ Falha ao salvar','var(--amber)');
-    setTimeout(()=>setSyncStatus(''),3000);
-  }, 2000);
-}
-
-/* ── MODAL BACKUP ── */
-function abrirModalBackup(){
-  const token = getToken();
-  document.getElementById('backup-token-input').value = token;
-  document.getElementById('backup-status').textContent = token ? '✅ Token configurado' : 'Nenhum token salvo ainda.';
-  document.getElementById('modal-backup').classList.remove('hidden');
-}
-function fecharModalBackup(){ document.getElementById('modal-backup').classList.add('hidden'); }
-function salvarToken(){
-  const val = document.getElementById('backup-token-input').value.trim();
-  if(!val){ document.getElementById('backup-status').textContent='⚠️ Cole o token antes de salvar.'; return; }
-  saveToken(val);
-  document.getElementById('backup-status').textContent='✅ Token salvo!';
-  document.getElementById('backup-cloud-btn').textContent='☁️';
-  syncDoGitHub(true).then(()=>renderHome());
-}
 
 /* ════ STORAGE ════ */
+const GH_USER  = 'RafaelRodriPinto';
+const GH_REPO  = 'Treino_Aline';
+const GH_FILE  = 'historico.json';
+const GH_API   = 'https://api.github.com/repos/'+GH_USER+'/'+GH_REPO+'/contents/'+GH_FILE;
+
+function getToken(){try{return localStorage.getItem('gym_ma_gh_token')||''}catch(e){return''}}
+function setToken(t){try{localStorage.setItem('gym_ma_gh_token',t)}catch(e){}}
+
 function save(){try{localStorage.setItem('gym_v6',JSON.stringify(E))}catch(e){}}
 function load(){
   try{const d=JSON.parse(localStorage.getItem('gym_v6')||'null');
     if(!d||d.data!==today())return null; return d}catch(e){return null}
 }
-function saveHist(entry){
+
+/* LOCAL — sempre rápido, usado em runtime */
+function saveHistLocal(entry){
   try{
     const h=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
     h.unshift(entry); if(h.length>120)h.splice(120);
     localStorage.setItem('gym_hist_v6',JSON.stringify(h));
-    agendarSync();
   }catch(e){}
 }
 function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v6')||'[]')}catch(e){return[]}}
+
+/* GITHUB — backup assíncrono */
+async function ghGet(){
+  const token=getToken(); if(!token)return null;
+  try{
+    const r=await fetch(GH_API,{headers:{
+      'Authorization':'token '+token,
+      'Accept':'application/vnd.github.v3+json'
+    }});
+    if(r.status===404)return {content:[],sha:null};
+    if(!r.ok)return null;
+    const d=await r.json();
+    const content=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    return {content, sha:d.sha};
+  }catch(e){return null}
+}
+async function ghPut(data, sha){
+  const token=getToken(); if(!token)return false;
+  try{
+    const body={
+      message:'Histórico atualizado',
+      content:btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2)))),
+    };
+    if(sha)body.sha=sha;
+    const r=await fetch(GH_API,{method:'PUT',headers:{
+      'Authorization':'token '+token,
+      'Accept':'application/vnd.github.v3+json',
+      'Content-Type':'application/json'
+    },body:JSON.stringify(body)});
+    return r.ok;
+  }catch(e){return false}
+}
+
+/* Salva local imediatamente + sincroniza GitHub em background */
+function saveHist(entry){
+  saveHistLocal(entry);
+  sincronizarGitHub();
+}
+
+let _syncTimeout=null;
+function getUltimaSinc(){try{return parseInt(localStorage.getItem('gym_ma_ultima_sinc')||'0')||null}catch(e){return null}}
+function setUltimaSinc(ts){try{localStorage.setItem('gym_ma_ultima_sinc',String(ts))}catch(e){}}
+function formatarUltimaSinc(ts){
+  const diffMin=Math.floor((Date.now()-ts)/60000);
+  if(diffMin<1)return'Sincronizado agora';
+  if(diffMin<60)return'Sincronizado há '+diffMin+'min';
+  const diffH=Math.floor(diffMin/60);
+  if(diffH<24)return'Sincronizado há '+diffH+'h';
+  return'Sincronizado há '+Math.floor(diffH/24)+'d';
+}
+function atualizarStatusBackup(){
+  const token=getToken();
+  const el=document.getElementById('gh-status');
+  const lbl=document.getElementById('gh-status-label');
+  if(el)el.textContent=token?'✅':'☁️';
+  if(lbl){
+    if(!token){lbl.textContent='Backup';return}
+    const ultimo=getUltimaSinc();
+    lbl.textContent=ultimo?formatarUltimaSinc(ultimo):'Backup';
+  }
+}
+
+/* Monta o payload completo a ser salvo no GitHub: treinos + dados de saúde */
+function montarPayloadCompleto(treinos){
+  return {
+    treinos: treinos,
+    peso: loadPesoLog(),
+    hidratacao: loadHidratHoje(),
+    suplementos: loadSupleHoje(),
+    avaliacoes: loadAvaliacoes(),
+    diasCompletos: loadDiasCompletos(),
+    estoque: loadEstoque(),
+    resumosSemanais: loadResumosSemana(),
+  };
+}
+
+function normalizarRemoto(remotoContent){
+  if(Array.isArray(remotoContent)){
+    return {treinos:remotoContent,peso:[],hidratacao:null,suplementos:null,avaliacoes:null,diasCompletos:null,estoque:null,resumosSemanais:[]};
+  }
+  return {
+    treinos: remotoContent.treinos||[],
+    peso: remotoContent.peso||[],
+    hidratacao: remotoContent.hidratacao||null,
+    suplementos: remotoContent.suplementos||null,
+    avaliacoes: remotoContent.avaliacoes||null,
+    diasCompletos: remotoContent.diasCompletos||null,
+    estoque: remotoContent.estoque||null,
+    resumosSemanais: remotoContent.resumosSemanais||[],
+  };
+}
+
+function sincronizarGitHub(){
+  // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
+  clearTimeout(_syncTimeout);
+  _syncTimeout=setTimeout(async()=>{
+    const token=getToken(); if(!token)return;
+    const localTreinos=loadHist();
+    const remoto=await ghGet();
+    if(!remoto)return;
+    const r=normalizarRemoto(remoto.content);
+
+    // merge treinos: une local + remoto, remove duplicatas por inicio+tipo
+    const todos=[...localTreinos,...r.treinos];
+    const vistos=new Set();
+    const mergedTreinos=todos.filter(h=>{
+      const k=(h.inicio||0)+'_'+h.tipo;
+      if(vistos.has(k))return false;
+      vistos.add(k);return true;
+    });
+    mergedTreinos.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
+    if(mergedTreinos.length>120)mergedTreinos.splice(120);
+    try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
+
+    // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
+    const localPeso=loadPesoLog();
+    const pesoPorData={};
+    r.peso.forEach(p=>pesoPorData[p.data]=p);
+    localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
+    const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
+    savePesoLog(mergedPeso);
+
+    // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
+    const localHidrat=loadHidratHoje();
+    const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
+    saveHidratHoje(mergedHidrat);
+
+    const localSuple=loadSupleHoje();
+    const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
+    saveSupleHoje(mergedSuple);
+
+    // avaliações: une por data, local tem prioridade
+    const localAvals=loadAvaliacoes();
+    const avalsPorData={};
+    (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
+    localAvals.forEach(a=>avalsPorData[a.data]=a);
+    const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
+    try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
+
+    // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
+    const localDC=loadDiasCompletos();
+    const remotoDC=r.diasCompletos||{};
+    const mergedDC={};
+    ['hidrat','suple'].forEach(tipo=>{
+      const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
+      mergedDC[tipo]=Array.from(setDias).sort();
+    });
+    saveDiasCompletos(mergedDC);
+
+    // estoque: local tem prioridade
+    const localEstoque=loadEstoque();
+    const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_ma_estoque'))?r.estoque:localEstoque;
+    saveEstoque(mergedEstoque);
+
+    // resumos semanais: une por semId (identificador único da semana)
+    const localResumosMap={};
+    loadResumosSemana().forEach(x=>localResumosMap[x.semId]=x);
+    (r.resumosSemanais||[]).forEach(x=>{if(!localResumosMap[x.semId])localResumosMap[x.semId]=x;});
+    const mergedResumos=Object.values(localResumosMap).sort((a,b)=>b.ts-a.ts).slice(0,52);
+    saveResumosSemana(mergedResumos);
+
+    // salva tudo no GitHub
+    const payload=montarPayloadCompleto(mergedTreinos);
+    const ok=await ghPut(payload, remoto.sha);
+    if(ok){
+      setUltimaSinc(Date.now());
+      atualizarStatusBackup();
+    }
+  },3000);
+}
+
+/* Restaura histórico do GitHub para o localStorage (usado na tela de config) */
+async function restaurarDoGitHub(){
+  mostrarToast('Buscando histórico no GitHub...');
+  const remoto=await ghGet();
+  if(!remoto){mostrarToast('❌ Token inválido ou erro de conexão');return}
+  const r=normalizarRemoto(remoto.content);
+  if(!r.treinos.length&&!r.peso.length){mostrarToast('Nenhum dado encontrado no GitHub');return}
+
+  try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos))}catch(e){}
+  // recalcula sessões
+  const sess={A:0,B:0,C:0};
+  r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
+  try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
+
+  if(r.peso.length)savePesoLog(r.peso);
+  if(r.hidratacao)saveHidratHoje(r.hidratacao);
+  if(r.suplementos)saveSupleHoje(r.suplementos);
+  if(r.avaliacoes&&r.avaliacoes.length){try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(r.avaliacoes))}catch(e){}}
+  if(r.diasCompletos)saveDiasCompletos(r.diasCompletos);
+  if(r.estoque&&r.estoque.length)saveEstoque(r.estoque);
+  if(r.resumosSemanais&&r.resumosSemanais.length)saveResumosSemana(r.resumosSemanais);
+
+  mostrarToast('✓ '+r.treinos.length+' treinos e dados de saúde restaurados!');
+  setTimeout(()=>{renderHome();renderHist(_histTab);if(document.getElementById('page-saude').classList.contains('active'))showNav('saude')},1500);
+}
+
+function mostrarToast(msg){
+  let t=document.getElementById('toast-msg');
+  if(!t){
+    t=document.createElement('div');t.id='toast-msg';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1c1c26;color:#f0f0f5;border:1px solid rgba(255,255,255,.15);padding:10px 18px;border-radius:20px;font-size:13px;font-family:var(--mono);z-index:99;white-space:nowrap;transition:opacity .3s';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._to);t._to=setTimeout(()=>t.style.opacity='0',3000);
+}
+
+/* ─── CONFIGURAÇÃO DO TOKEN ─── */
+function abrirConfigToken(){
+  const existing=document.getElementById('modal-token');
+  if(existing)existing.remove();
+  const token=getToken();
+  const div=document.createElement('div');
+  div.id='modal-token';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px;max-height:90vh;overflow-y:auto">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔐 Backup no GitHub</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+        O histórico fica salvo no seu GitHub e nunca se perde ao limpar o cache.<br><br>
+        <b style="color:var(--text)">Como criar o token:</b><br>
+        1. github.com → foto → Settings<br>
+        2. Developer settings → Personal access tokens → Tokens (classic)<br>
+        3. Generate new token → marque <b>repo</b><br>
+        4. Copie e cole abaixo
+      </div>
+      <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Token atual: ${token?'✓ configurado':'não configurado'}</div>
+      <input id="inp-token" type="password" placeholder="ghp_xxxxxxxxxxxx" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${token}">
+      <button onclick="salvarToken()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar token</button>
+      ${token?`<button onclick="restaurarDoGitHub();document.getElementById('modal-token').remove()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">↓ Restaurar histórico do GitHub</button>`:''}
+      <button onclick="document.getElementById('modal-token').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function salvarToken(){
+  const t=document.getElementById('inp-token').value.trim();
+  if(!t){mostrarToast('Cole o token antes de salvar');return}
+  setToken(t);
+  document.getElementById('modal-token').remove();
+  const el=document.getElementById('gh-status');
+  if(el)el.textContent='✅';
+  mostrarToast('✓ Token salvo! Sincronizando...');
+  sincronizarGitHub();
+}
+
+/* ─── MIGRAÇÃO ─── */
+function migrarHistoricoAntigo(){
+  if(localStorage.getItem('gym_migrated_v6'))return;
+  const keys=['gym_hist_v5','gym_hist_v4','gym_hist_v3'];
+  let importados=0;
+  keys.forEach(k=>{
+    try{
+      const old=JSON.parse(localStorage.getItem(k)||'[]');
+      old.forEach(h=>{
+        // marca como plano antigo se não tiver plano definido
+        if(!h.plano) h.plano='antigo';
+        // garante campos mínimos
+        if(!h.dataStr) h.dataStr=h.data?new Date(h.data).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}):'?';
+        saveHist(h);
+        importados++;
+      });
+    }catch(e){}
+  });
+  localStorage.setItem('gym_migrated_v6','1');
+  if(importados>0) console.log('Migrados '+importados+' treinos do histórico anterior.');
+}
+
+/* Migração de plano — quando os exercícios do treino mudam (nova avaliação física),
+   arquiva o plano anterior como "antigo" e zera o contador de sessões do novo ciclo */
+const PLANO_VERSAO = '2026-08-12'; // muda toda vez que TREINOS é substituído por um novo plano
+function migrarPlanoV2(){
+  let versaoSalva=null;
+  try{versaoSalva=localStorage.getItem('gym_plano_versao')}catch(e){}
+  if(versaoSalva===PLANO_VERSAO)return; // já está na versão atual, nada a fazer
+
+  try{
+    const hist=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    let mudou=false;
+    hist.forEach(h=>{
+      if(h.plano==='novo'){h.plano='antigo';mudou=true}
+    });
+    if(mudou)localStorage.setItem('gym_hist_v6',JSON.stringify(hist));
+  }catch(e){}
+
+  // zera sessões — novo ciclo de treino começa do zero
+  try{localStorage.setItem('gym_sess_v6',JSON.stringify({A:0,B:0,C:0}))}catch(e){}
+
+  try{localStorage.setItem('gym_plano_versao',PLANO_VERSAO)}catch(e){}
+  if(getToken())sincronizarGitHub();
+}
+// sessões concluídas por tipo (apenas treinos novos A-D)
 function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0,"C":0}')}catch(e){return{A:0,B:0,C:0}}}
 function addSessao(tipo){
   const s=loadSessoes(); s[tipo]=(s[tipo]||0)+1;
   localStorage.setItem('gym_sess_v6',JSON.stringify(s));
-  agendarSync();
 }
 function today(){return new Date().toDateString()}
 function todayStr(){return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})}
@@ -712,36 +1078,314 @@ function diasAtePrazo(){
 
 // sugestão: próximo treino na rotação A→B→C→D→A...
 function sugerirTreino(){
-  const sess=loadSessoes();
   const hist=loadHist();
-  // Primeiro tenta pelo último treino registrado no app
+  // busca último treino concluído nos treinos novos (que tem 'plano':'novo')
   const ultimo=hist.find(h=>h.plano==='novo');
-  if(ultimo){
-    const idx=ORDEM.indexOf(ultimo.tipo);
-    return ORDEM[(idx+1)%ORDEM.length];
-  }
-  // Sem histórico no app: sugere o treino com menor número de sessões
-  // Em caso de empate, segue a ordem normal
-  let menorTreino=ORDEM[0];
-  let menorN=sess[ORDEM[0]]||0;
-  ORDEM.forEach(t=>{
-    const n=sess[t]||0;
-    if(n<menorN){menorN=n;menorTreino=t;}
-  });
-  return menorTreino;
+  if(!ultimo) return 'A';
+  const idx=ORDEM.indexOf(ultimo.tipo);
+  return ORDEM[(idx+1)%ORDEM.length];
 }
 
 /* ════ NAV ════ */
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
+  // esconde o assist se estava visível
+  const assist=document.getElementById('page-assist');
+  if(assist)assist.style.display='none';
+  if(id==='assist'){
+    if(assist){assist.style.display='flex';}
+  }else{
+    const el=document.getElementById('page-'+id);
+    if(el)el.classList.add('active');
+  }
   document.getElementById('app').scrollTop=0;
 }
+/* ════ 1. TRACKER DE PESO SEMANAL ════ */
+function loadPesoLog(){try{return JSON.parse(localStorage.getItem('gym_ma_peso_log')||'[]')}catch(e){return[]}}
+function savePesoLog(log){try{localStorage.setItem('gym_ma_peso_log',JSON.stringify(log))}catch(e){}}
+function registrarPeso(){
+  const input=document.getElementById('peso-input');
+  const cinturaInput=document.getElementById('cintura-input');
+  const valor=parseFloat(input.value);
+  const cintura=parseFloat(cinturaInput.value)||null;
+  if(!valor||valor<30||valor>250){mostrarToast('Informe um peso válido');return}
+  const log=loadPesoLog();
+  const hoje=today();
+  // se já registrou hoje, atualiza em vez de duplicar
+  const idx=log.findIndex(p=>p.data===hoje);
+  if(idx>=0){log[idx].peso=valor;if(cintura)log[idx].cintura=cintura;}
+  else log.push({data:hoje,dataStr:todayStr(),peso:valor,cintura:cintura,ts:Date.now()});
+  log.sort((a,b)=>a.ts-b.ts);
+  savePesoLog(log);
+  input.value='';cinturaInput.value='';
+  mostrarToast('✓ Registrado: '+valor+'kg'+(cintura?' · '+cintura+'cm':''));
+  renderPesoTracker();
+  if(getToken())sincronizarGitHub();
+}
+function excluirPeso(ts){
+  let log=loadPesoLog();
+  log=log.filter(p=>p.ts!==ts);
+  savePesoLog(log);
+  renderPesoTracker();
+  if(getToken())sincronizarGitHub();
+}
+function renderPesoTracker(){
+  const log=loadPesoLog();
+  const chartWrap=document.getElementById('peso-chart-wrap');
+  const lista=document.getElementById('peso-lista');
+  if(!chartWrap||!lista)return;
+  if(!log.length){
+    chartWrap.innerHTML='<p style="color:var(--muted);font-size:12px;text-align:center;padding:12px 0">Registre seu peso semanalmente para ver o gráfico de evolução.</p>';
+    lista.innerHTML='';
+    return;
+  }
+  // gráfico SVG simples de linha
+  const pesos=log.map(p=>p.peso);
+  const min=Math.min(...pesos,82)-1, max=Math.max(...pesos,93)+1;
+  const w=280,h=90,pad=10;
+  const pts=log.map((p,i)=>{
+    const x=log.length>1?pad+(i/(log.length-1))*(w-pad*2):w/2;
+    const y=pad+(1-(p.peso-min)/(max-min))*(h-pad*2);
+    return [x,y];
+  });
+  const pathD=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
+  const dots=pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--accent2)"/>`).join('');
+  const metaY=pad+(1-(82-min)/(max-min))*(h-pad*2);
+  chartWrap.innerHTML=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:90px">
+    <line x1="0" y1="${metaY}" x2="${w}" y2="${metaY}" stroke="var(--green)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+    <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2"/>
+    ${dots}
+  </svg>
+  <div style="font-size:9px;color:var(--muted);text-align:right;font-family:var(--mono)">--- meta 82kg</div>`;
+  // lista das últimas 5 entradas
+  const recentes=log.slice(-5).reverse();
+  lista.innerHTML=recentes.map(p=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:12px;color:var(--muted)">${p.dataStr}</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:13px;font-family:var(--mono);font-weight:500">${p.peso}kg</span>
+        ${p.cintura?`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">${p.cintura}cm</span>`:''}
+        <button onclick="excluirPeso(${p.ts})" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer;padding:2px 6px">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+/* ════ 2. HIDRATAÇÃO ════ */
+const HIDRAT_ETAPAS=[
+  {id:'acordar',label:'500ml ao acordar (06h30)',icon:'🌅'},
+  {id:'pretreino',label:'300ml com pré-treino (07h30)',icon:'💊'},
+  {id:'treino',label:'500ml durante o treino',icon:'🏋️'},
+  {id:'postreino',label:'300ml pós-treino',icon:'🍳'},
+  {id:'dia',label:'1.5L ao longo do dia',icon:'☀️'},
+];
+function loadHidratHoje(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gym_ma_hidrat')||'null');
+    if(!d||d.data!==today())return{data:today(),feitos:[]};
+    return d;
+  }catch(e){return{data:today(),feitos:[]}}
+}
+function saveHidratHoje(d){try{localStorage.setItem('gym_ma_hidrat',JSON.stringify(d))}catch(e){}}
+function toggleHidrat(id){
+  const d=loadHidratHoje();
+  const i=d.feitos.indexOf(id);
+  if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
+  saveHidratHoje(d);
+  if(d.feitos.length===HIDRAT_ETAPAS.length)registrarDiaCompleto('hidrat');
+  renderHidratChecklist();
+  if(getToken())sincronizarGitHub();
+}
+function renderHidratChecklist(){
+  const el=document.getElementById('hidrat-checklist');
+  const totalEl=document.getElementById('hidrat-total');
+  if(!el)return;
+  const d=loadHidratHoje();
+  el.innerHTML=HIDRAT_ETAPAS.map(e=>{
+    const feito=d.feitos.includes(e.id);
+    return`<div onclick="toggleHidrat('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer">
+      <div style="width:22px;height:22px;border-radius:7px;border:1.5px solid ${feito?'var(--green)':'var(--border2)'};background:${feito?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#fff">${feito?'✓':''}</div>
+      <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'}">${e.icon} ${e.label}</span>
+    </div>`;
+  }).join('');
+  const streak=calcularStreak('hidrat');
+  if(totalEl)totalEl.innerHTML=d.feitos.length+' / '+HIDRAT_ETAPAS.length+' etapas'+(streak>0?` · <span style="color:var(--amber)">🔥 ${streak} dia${streak>1?'s':''}</span>`:'');
+}
+
+/* ════ 4. SUPLEMENTOS DO DIA ════ */
+const SUPLE_ETAPAS=[
+  {id:'vitamd',   label:'Vitamina D3+K2 — 1 cápsula (manhã c/ refeição)', icon:'☀️'},
+  {id:'omega3',   label:'Ômega 3 — 2g (c/ refeição principal)',            icon:'🐟'},
+  {id:'colageno', label:'Colágeno Hidrolisado — 10g (manhã em jejum)',     icon:'💪'},
+  {id:'pretreino',label:'Mix pré-treino + creatina 5g + própolis 70 — junto com Rafael (07h30)', icon:'⚡'},
+  {id:'magnesio', label:'Magnésio — junto com Rafael (22h)',                icon:'🌙'},
+];
+function loadSupleHoje(){
+  try{
+    const d=JSON.parse(localStorage.getItem('gym_ma_suple')||'null');
+    if(!d||d.data!==today())return{data:today(),feitos:[]};
+    return d;
+  }catch(e){return{data:today(),feitos:[]}}
+}
+function saveSupleHoje(d){try{localStorage.setItem('gym_ma_suple',JSON.stringify(d))}catch(e){}}
+function toggleSuple(id){
+  const d=loadSupleHoje();
+  const i=d.feitos.indexOf(id);
+  if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
+  saveSupleHoje(d);
+  if(d.feitos.length===SUPLE_ETAPAS.length)registrarDiaCompleto('suple');
+  renderSupleChecklist();
+  if(getToken())sincronizarGitHub();
+}
+function renderSupleChecklist(){
+  const el=document.getElementById('suple-checklist');
+  const streakEl=document.getElementById('suple-streak');
+  if(!el)return;
+  const d=loadSupleHoje();
+  el.innerHTML=SUPLE_ETAPAS.map(e=>{
+    const feito=d.feitos.includes(e.id);
+    return`<div onclick="toggleSuple('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer">
+      <div style="width:22px;height:22px;border-radius:7px;border:1.5px solid ${feito?'var(--accent)':'var(--border2)'};background:${feito?'var(--accent)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#fff">${feito?'✓':''}</div>
+      <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'}">${e.icon} ${e.label}</span>
+    </div>`;
+  }).join('');
+  const streak=calcularStreak('suple');
+  if(streakEl)streakEl.innerHTML=streak>0?`<span style="color:var(--amber)">🔥 ${streak} dia${streak>1?'s':''} seguidos completando 100%</span>`:'';
+}
+
+/* ════ STREAKS — dias consecutivos com checklist 100% completo ════ */
+function loadDiasCompletos(){try{return JSON.parse(localStorage.getItem('gym_ma_dias_completos')||'{}')}catch(e){return{}}}
+function saveDiasCompletos(d){try{localStorage.setItem('gym_ma_dias_completos',JSON.stringify(d))}catch(e){}}
+function registrarDiaCompleto(tipo){
+  // tipo: 'hidrat' ou 'suple'
+  const dc=loadDiasCompletos();
+  if(!dc[tipo])dc[tipo]=[];
+  const hoje=today();
+  if(!dc[tipo].includes(hoje))dc[tipo].push(hoje);
+  saveDiasCompletos(dc);
+}
+function calcularStreak(tipo){
+  const dc=loadDiasCompletos();
+  const dias=(dc[tipo]||[]).slice().sort().reverse(); // mais recente primeiro
+  if(!dias.length)return 0;
+  let streak=0;
+  let cursor=new Date();
+  cursor.setHours(0,0,0,0);
+  for(let i=0;i<dias.length;i++){
+    const cursorStr=cursor.toISOString().slice(0,10);
+    if(dias[i]===cursorStr){
+      streak++;
+      cursor.setDate(cursor.getDate()-1);
+    }else if(streak===0&&i===0){
+      // hoje ainda não completou, mas verifica se ontem foi consecutivo
+      const ontem=new Date();ontem.setDate(ontem.getDate()-1);ontem.setHours(0,0,0,0);
+      const ontemStr=ontem.toISOString().slice(0,10);
+      if(dias[i]===ontemStr){streak++;cursor=ontem;cursor.setDate(cursor.getDate()-1)}
+      else break;
+    }else break;
+  }
+  return streak;
+}
+
+/* ════ 3. HISTÓRICO DE AVALIAÇÕES FÍSICAS ════ */
+function loadAvaliacoes(){
+  const SEED=[
+    {data:'2026-05-11',dataStr:'11/05/2026',pontuacao:79,peso:93,imc:26.8,
+     aguaCorporal:52.3,massaGorda:21.7,massaProteica:14.2,minerais:4.8,
+     massaMuscular:66.5,massaMuscularEsq:40.7,gorduraVisceral:9,
+     gorduraSubcutanea:19.2,cinturaQuadril:0.9,massaLivreGordura:71.3,
+     aguaIntracelular:32.9,aguaExtracelular:19.4},
+    {data:'2026-08-12',dataStr:'12/08/2026',pontuacao:80,peso:92.5,imc:26.7,
+     aguaCorporal:52.5,massaGorda:20.7,massaProteica:14.2,minerais:5,
+     massaMuscular:66.7,massaMuscularEsq:41,gorduraVisceral:8,
+     gorduraSubcutanea:18.5,cinturaQuadril:0.9,massaLivreGordura:71.7,
+     aguaIntracelular:32.9,aguaExtracelular:19.6},
+  ];
+  try{
+    const a=JSON.parse(localStorage.getItem('gym_ma_avaliacoes')||'null');
+    if(a&&a.length){
+      // garante que avaliações novas do SEED (ex: nova avaliação física) entrem mesmo
+      // se o usuário já tinha avaliações salvas de antes
+      const datasExistentes=new Set(a.map(x=>x.data));
+      let mudou=false;
+      SEED.forEach(s=>{if(!datasExistentes.has(s.data)){a.push(s);mudou=true}});
+      if(mudou){
+        a.sort((x,y)=>new Date(x.data)-new Date(y.data));
+        try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(a))}catch(e){}
+      }
+      return a;
+    }
+  }catch(e){}
+  return SEED;
+}
+function renderAvaliacoesLista(){
+  const el=document.getElementById('avaliacoes-lista');
+  if(!el)return;
+  const avals=loadAvaliacoes();
+  el.innerHTML=avals.map((a,i)=>{
+    const anterior=avals[i-1];
+    let diffPeso='';
+    if(anterior){
+      const d=+(a.peso-anterior.peso).toFixed(1);
+      diffPeso=d<0?`<span style="color:var(--green)">▼ ${Math.abs(d)}kg</span>`:d>0?`<span style="color:var(--red)">▲ ${d}kg</span>`:'<span style="color:var(--muted)">→</span>';
+    }
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;${i<avals.length-1?'border-bottom:1px solid var(--border)':''}">
+      <div>
+        <div style="font-size:13px;font-weight:500">${a.dataStr}</div>
+        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:15px;font-family:var(--mono);font-weight:600">${a.peso}kg</div>
+        <div style="font-size:11px">${diffPeso}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildMetricRow(nome,valor,ideal,status){
+  const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!']};
+  const [bg,cor,icone]=cores[status]||cores.ok;
+  return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+    <div style="flex:1">
+      <div style="font-size:12px;font-weight:500">${nome}</div>
+      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">ideal: ${ideal}</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span style="font-size:13px;font-family:var(--mono);font-weight:500">${valor}</span>
+      <span style="background:${bg};color:${cor};border-radius:6px;padding:2px 7px;font-size:10px;font-family:var(--mono)">${icone}</span>
+    </div>
+  </div>`;
+}
+
 function showNav(tab){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('nav-'+tab).classList.add('active');
   if(tab==='home'){showPage('home');renderHome()}
-  if(tab==='saude'){showPage('saude');renderSaude();}
+  if(tab==='saude'){
+    showPage('saude');
+    const metricas=[
+      ['Água corporal total','34.7kg','28.6~35.0','excelente'],
+      ['Massa gorda','26.2kg','8.4~17.4','ruim'],
+      ['Massa proteica','9.3kg','8.6~10.5','ruim'],
+      ['Minerais','3.3kg','2.9~3.6','ok'],
+      ['Massa muscular','47.3kg','44.9~54.9','ok'],
+      ['Massa muscular esquelética','25.8kg','23.3~28.5','ok'],
+      ['Gordura visceral','12','1~9','ruim'],
+      ['Gordura subcutânea','22.8kg','5.4~10.8','ruim'],
+      ['Relação de gordura','35.6%','18.0~28.0','ruim'],
+      ['Massa livre de gordura','47.3kg','44.9~54.9','ok'],
+      ['IMC','25.1','18.5~23.0','ok'],
+      ['Pontuação saúde','69 pts','>80','ruim'],
+    ];
+    const el=document.getElementById('comp-body');
+    if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
+    renderPesoTracker();
+    renderHidratChecklist();
+    renderSupleChecklist();
+    renderAvaliacoesLista();
+    renderEstoqueLista();
+    renderNotifBtn();
+  }
+
   if(tab==='hist'){showPage('hist');renderHist(_histTab)}
 }
 function voltarHome(){
@@ -752,9 +1396,108 @@ function clearAllTicks(){
 }
 
 /* ════ HOME ════ */
+function getSemanaAtualId(){
+  // identifica a semana atual no formato ano-numerosemana, baseado em segunda-feira
+  const d=new Date();
+  const onejan=new Date(d.getFullYear(),0,1);
+  const diasPassados=Math.floor((d-onejan)/86400000);
+  const semana=Math.ceil((diasPassados+onejan.getDay()+1)/7);
+  return d.getFullYear()+'-S'+semana;
+}
+function calcularDadosSemanais(segundaMs, sextaMs){
+  const hist=loadHist();
+  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=segundaMs&&h.inicio<=sextaMs);
+  const totalTreinos=treinosSemana.length;
+  const totalKcal=treinosSemana.reduce((a,h)=>{
+    const kcalSalvo=h.kcal||0;
+    if(kcalSalvo)return a+kcalSalvo;
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+(x.peso*(x.reps||0))+(x.peso2||0)*(x.reps2||0),0);
+    return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
+  },0);
+  const pesoLogSemana=loadPesoLog().filter(p=>{
+    const t=new Date(p.data).getTime();
+    return t>=segundaMs&&t<=sextaMs;
+  });
+  let diffPeso=null;
+  if(pesoLogSemana.length>=2){
+    diffPeso=+(pesoLogSemana[pesoLogSemana.length-1].peso-pesoLogSemana[0].peso).toFixed(1);
+  }
+  const pesoFinal=pesoLogSemana.length?pesoLogSemana[pesoLogSemana.length-1].peso:null;
+  return {totalTreinos,totalKcal,diffPeso,pesoFinal};
+}
+
+function loadResumosSemana(){try{return JSON.parse(localStorage.getItem('gym_resumos_semanais')||'[]')}catch(e){return[]}}
+function saveResumosSemana(r){try{localStorage.setItem('gym_resumos_semanais',JSON.stringify(r))}catch(e){}}
+
+function renderResumoSemanal(){
+  const el=document.getElementById('home-weekly-summary');
+  if(!el)return;
+  const semanaAtual=getSemanaAtualId();
+  let vistoSemana=null;
+  try{vistoSemana=localStorage.getItem('gym_ma_resumo_visto')}catch(e){}
+  const hoje=new Date();
+  const ehSegunda=hoje.getDay()===1;
+  if(!ehSegunda||vistoSemana===semanaAtual){el.innerHTML='';return}
+
+  const segundaPassada=new Date(hoje);segundaPassada.setDate(hoje.getDate()-7);segundaPassada.setHours(0,0,0,0);
+  const sextaPassada=new Date(hoje);sextaPassada.setDate(hoje.getDate()-3);sextaPassada.setHours(23,59,59,999);
+
+  const dados=calcularDadosSemanais(segundaPassada.getTime(),sextaPassada.getTime());
+  if(!dados.totalTreinos){el.innerHTML='';return}
+
+  let diffPesoHtml='';
+  if(dados.diffPeso!==null){
+    diffPesoHtml=dados.diffPeso<0?`<span style="color:var(--green)">▼ ${Math.abs(dados.diffPeso)}kg</span>`:dados.diffPeso>0?`<span style="color:var(--red)">▲ ${dados.diffPeso}kg</span>`:'<span style="color:var(--muted)">estável</span>';
+  }
+
+  el.innerHTML=`<div class="card" style="background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(62,207,142,.08));border:1px solid rgba(124,106,247,.2);padding:14px;margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <span style="font-size:12px;font-family:var(--mono);letter-spacing:1px;color:var(--accent2);text-transform:uppercase">📊 Resumo da semana passada (seg-sex)</span>
+      <button onclick="fecharResumoSemanal()" style="background:none;border:none;color:var(--muted);font-size:14px;cursor:pointer">✕</button>
+    </div>
+    <div style="display:flex;gap:8px">
+      <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
+        <div style="font-size:18px;font-weight:600">${dados.totalTreinos}/5</div>
+        <div style="font-size:10px;color:var(--muted)">treinos</div>
+      </div>
+      <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
+        <div style="font-size:18px;font-weight:600">~${dados.totalKcal}</div>
+        <div style="font-size:10px;color:var(--muted)">kcal total</div>
+      </div>
+      ${diffPesoHtml?`<div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
+        <div style="font-size:14px;font-weight:600">${diffPesoHtml}</div>
+        <div style="font-size:10px;color:var(--muted)">peso</div>
+      </div>`:''}
+    </div>
+  </div>`;
+  // salva automaticamente quando exibe (não precisa esperar fechar)
+  salvarResumoSemanalNoHistorico(segundaPassada,sextaPassada,dados);
+}
+function fecharResumoSemanal(){
+  try{localStorage.setItem('gym_ma_resumo_visto',getSemanaAtualId())}catch(e){}
+  document.getElementById('home-weekly-summary').innerHTML='';
+}
+function salvarResumoSemanalNoHistorico(segunda,sexta,dados){
+  const semId=getSemanaAtualId();
+  const resumos=loadResumosSemana();
+  // evita duplicata
+  if(resumos.find(r=>r.semId===semId))return;
+  resumos.unshift({
+    semId,
+    dataStr: segunda.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + ' – ' + sexta.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}),
+    totalTreinos: dados.totalTreinos,
+    totalKcal: dados.totalKcal,
+    diffPeso: dados.diffPeso,
+    pesoFinal: dados.pesoFinal,
+    ts: Date.now()
+  });
+  if(resumos.length>52)resumos.splice(52); // guarda até 1 ano
+  saveResumosSemana(resumos);
+  if(getToken())sincronizarGitHub();
+}
+
 function renderHome(){
-  renderResumoSemanal();
-  // Alertas de prazo
+  // Alertas de prazo — avisa a partir de 09/05
   const dias=diasAtePrazo();
   const now=new Date(); now.setHours(0,0,0,0);
   const inicioPlazo=new Date(INICIO_PLANO); inicioPlazo.setHours(0,0,0,0);
@@ -762,16 +1505,17 @@ function renderHome(){
   let alertHtml='';
   if(planoAtivo){
     if(dias<=0){
-      alertHtml=`<div class="alert-banner alert-red">⚠️ Prazo encerrado em ${PRAZO.toLocaleDateString('pt-BR')}. Hora de definir um novo plano!</div>`;
+      alertHtml=`<div class="alert-banner alert-red">⚠️ O prazo do plano encerrou em ${PRAZO.toLocaleDateString('pt-BR')}.</div>`;
     }else if(dias<=14){
-      alertHtml=`<div class="alert-banner alert-yellow">🟡 Atenção — faltam <b>${dias} dia${dias!==1?'s':''}</b> para o fim do plano!</div>`;
+      alertHtml=`<div class="alert-banner alert-red">🔴 Faltam <b>${dias} dia${dias>1?'s':''}</b> para o fim do plano (${PRAZO.toLocaleDateString('pt-BR')})!</div>`;
     }else if(dias<=30){
-      alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dias</b> para encerrar o plano (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
+      alertHtml=`<div class="alert-banner alert-amber">⏰ Faltam <b>${dias} dias</b> para o fim do plano (${PRAZO.toLocaleDateString('pt-BR')}).</div>`;
     }else{
-      alertHtml=`<div class="alert-banner alert-subtle">📅 Plano ativo · Faltam ${dias} dias (${PRAZO.toLocaleDateString('pt-BR')})</div>`;
+      alertHtml=`<div class="alert-banner alert-amber" style="opacity:.75">📅 Plano ativo até ${PRAZO.toLocaleDateString('pt-BR')} · Faltam ${dias} dias.</div>`;
     }
   }
   document.getElementById('home-alerts').innerHTML=alertHtml;
+  renderResumoSemanal();
 
   // Treino pendente (não concluído hoje)
   const pend=load();
@@ -779,7 +1523,7 @@ function renderHome(){
     const ex=TREINOS[pend.tipo].exercicios[pend.exIdx];
     document.getElementById('home-pending').innerHTML=`<div class="pending-card">
       <div class="pending-label">● Em andamento</div>
-      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${pend.serieIdx+1}/3</span></div>
+      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/3</span></div>
       <button class="btn btn-primary" onclick="retomar()" style="margin-bottom:6px">↩ Retomar de onde parei</button>
       <button class="btn btn-red" onclick="descartar()">Descartar</button>
     </div>`;
@@ -802,10 +1546,8 @@ function renderHome(){
     const n=sess[t]||0;
     const pct=Math.min(100,Math.round((n/META_SESSOES)*100));
     sgHtml+=`<div class="sess-card">
-      <div class="sess-top">
-        <span class="sess-letra">${t}</span>
-        <span class="sess-fraction"><strong>${n}</strong>/${META_SESSOES}</span>
-      </div>
+      <div class="sess-letra">${t}</div>
+      <div style="font-size:16px;font-weight:600;font-family:var(--mono);color:var(--text)">${n}<span style="font-size:12px;color:var(--muted);font-weight:400">/${META_SESSOES}</span></div>
       <div class="sess-bar"><div class="sess-fill" style="width:${pct}%"></div></div>
     </div>`;
   });
@@ -835,7 +1577,9 @@ function iniciarTreino(tipo){
   if(p&&!p.finalizado){descartar()}
   const tr=TREINOS[tipo];
   E={
-    tipo, plano:'novo', data:today(), exIdx:0, serieIdx:0,
+    tipo, plano:'novo', data:today(), exIdx:0,
+    // serieIdx agora é um array por exercício em vez de global
+    serieIdxs:tr.exercicios.map(()=>0),
     series:tr.exercicios.map(ex=>(ex.tipo==='normal'||ex.tipo==='conjugado'||ex.tipo==='progressivo')?Array(ex.series||3).fill(null):[]),
     pulados:[], finalizado:false, inicio:Date.now(),
     serieStartTs:null, restStartTs:null, restTotal:0, restTipo:null,
@@ -845,16 +1589,32 @@ function iniciarTreino(tipo){
 }
 function retomar(){
   E=load(); if(!E){voltarHome();return}
+  // migração: se estado antigo tem serieIdx global, converte para array
+  if(typeof E.serieIdx === 'number' && !E.serieIdxs){
+    const tr=TREINOS[E.tipo];
+    E.serieIdxs=tr.exercicios.map((_,i)=>i===E.exIdx?E.serieIdx:0);
+    delete E.serieIdx;
+    save();
+  }
+  // garante que serieIdxs tem o tamanho certo
+  if(!E.serieIdxs){
+    E.serieIdxs=TREINOS[E.tipo].exercicios.map(()=>0);
+    save();
+  }
   if(E.restStartTs&&E.restTotal){
     const rem=restRem(E.restStartTs,E.restTotal);
     if(rem>0){_restCb=E.restTipo==='serie'?()=>goExercicio():()=>avancarExercicio();mostrarDescansoRetomado();return}
     E.restStartTs=null;E.restTotal=0;
     if(E.restTipo==='serie')goExercicio(); else avancarExercicio(); return;
   }
-  if(E.esteiraStartTs&&E.esteiraTipo){
-    const rem=restRem(E.esteiraStartTs,600);
+  if(E.esteiraTipo&&E.esteiraStartTs){
+    const rem=restRem(E.esteiraStartTs,esteiraDuracao(E.esteiraTipo));
     if(rem>0){mostrarEsteiraRetomada();return}
     E.esteiraStartTs=null;terminarEsteira();return;
+  }
+  if(E.esteiraTipo&&!E.esteiraStartTs){
+    // esteira aberta mas ainda não iniciada (não apertou "Iniciar")
+    goEsteira(E.esteiraTipo);return;
   }
   goExercicio();
 }
@@ -889,7 +1649,7 @@ function goExercicio(){
 function renderExCard(){
   const exs=TREINOS[E.tipo].exercicios;
   const ex=exs[E.exIdx];
-  const normTotal=exs.filter(e=>e.tipo==='normal'||e.tipo==='conjugado').length;
+  const normTotal=exs.filter(e=>e.tipo==='normal'||e.tipo==='conjugado'||e.tipo==='progressivo').length;
   const normDone=exs.slice(0,E.exIdx).filter(e=>e.tipo==='normal'||e.tipo==='conjugado').length;
   document.getElementById('prog-label').textContent='Treino '+E.tipo;
   document.getElementById('prog-count').textContent=(E.exIdx+1)+'/'+exs.length;
@@ -902,15 +1662,7 @@ function renderExCard(){
   }
 
   let nomeHtml='', linkHtml='';
-  if(ex.tipo==='progressivo'){
-    camposHtml=`
-      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⬆️ Cargas Progressivas — ${ex.reps} reps cada</div>
-      <div class="input-grid" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px">
-        <div class="field"><label>Carga 1</label><input type="number" id="edit-prog1" step="0.5" value="${s.prog1||0}"></div>
-        <div class="field"><label>Carga 2</label><input type="number" id="edit-prog2" step="0.5" value="${s.prog2||0}"></div>
-        <div class="field"><label>Carga 3</label><input type="number" id="edit-prog3" step="0.5" value="${s.prog3||0}"></div>
-      </div>`;
-  }else if(ex.tipo==='conjugado'){
+  if(ex.tipo==='conjugado'){
     // links separados para cada exercício conjugado
     const n1=ex.link?`<a href="${ex.link}" target="_blank">${ex.nome}</a>`:ex.nome;
     const n2=ex.link2?`<a href="${ex.link2}" target="_blank">${ex.nome2}</a>`:ex.nome2;
@@ -929,7 +1681,7 @@ function renderExCard(){
     :`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'}`;
 
   document.getElementById('ex-card').innerHTML=`
-    <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}${ex.tipo==='conjugado'?' · conjugado':ex.tipo==='progressivo'?' · progressivo ⬆️':''}</div>
+    <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}${ex.tipo==='conjugado'?' · conjugado':''}</div>
     <div class="ex-name">${nomeHtml}</div>
     ${ex.tipo==='conjugado'?`<div class="ex-conjugado">⚡ Faça os dois em sequência</div>`:''}
     ${ex.obs?`<div style="font-size:11px;color:var(--amber);margin-top:5px;font-family:var(--mono);line-height:1.5">💡 ${ex.obs}</div>`:''}
@@ -945,16 +1697,23 @@ function renderSeriesDone(){
   if(!done.length){document.getElementById('series-done-wrap').innerHTML='';return}
   const rows=done.map((s,i)=>{
     if(ex.tipo==='progressivo'){
-    camposHtml=`
-      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⬆️ Cargas Progressivas — ${ex.reps} reps cada</div>
-      <div class="input-grid" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px">
-        <div class="field"><label>Carga 1</label><input type="number" id="edit-prog1" step="0.5" value="${s.prog1||0}"></div>
-        <div class="field"><label>Carga 2</label><input type="number" id="edit-prog2" step="0.5" value="${s.prog2||0}"></div>
-        <div class="field"><label>Carga 3</label><input type="number" id="edit-prog3" step="0.5" value="${s.prog3||0}"></div>
-      </div>`;
-  }else if(ex.tipo==='conjugado'){
-      return`<div class="serie-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+      return`<div class="serie-row" style="cursor:pointer" onclick="editarSerie(${i})">
         <span class="s-label">S${i+1}</span>
+        <div class="s-data">
+          <span class="pill">${s.prog1||'-'}kg</span>
+          <span class="pill">${s.prog2||'-'}kg</span>
+          <span class="pill">${s.prog3||'-'}kg</span>
+          <span class="pill g">${s.tempo}s</span>
+          <span style="font-size:10px;color:var(--muted);margin-left:4px">✎</span>
+        </div>
+      </div>`;
+    }
+    if(ex.tipo==='conjugado'){
+      return`<div class="serie-row" style="flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer" onclick="editarSerie(${i})">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+          <span class="s-label">S${i+1}</span>
+          <span style="font-size:10px;color:var(--muted)">✎ editar</span>
+        </div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
           <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${ex.nome.split(' ')[0]}:</span>
           <span class="pill">${s.peso}kg</span><span class="pill">${s.reps} reps</span><span class="pill g">${s.tempo}s</span>
@@ -965,36 +1724,93 @@ function renderSeriesDone(){
         </div>
       </div>`;
     }
-    return`<div class="serie-row">
+    return`<div class="serie-row" style="cursor:pointer" onclick="editarSerie(${i})">
       <span class="s-label">S${i+1}</span>
       <div class="s-data">
         <span class="pill">${s.peso}kg</span>
         <span class="pill">${ex.isTime?s.tempo+'s':s.reps+' reps'}</span>
         <span class="pill g">${s.tempo}s</span>
+        <span style="font-size:10px;color:var(--muted);margin-left:4px">✎</span>
       </div>
     </div>`;
   }).join('');
   document.getElementById('series-done-wrap').innerHTML=`<div class="series-done">${rows}</div>`;
 }
 
+/* Edição de série já concluída — abre modal simples para corrigir peso/reps */
+function editarSerie(idx){
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  const s=E.series[E.exIdx][idx];
+  if(!s)return;
+  const existing=document.getElementById('modal-edit-serie');if(existing)existing.remove();
+  const div=document.createElement('div');
+  div.id='modal-edit-serie';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+
+  let camposHtml='';
+  if(ex.tipo==='conjugado'){
+    camposHtml=`
+      <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">① ${ex.nome}</div>
+      <div class="input-grid" style="margin-bottom:10px">
+        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" value="${s.peso}"></div>
+        <div class="field"><label>Repetições</label><input type="number" id="edit-reps" step="1" value="${s.reps}"></div>
+      </div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">② ${ex.nome2}</div>
+      <div class="input-grid" style="margin-bottom:10px">
+        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso2" step="0.5" value="${s.peso2||0}"></div>
+        <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps2" step="1" value="${s.reps2||0}"></div>
+      </div>`;
+  }else{
+    camposHtml=`<div class="input-grid" style="margin-bottom:10px">
+      <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" value="${s.peso}"></div>
+      <div class="field"><label>${ex.isTime?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps" step="1" value="${s.reps}"></div>
+    </div>`;
+  }
+
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:12px">✎ Corrigir Série ${idx+1}</div>
+      ${camposHtml}
+      <button onclick="salvarEdicaoSerie(${idx})" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar correção</button>
+      <button onclick="document.getElementById('modal-edit-serie').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;cursor:pointer">Cancelar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function salvarEdicaoSerie(idx){
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  const s=E.series[E.exIdx][idx];
+  const peso=parseFloat(document.getElementById('edit-peso').value)||0;
+  const reps=parseInt(document.getElementById('edit-reps').value)||0;
+  s.peso=peso;s.reps=reps;
+  if(ex.tipo==='conjugado'){
+    s.peso2=parseFloat(document.getElementById('edit-peso2').value)||0;
+    s.reps2=parseInt(document.getElementById('edit-reps2').value)||0;
+  }
+  save();
+  document.getElementById('modal-edit-serie').remove();
+  renderSeriesDone();
+  mostrarToast('✓ Série corrigida');
+  if(getToken())sincronizarGitHub();
+}
+
 function renderActionArea(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const up=getUltimoPeso();
   const up2=getUltimoPeso2();
+  const ur=getUltimaReps();
+  const ur2=getUltimaReps2();
   const jaRodando=!!E.serieStartTs;
   const repsLabel=ex.isTime?'Meta (seg)':'Repetições';
   const repsPlaceholder=ex.isTime?ex.reps:'0';
 
   let inputsHtml='';
   if(ex.tipo==='progressivo'){
-    // Progressivo: 3 mini-sets dentro de uma série — carga diferente em cada
-    const s=E.series[E.exIdx][E.serieIdxs[E.exIdx]];
     inputsHtml=`<div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
       <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">⬆️ Progressivo — ${ex.reps} reps em cada mini-set</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-        <div class="field"><label>Carga 1 (kg)</label><input type="number" id="inp-prog1" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none" value="${s&&s.prog1||''}"></div>
-        <div class="field"><label>Carga 2 (kg)</label><input type="number" id="inp-prog2" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none" value="${s&&s.prog2||''}"></div>
-        <div class="field"><label>Carga 3 (kg)</label><input type="number" id="inp-prog3" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none" value="${s&&s.prog3||''}"></div>
+        <div class="field"><label>Carga 1 (kg)</label><input type="number" id="inp-prog1" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none"></div>
+        <div class="field"><label>Carga 2 (kg)</label><input type="number" id="inp-prog2" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none"></div>
+        <div class="field"><label>Carga 3 (kg)</label><input type="number" id="inp-prog3" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none"></div>
       </div>
     </div>`;
   }else if(ex.tipo==='conjugado'){
@@ -1004,20 +1820,20 @@ function renderActionArea(){
         <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">① ${ex.nome}</div>
         <div class="input-grid">
           <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}"></div>
+          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}" value="${ur}"></div>
         </div>
       </div>
       <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
         <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
         <div class="input-grid">
           <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
-          <div class="field"><label>${ex.isTime2===false?'Repetições':'Meta (seg)'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}"></div>
+          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}" value="${ur2}"></div>
         </div>
       </div>`;
   }else{
     inputsHtml=`<div class="input-grid">
       <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}"></div>
+      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}" value="${ur}"></div>
     </div>`;
   }
 
@@ -1058,6 +1874,15 @@ function getUltimoPeso2(){
   }
   return '';
 }
+/* Auto-preenche reps com base na série anterior DESTE treino (não busca histórico — só dentro da sessão atual) */
+function getUltimaReps(){
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps)return s.reps}
+  return '';
+}
+function getUltimaReps2(){
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps2)return s.reps2}
+  return '';
+}
 
 /* série */
 function iniciarSerie(){
@@ -1086,16 +1911,35 @@ function finalizarSerie(){
   const tempo=E.serieStartTs?elapsed(E.serieStartTs):0;
   E.serieStartTs=null;
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
-  const peso=parseFloat(document.getElementById('inp-peso')?.value)||0;
-  let reps=parseInt(document.getElementById('inp-reps')?.value)||0;
+  const si=E.serieIdxs?E.serieIdxs[E.exIdx]:E.serieIdx;
 
   if(ex.tipo==='progressivo'){
     const prog1=parseFloat(document.getElementById('inp-prog1')?.value)||0;
     const prog2=parseFloat(document.getElementById('inp-prog2')?.value)||0;
     const prog3=parseFloat(document.getElementById('inp-prog3')?.value)||0;
     if(!prog1&&!prog2&&!prog3){mostrarToast('Informe ao menos uma carga');iniciarSerie();return}
-    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={prog1,prog2,prog3,reps:ex.reps,tempo};
-  }else if(ex.tipo==='conjugado'){
+    E.series[E.exIdx][si]={prog1,prog2,prog3,reps:ex.reps,tempo};
+    const totalS=ex.series||3;
+    if(si<totalS-1){
+      if(E.serieIdxs)E.serieIdxs[E.exIdx]++;else E.serieIdx++;
+      E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='serie';save();
+      const proxLabel=`${exNome(ex)} — Série ${si+2} de ${totalS}`;
+      iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
+    }else{
+      if(E.serieIdxs)E.serieIdxs[E.exIdx]=0;else E.serieIdx=0;
+      const proxIdx=proximoExPendente(E.exIdx+1);
+      E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
+      let proxLabel='Finalizar treino';
+      if(proxIdx!==-1){const pex=TREINOS[E.tipo].exercicios[proxIdx];proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':`${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;}
+      iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
+    }
+    return;
+  }
+
+  const peso=parseFloat(document.getElementById('inp-peso')?.value)||0;
+  let reps=parseInt(document.getElementById('inp-reps')?.value)||0;
+
+  if(ex.tipo==='conjugado'){
     const peso2=parseFloat(document.getElementById('inp-peso2').value)||0;
     let reps2=parseInt(document.getElementById('inp-reps2').value)||0;
     if(!reps){alert('Informe as repetições do 1º exercício');iniciarSerie();return}
@@ -1114,13 +1958,13 @@ function finalizarSerie(){
     const proxLabel=`${exNome(ex)} — Série ${E.serieIdxs[E.exIdx]+1} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
-    E.serieIdxs[E.exIdx]=0;
+    E.serieIdxs[E.exIdx]=totalS; // marca como completo (não volta para 0)
     const proxIdx=proximoExPendente(E.exIdx+1);
     E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
     let proxLabel='Finalizar treino';
     if(proxIdx!==-1){
       const pex=TREINOS[E.tipo].exercicios[proxIdx];
-      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (10 min)':
+      proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':
         `${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;
     }
     iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
@@ -1173,6 +2017,9 @@ function esconderDescanso(){document.getElementById('rest-overlay').classList.ad
 
 /* pular */
 function pularExercicio(){
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  const nome=exNome(ex);
+  if(!confirm('Pular "'+nome+'"?\n\nVocê pode voltar a ele depois pela lista de exercícios.')){return}
   if(!E.pulados)E.pulados=[];
   E.pulados.push(E.exIdx);E.serieStartTs=null;save();avancarExercicio();
 }
@@ -1183,22 +2030,19 @@ function abrirLista(){
   document.getElementById('modal-titulo').textContent='Treino '+E.tipo;
   let html='';
   exs.forEach((ex,i)=>{
-    if(ex.tipo==='esteira_inicio'){
+    if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim'){
       html+=`<div class="modal-item" style="opacity:.35;cursor:default">
         <span class="mi-num">${i+1}</span><span class="mi-name" style="color:var(--muted)">🏃 ${exNome(ex)}</span></div>`;return;
     }
-    if(ex.tipo==='esteira_fim'){
-      html+=`<div class="modal-item" onclick="irParaEx(${i})">
-        <span class="mi-num">${i+1}</span><span class="mi-name">🏃 ${exNome(ex)}</span></div>`;return;
-    }
     const pulado=exFoiPulado(i),done=exFoiConcluido(i),current=i===E.exIdx;
     let badge='';
-    if(pulado)badge=`<span class="tag tag-red">pulado</span>`;
+    if(pulado)badge=`<span class="tag tag-amber">pulado — retomar?</span>`;
     else if(done)badge=`<span class="tag tag-green">✓</span>`;
     else if(current)badge=`<span class="tag tag-blue">atual</span>`;
-    const locked=done||pulado;
-    const cls=locked?'done-ex':current?'current-ex':'';
-    const click=locked?'':`onclick="irParaEx(${i})"`;
+    // concluído = bloqueado; pulado = pode retomar; outros = podem navegar
+    const locked=done; // só bloqueia concluídos, NÃO pulados
+    const cls=locked?'done-ex':current?'current-ex':(pulado?'pulado-ex':'');
+    const click=locked?'':`onclick="${pulado?`retornarPulado(${i})`:`irParaEx(${i})`}"`;
     html+=`<div class="modal-item ${cls}" ${click}>
       <span class="mi-num">${i+1}</span>
       <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span></span>
@@ -1212,10 +2056,22 @@ function fecharModalDireto(){document.getElementById('modal-lista').classList.ad
 function irParaEx(idx){
   fecharModalDireto();clearAllTicks();
   E.exIdx=idx;
-  // Restaura serieIdx baseado nas séries já feitas neste exercício
-  const seriesFeitas=E.series[idx]?E.series[idx].filter(s=>s!==null).length:0;
-  E.serieIdx=seriesFeitas;
+  // só reseta serieIdx se o exercício ainda não tem nenhuma série feita
+  const seriesFeitas=(E.series[idx]||[]).filter(Boolean).length;
+  if(seriesFeitas===0)E.serieIdxs[idx]=0;
+  // se tem séries feitas, serieIdxs[idx] já aponta para a próxima série correta — não mexe
   E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+}
+function retornarPulado(idx){
+  fecharModalDireto();clearAllTicks();
+  // remove da lista de pulados para poder fazer normalmente
+  E.pulados=E.pulados.filter(p=>p!==idx);
+  E.exIdx=idx;
+  // mesma lógica: só reseta se não tem séries feitas
+  const seriesFeitas=(E.series[idx]||[]).filter(Boolean).length;
+  if(seriesFeitas===0)E.serieIdxs[idx]=0;
+  E.serieStartTs=null;E.restStartTs=null;E.restTotal=0;save();goExercicio();
+  mostrarToast('↩ Retomando "'+exNome(TREINOS[E.tipo].exercicios[idx])+'"');
 }
 
 /* avançar */
@@ -1226,15 +2082,21 @@ function avancarExercicio(){
     const ex=exs[next];
     if(ex.tipo==='esteira_inicio'){next++;continue}
     if(ex.tipo==='esteira_fim'){
-      // verifica se ainda há exercícios normais pendentes
-      const pendentes=exs.filter((e,i)=>
+      // verifica se ainda há exercícios pendentes (não feitos E não pulados)
+      const naoFeitos=exs.filter((e,i)=>
         (e.tipo==='normal'||e.tipo==='conjugado')&&
         !exFoiConcluido(i)&&!exFoiPulado(i)
       );
-      if(pendentes.length>0){
-        // monta lista dos pendentes
-        const nomes=pendentes.map(e=>e.tipo==='conjugado'?e.nome+' + '+e.nome2:e.nome);
-        mostrarConfirmacaoEsteira(nomes);
+      // exercícios pulados que ainda podem ser retomados
+      const pulados=exs.filter((e,i)=>
+        (e.tipo==='normal'||e.tipo==='conjugado')&&
+        exFoiPulado(i)
+      );
+      if(naoFeitos.length>0||pulados.length>0){
+        mostrarConfirmacaoEsteira(
+          naoFeitos.map(e=>exNome(e)),
+          pulados.map(e=>exNome(e))
+        );
         return;
       }
       break; // sem pendentes, vai para esteira normalmente
@@ -1244,92 +2106,179 @@ function avancarExercicio(){
   }
   if(next<exs.length){
     E.exIdx=next;
-    // Restaura serieIdx baseado nas séries já feitas (para intercalação entre exercícios)
-    const seriesFeitas=E.series[next]?E.series[next].filter(s=>s!==null).length:0;
-    E.serieIdx=seriesFeitas;
+    const seriesFeitas=(E.series[next]||[]).filter(Boolean).length;
+    if(seriesFeitas===0)E.serieIdxs[next]=0;
     E.serieStartTs=null;save();goExercicio();
   }
   else finalizarTreino();
 }
 
-function mostrarConfirmacaoEsteira(pendentes){
-  // cria modal de confirmação na própria página
+function mostrarConfirmacaoEsteira(naoFeitos, pulados){
   const existing=document.getElementById('modal-esteira-confirm');
   if(existing)existing.remove();
-  const lista=pendentes.map(n=>`<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">• ${n}</div>`).join('');
+
+  let listaHtml='';
+  if(naoFeitos.length>0){
+    listaHtml+=`<div style="font-size:11px;font-family:var(--mono);color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Não realizados:</div>`;
+    listaHtml+=naoFeitos.map(n=>`<div style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px">• ${n}</div>`).join('');
+  }
+  if(pulados.length>0){
+    listaHtml+=`<div style="font-size:11px;font-family:var(--mono);color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin:${naoFeitos.length?'10px':'0'} 0 6px">Pulados (pode retomar):</div>`;
+    listaHtml+=pulados.map(n=>`<div style="padding:5px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--amber)">• ${n}</div>`).join('');
+  }
+
   const div=document.createElement('div');
   div.id='modal-esteira-confirm';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
   div.innerHTML=`
     <div style="background:var(--surface);border-radius:24px;padding:20px">
-      <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⚠️ Exercícios pendentes</div>
-      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Ainda há exercícios não realizados:</div>
-      <div style="margin-bottom:16px;max-height:200px;overflow-y:auto">${lista}</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Deseja ir para a esteira de finalização mesmo assim?</div>
-      <button onclick="confirmarIrEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Sim, ir para esteira</button>
-      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:14px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:14px;font-family:var(--sans);font-weight:500;cursor:pointer">Não, continuar exercícios</button>
+      <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--amber);text-transform:uppercase;margin-bottom:8px">⚠️ Atenção — exercícios pendentes</div>
+      <div style="margin-bottom:16px;max-height:220px;overflow-y:auto">${listaHtml}</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.5">Deseja ir para a esteira de finalização mesmo assim?<br><span style="font-size:12px">O treino será finalizado após a esteira, mesmo se parar antes do tempo.</span></div>
+      <button onclick="confirmarIrEsteira()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--green),#2aaa70);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">✅ Sim, ir para a esteira e finalizar</button>
+      <button onclick="voltarAosExercicios()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">💪 Voltar e fazer os pendentes</button>
+      <button onclick="document.getElementById('modal-esteira-confirm').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
+}
+
+function voltarAosExercicios(){
+  const modal=document.getElementById('modal-esteira-confirm');
+  if(modal)modal.remove();
+  // vai para o primeiro exercício pendente (não feito ou pulado)
+  const exs=TREINOS[E.tipo].exercicios;
+  const primeiro=exs.findIndex((e,i)=>
+    (e.tipo==='normal'||e.tipo==='conjugado')&&
+    (!exFoiConcluido(i)&&!exFoiPulado(i))||
+    ((e.tipo==='normal'||e.tipo==='conjugado')&&exFoiPulado(i))
+  );
+  if(primeiro>=0){
+    if(exFoiPulado(primeiro)){E.pulados=E.pulados.filter(p=>p!==primeiro);}
+    E.exIdx=primeiro;
+    const seriesFeitas=(E.series[primeiro]||[]).filter(Boolean).length;
+    if(seriesFeitas===0)E.serieIdxs[primeiro]=0;
+    E.serieStartTs=null;save();goExercicio();
+  }
 }
 
 function confirmarIrEsteira(){
   const modal=document.getElementById('modal-esteira-confirm');
   if(modal)modal.remove();
-  // vai direto para esteira_fim
   const exs=TREINOS[E.tipo].exercicios;
   const idxEsteira=exs.findIndex(e=>e.tipo==='esteira_fim');
-  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdx=0;E.serieStartTs=null;save();goExercicio()}
+  if(idxEsteira>=0){E.exIdx=idxEsteira;E.serieIdxs[idxEsteira]=0;E.serieStartTs=null;save();goExercicio()}
   else finalizarTreino();
 }
 
 /* esteira */
+const ESTEIRA_INICIO_SECS = 600;  // 10 min aquecimento
+const ESTEIRA_FIM_SECS   = 1200; // 20 min finalização
+
+function esteiraDuracao(tipo){ return tipo==='esteira_fim'?ESTEIRA_FIM_SECS:ESTEIRA_INICIO_SECS; }
+
 function goEsteira(tipo){
-  E.esteiraTipo=tipo;if(!E.esteiraStartTs)E.esteiraStartTs=Date.now();save();
+  E.esteiraTipo=tipo;
+  // NÃO inicia o timer automaticamente — só ao apertar "Iniciar esteira"
+  if(!E.esteiraLog)E.esteiraLog=[];
+  E.esteiraRegistrada=false; // flag de proteção contra duplo registro
+  save();
   showPage('esteira');
-  const dur=tipo==='esteira_fim'?1200:600;
+  const dur=esteiraDuracao(tipo);
   document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
   document.getElementById('esteira-sub').textContent=tipo==='esteira_inicio'?'Aqueça bem antes de começar':'Ótimo trabalho! 20 minutos de recuperação.';
-  document.getElementById('esteira-timer').textContent=fmtMS(dur);
+  document.getElementById('esteira-timer').textContent=fmtMS(E.esteiraTipo==='esteira_fim'?1200:600);
+  // mostra botão iniciar, esconde parar (ainda não começou)
+  document.getElementById('btn-iniciar-esteira').style.display='';
+  document.getElementById('btn-parar-esteira').style.display='none';
+  clearInterval(esteiraTickInterval);
+}
+function iniciarEsteira(){
+  E.esteiraStartTs=Date.now();save();
+  document.getElementById('btn-iniciar-esteira').style.display='none';
+  document.getElementById('btn-parar-esteira').style.display='';
   atualizarEsteira();
   clearInterval(esteiraTickInterval);
   esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function mostrarEsteiraRetomada(){
   showPage('esteira');
-  document.getElementById('esteira-title').textContent=E.esteiraTipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
+  const tipo=E.esteiraTipo;
+  document.getElementById('esteira-title').textContent=tipo==='esteira_inicio'?'Esteira — aquecimento (10 min)':'Esteira — finalização (20 min)';
   document.getElementById('esteira-sub').textContent='Retomando...';
+  // já estava rodando — mostra botão parar
+  document.getElementById('btn-iniciar-esteira').style.display='none';
+  document.getElementById('btn-parar-esteira').style.display='';
   atualizarEsteira();clearInterval(esteiraTickInterval);esteiraTickInterval=setInterval(atualizarEsteira,500);
 }
 function atualizarEsteira(){
   if(!E||!E.esteiraStartTs)return;
-  const dur=E.esteiraTipo==='esteira_fim'?1200:600;
+  const dur=esteiraDuracao(E.esteiraTipo);
   const rem=restRem(E.esteiraStartTs,dur);
-  document.getElementById('esteira-timer').textContent=fmtMS(rem);
-  if(rem<=0){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
-}
-function pularEsteira(){clearInterval(esteiraTickInterval);E.esteiraStartTs=null;save();terminarEsteira()}
-function terminarEsteira(){
-  if(E.esteiraTipo==='esteira_fim'){
-    const exs=TREINOS[E.tipo].exercicios;
-    const temPendente=exs.some((ex,i)=>
-      (ex.tipo==='normal'||ex.tipo==='conjugado') && !exFoiConcluido(i) && !exFoiPulado(i)
-    );
-    if(temPendente){
-      // Ainda há exercícios — não finaliza. Vai para o primeiro pendente e abre a lista por cima.
-      const idxPendente=exs.findIndex((ex,i)=>
-        (ex.tipo==='normal'||ex.tipo==='conjugado') && !exFoiConcluido(i) && !exFoiPulado(i)
-      );
-      E.esteiraTipo=null;
-      E.exIdx=idxPendente;
-      const seriesFeitas=E.series[idxPendente]?E.series[idxPendente].filter(s=>s!==null).length:0;
-      E.serieIdx=seriesFeitas;
-      E.serieStartTs=null;save();
-      goExercicio();
-      abrirLista();
-      return;
+  const timerEl=document.getElementById('esteira-timer');
+  if(timerEl)timerEl.textContent=fmtMS(rem);
+  if(rem<=0){
+    clearInterval(esteiraTickInterval);
+    if(!E.esteiraRegistrada){
+      E.esteiraRegistrada=true;
+      registrarEsteira('concluida');
+      E.esteiraStartTs=null;save();
+      terminarEsteira();
     }
-    finalizarTreino();return;
   }
+}
+function confirmarPararEsteira(){
+  const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
+  const min=Math.floor(feito/60), seg=feito%60;
+  const tempoTxt=min+'min'+(seg?' '+seg+'s':'');
+  if(confirm('Parar a esteira e salvar '+tempoTxt+' feitos?')){
+    pararEsteira();
+  }
+}
+function confirmarPularEsteira(){
+  if(confirm('Pular esta esteira sem fazer nada? Será registrada como pulada (0min).')){
+    pularEsteira();
+  }
+}
+function pularEsteira(){
+  // pula completamente, sem ter feito nada — registra 0
+  clearInterval(esteiraTickInterval);
+  if(!E.esteiraRegistrada){
+    E.esteiraRegistrada=true;
+    if(!E.esteiraLog)E.esteiraLog=[];
+    const dur=esteiraDuracao(E.esteiraTipo);
+    E.esteiraLog.push({
+      tipo:E.esteiraTipo,
+      status:'pulada',
+      duracaoMeta:dur,
+      duracaoFeita:0,
+    });
+    E.esteiraStartTs=null;save();
+    terminarEsteira();
+  }
+}
+function pararEsteira(){
+  // para a esteira ANTES do tempo e salva o tempo real feito até agora
+  clearInterval(esteiraTickInterval);
+  if(!E.esteiraRegistrada){
+    E.esteiraRegistrada=true;
+    registrarEsteira('parada');
+    E.esteiraStartTs=null;save();
+    terminarEsteira();
+  }
+}
+function registrarEsteira(status){
+  if(!E.esteiraLog)E.esteiraLog=[];
+  const dur=esteiraDuracao(E.esteiraTipo);
+  const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
+  E.esteiraLog.push({
+    tipo:E.esteiraTipo,
+    status, // 'concluida' | 'parada' (tempo parcial salvo) | 'pulada' (compat. com versões antigas)
+    duracaoMeta:dur,
+    duracaoFeita:Math.min(feito,dur),
+  });
+}
+function terminarEsteira(){
+  if(E.esteiraTipo==='esteira_fim'){finalizarTreino();return}
   E.esteiraTipo=null;save();avancarExercicio();
 }
 
@@ -1337,40 +2286,75 @@ function terminarEsteira(){
 function finalizarTreino(){
   clearAllTicks();E.finalizado=true;E.fim=Date.now();save();
   addSessao(E.tipo);
+  const dur=E.fim-E.inicio;
+  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+  const kcal=estimarCaloriasTreino(dur,vol);
   saveHist({
     tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
     exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
-    series:E.series,pulados:E.pulados||[]
+    series:E.series,pulados:E.pulados||[],
+    esteiraLog:E.esteiraLog||[],
+    kcal:kcal
   });
   showPage('finished');renderFinished();
 }
+function buildEsteiraHtml(log){
+  if(!log||!log.length)return '';
+  let html='';
+  log.forEach(e=>{
+    const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
+    const meta=e.tipo==='esteira_inicio'?'10min':'20min';
+    const pulada=e.status==='pulada'; // pulada sem fazer nada (compat. antiga)
+    const parada=e.status==='parada'; // parou antes do tempo, mas fez algo
+    const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
+    const cor=pulada?'var(--amber)':(parada?'var(--amber)':'var(--green)');
+    const icon=pulada?'⏭':(parada?'⏹':'🏃');
+    const tag=pulada?'<span class="tag tag-amber">pulada</span>':(parada?'<span class="tag tag-amber">parcial</span>':'<span class="tag tag-green">✓</span>');
+    html+=`<div class="card" style="padding:11px 14px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;font-weight:500">${icon} ${nome}</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span class="pill">${meta}</span>
+          <span style="font-size:12px;font-family:var(--mono);color:${cor};font-weight:500">${feito}</span>
+          ${tag}
+        </div>
+      </div>
+    </div>`;
+  });
+  return html;
+}
+
+function estimarCaloriasTreino(durMs,vol){
+  // estimativa simples: ~6 kcal/min de treino de força moderado-intenso + ajuste pelo volume
+  const durMin=durMs/60000;
+  const base=durMin*6; // ~6kcal/min é uma média para treino de força com pouco descanso
+  const ajusteVolume=vol/100; // cada 100kg×rep de volume adiciona ~1kcal extra (ajuste fino)
+  return Math.round(base+ajusteVolume);
+}
+
 function renderFinished(){
   const exs=TREINOS[E.tipo].exercicios;
   const dur=E.fim-E.inicio;
   const totalS=E.series.flat().filter(Boolean).length;
   const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
   const sess=loadSessoes();
+  const kcal=estimarCaloriasTreino(dur,vol);
   document.getElementById('fin-sub').textContent='Treino '+E.tipo+' · '+todayStr();
   document.getElementById('fin-stats').innerHTML=`
     <div class="stat-card"><div class="stat-num" style="font-size:19px">${fmtHMS(dur)}</div><div class="stat-label">Duração</div></div>
     <div class="stat-card"><div class="stat-num">${totalS}</div><div class="stat-label">Séries</div></div>
     <div class="stat-card"><div class="stat-num">${Math.round(vol)}</div><div class="stat-label">Volume kg×rep</div></div>
-    <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>`;
+    <div class="stat-card"><div class="stat-num">${sess[E.tipo]}/${META_SESSOES}</div><div class="stat-label">Sessões ${E.tipo}</div></div>
+    <div class="stat-card"><div class="stat-num">~${kcal}</div><div class="stat-label">Kcal estimadas</div></div>`;
   let html='';
+  // esteiras primeiro
+  html+=buildEsteiraHtml(E.esteiraLog||[]);
   exs.forEach((ex,i)=>{
     if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
     const ss=E.series[i].filter(Boolean);
     const pulado=exFoiPulado(i);
-    if(ex.tipo==='progressivo'){
-    camposHtml=`
-      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⬆️ Cargas Progressivas — ${ex.reps} reps cada</div>
-      <div class="input-grid" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px">
-        <div class="field"><label>Carga 1</label><input type="number" id="edit-prog1" step="0.5" value="${s.prog1||0}"></div>
-        <div class="field"><label>Carga 2</label><input type="number" id="edit-prog2" step="0.5" value="${s.prog2||0}"></div>
-        <div class="field"><label>Carga 3</label><input type="number" id="edit-prog3" step="0.5" value="${s.prog3||0}"></div>
-      </div>`;
-  }else if(ex.tipo==='conjugado'){
+    if(ex.tipo==='conjugado'){
       html+=`<div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
           <span style="font-size:11px;color:var(--amber);font-family:var(--mono)">⚡ conjugado</span>
@@ -1398,8 +2382,7 @@ function renderFinished(){
 function switchHistTab(tab){
   _histTab=tab;
   ['atual','antigo','evol','treinos'].forEach(t=>{
-    const el=document.getElementById('htab-'+t);
-    if(el) el.classList.toggle('active',t===tab);
+    document.getElementById('htab-'+t).classList.toggle('active',t===tab);
   });
   renderHist(tab);
 }
@@ -1440,20 +2423,19 @@ function renderHist(tab){
     if(novos.length<2){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Registre pelo menos 2 treinos para ver evolução.</p>';return}
     const byEx={};
     novos.forEach(h=>{
-      const exs=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:[];
+      const exsAtuais=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:[];
+      // só usa a estrutura de conjugado/isTime do plano atual se os nomes baterem — senão, ignora esse treino na evolução (dados de plano diferente)
+      if(!h.exNames)return;
+      const nomesReais=exsAtuais.filter(e=>e.tipo!=='esteira_inicio'&&e.tipo!=='esteira_fim').map(e=>e.nome);
+      const nomesHistFiltrado=h.exNames.filter(n=>n&&!n.includes('Esteira'));
+      const bate=nomesReais.length===nomesHistFiltrado.length&&nomesReais.every((n,i)=>n===nomesHistFiltrado[i]);
+      if(!bate)return; // treino de um plano diferente do atual — não mistura na evolução
+      const exs=exsAtuais;
       exs.forEach((ex,i)=>{
         if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
         const ss=(h.series[i]||[]).filter(Boolean);
         if(!ss.length)return;
-        if(ex.tipo==='progressivo'){
-    camposHtml=`
-      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⬆️ Cargas Progressivas — ${ex.reps} reps cada</div>
-      <div class="input-grid" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px">
-        <div class="field"><label>Carga 1</label><input type="number" id="edit-prog1" step="0.5" value="${s.prog1||0}"></div>
-        <div class="field"><label>Carga 2</label><input type="number" id="edit-prog2" step="0.5" value="${s.prog2||0}"></div>
-        <div class="field"><label>Carga 3</label><input type="number" id="edit-prog3" step="0.5" value="${s.prog3||0}"></div>
-      </div>`;
-  }else if(ex.tipo==='conjugado'){
+        if(ex.tipo==='conjugado'){
           // registra cada exercício do conjugado separado
           const nm1=ex.nome;
           const nm2=ex.nome2;
@@ -1516,11 +2498,46 @@ function renderHist(tab){
       }
     });
     div.innerHTML=html||'<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Dados insuficientes para evolução.</p>';
+  }else if(tab==='semanas'){
+    const resumos=loadResumosSemana();
+    if(!resumos.length){
+      div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Os resumos semanais aparecerão aqui toda segunda-feira.<br>Os dados são salvos automaticamente.</p>';
+      return;
+    }
+    let html='';
+    resumos.forEach(r=>{
+      let pesoHtml='';
+      if(r.diffPeso!==null&&r.diffPeso!==undefined){
+        pesoHtml=r.diffPeso<0?`<span style="color:var(--green)">▼ ${Math.abs(r.diffPeso)}kg</span>`:r.diffPeso>0?`<span style="color:var(--red)">▲ ${r.diffPeso}kg</span>`:'<span style="color:var(--muted)">estável</span>';
+      }
+      const estrelas='⭐'.repeat(r.totalTreinos>4?5:r.totalTreinos>3?4:r.totalTreinos>2?3:r.totalTreinos>1?2:1);
+      html+=`<div class="card" style="padding:12px 14px;margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:12px;font-family:var(--mono);color:var(--muted)">${r.dataStr}</span>
+          <span style="font-size:12px">${estrelas}</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;text-align:center;background:var(--surface2);border-radius:8px;padding:8px">
+            <div style="font-size:16px;font-weight:600;${r.totalTreinos>=5?'color:var(--green)':r.totalTreinos>=3?'color:var(--amber)':'color:var(--red)'}">${r.totalTreinos}/5</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">TREINOS</div>
+          </div>
+          <div style="flex:1;text-align:center;background:var(--surface2);border-radius:8px;padding:8px">
+            <div style="font-size:16px;font-weight:600;color:var(--amber)">~${r.totalKcal}</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">KCAL</div>
+          </div>
+          ${pesoHtml?`<div style="flex:1;text-align:center;background:var(--surface2);border-radius:8px;padding:8px">
+            <div style="font-size:14px;font-weight:600">${pesoHtml}</div>
+            <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
+          </div>`:''}
+        </div>
+      </div>`;
+    });
+    div.innerHTML=html;
   }else if(tab==='treinos'){
-    // Lista dos treinos atuais A e B para consulta/referência
-    let html='<div class="card" style="margin-bottom:14px;background:rgba(124,106,247,.07);border-color:rgba(124,106,247,.2)"><div style="font-size:12px;color:var(--accent2);line-height:1.6">📋 Treinos atuais para consulta rápida.</div></div>';
-    ORDEM.forEach(t=>{
-      const tr=TREINOS[t];
+    // Lista dos treinos antigos A, B, C para referência
+    let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
+    Object.keys(TREINOS_ANTIGOS).forEach(t=>{
+      const tr=TREINOS_ANTIGOS[t];
       const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado');
       html+=`<div class="card">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
@@ -1542,7 +2559,7 @@ function renderHist(tab){
             <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
           </div>`).join('')}
         <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 10min</span>
+          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
         </div>
       </div>`;
     });
@@ -1551,25 +2568,46 @@ function renderHist(tab){
 }
 function buildHistCard(h){
   const dur=fmtHMS((h.fim||0)-(h.inicio||0));
-  const exs=(TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null)
-    ||(TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null)
-    ||[];
+  // só usa a estrutura de TREINOS/TREINOS_ANTIGOS se os nomes salvos no histórico
+  // baterem exatamente com ela — evita mostrar nome de exercício errado quando o
+  // plano de treino muda (ex: nova avaliação física trouxe exercícios diferentes)
+  function nomesBatem(exs){
+    if(!h.exNames||!exs||!exs.length)return false;
+    const nomesReais=exs.filter(e=>e.tipo!=='esteira_inicio'&&e.tipo!=='esteira_fim').map(e=>e.nome);
+    if(nomesReais.length!==h.exNames.filter(n=>n&&!n.includes('Esteira')).length)return false;
+    const nomesHistFiltrado=h.exNames.filter(n=>n&&!n.includes('Esteira'));
+    return nomesReais.every((n,i)=>n===nomesHistFiltrado[i]);
+  }
+  const exsNovos=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null;
+  const exsAntigos=TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null;
+  const exs = nomesBatem(exsNovos)?exsNovos : (nomesBatem(exsAntigos)?exsAntigos : []);
   let exHtml='';
+  // esteiras primeiro, se houver registro
+  if(h.esteiraLog&&h.esteiraLog.length){
+    h.esteiraLog.forEach(e=>{
+      const nome=e.tipo==='esteira_inicio'?'Esteira aquecimento':'Esteira finalização';
+      const meta=e.tipo==='esteira_inicio'?'10min':'20min';
+      const pulada=e.status==='pulada';
+      const parada=e.status==='parada';
+      const feito=pulada?'pulada':fmtMS(e.duracaoFeita);
+      const cor=(pulada||parada)?'var(--amber)':'var(--green)';
+      const icon=pulada?'⏭':(parada?'⏹':'🏃');
+      const tag=pulada?'<span class="tag tag-amber" style="font-size:9px">pulada</span>':(parada?'<span class="tag tag-amber" style="font-size:9px">parcial</span>':'');
+      exHtml+=`<div style="margin-bottom:7px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;color:var(--muted)">${icon} ${nome} (${meta})</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:11px;font-family:var(--mono);color:${cor}">${feito}</span>${tag}
+        </div>
+      </div>`;
+    });
+  }
   if(exs.length>0){
     exs.forEach((ex,i)=>{
       if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
       const ss=(h.series&&h.series[i])?h.series[i].filter(Boolean):[];
       const pulado=h.pulados&&h.pulados.includes(i);
       if(!ss.length&&!pulado)return;
-      if(ex.tipo==='progressivo'){
-    camposHtml=`
-      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⬆️ Cargas Progressivas — ${ex.reps} reps cada</div>
-      <div class="input-grid" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px">
-        <div class="field"><label>Carga 1</label><input type="number" id="edit-prog1" step="0.5" value="${s.prog1||0}"></div>
-        <div class="field"><label>Carga 2</label><input type="number" id="edit-prog2" step="0.5" value="${s.prog2||0}"></div>
-        <div class="field"><label>Carga 3</label><input type="number" id="edit-prog3" step="0.5" value="${s.prog3||0}"></div>
-      </div>`;
-  }else if(ex.tipo==='conjugado'){
+      if(ex.tipo==='conjugado'){
         exHtml+=`<div style="margin-bottom:10px;padding:8px;background:var(--surface2);border-radius:10px">
           <div style="font-size:10px;color:var(--amber);font-family:var(--mono);margin-bottom:5px">⚡ conjugado${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
           <div style="font-size:11px;color:var(--accent2);margin-bottom:3px">① ${ex.nome}</div>
@@ -1598,11 +2636,22 @@ function buildHistCard(h){
   const planoTag=h.plano==='novo'
     ?`<span class="tag tag-blue" style="margin-left:6px">atual</span>`
     :`<span class="tag tag-muted" style="margin-left:6px">anterior</span>`;
+  // calorias: usa o valor salvo se existir, ou recalcula para treinos antigos
+  let kcalHtml='';
+  if(h.kcal){
+    kcalHtml=`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">~${h.kcal} kcal</span>`;
+  }else if(h.series&&h.fim&&h.inicio){
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+    const kcalCalc=estimarCaloriasTreino(h.fim-h.inicio,vol);
+    kcalHtml=`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">~${kcalCalc} kcal</span>`;
+  }
   return`<div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
       <span style="font-size:15px;font-weight:500">Treino ${h.tipo}${planoTag}</span>
       <span style="font-size:11px;font-family:var(--mono);color:var(--muted)">${h.dataStr||'?'} · ${dur}</span>
-    </div>${exHtml}
+    </div>
+    ${kcalHtml?`<div style="margin-bottom:8px">${kcalHtml}</div>`:''}
+    ${exHtml}
   </div>`;
 }
 
@@ -1611,464 +2660,390 @@ document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&E&&!E.finalizado)retomar();
 });
 
+/* ════ ASSISTENTE CLAUDE ════ */
+const ASSIST_MODEL = 'claude-haiku-4-5-20251001';
 
-/* ════ TEMA ════ */
-function toggleTema(){
-  const light = document.body.classList.toggle('light');
-  localStorage.setItem('gym_ma_tema', light ? 'light' : 'dark');
-  const btn = document.getElementById('theme-btn');
-  if(btn) btn.textContent = light ? '🌙 Tema' : '☀️ Tema';
-}
-function carregarTema(){
-  const t = localStorage.getItem('gym_ma_tema');
-  if(t === 'light'){
-    document.body.classList.add('light');
-    const btn = document.getElementById('theme-btn');
-    if(btn) btn.textContent = '🌙 Tema';
+function getApiKey(){try{return localStorage.getItem('gym_api_key')||''}catch(e){return''}}
+function setApiKey(k){try{localStorage.setItem('gym_api_key',k)}catch(e){}}
+
+let assistMsgs = []; // histórico da conversa
+let assistInited = false;
+
+function initAssist(){
+  const key = getApiKey();
+  const statusEl = document.getElementById('assist-status');
+  const keyBtn = document.getElementById('assist-key-btn');
+  if(key){
+    if(statusEl) statusEl.textContent = '✅ Conectado · Claude Haiku';
+    if(keyBtn) keyBtn.textContent = '🔑 Chave ✓';
+  }else{
+    if(statusEl) statusEl.textContent = 'Configure sua chave API para começar';
+  }
+  if(!assistInited){
+    assistInited = true;
+    // mensagem de boas-vindas
+    if(!getApiKey()){
+      appendMsgClaude('Olá Rafael! 👋 Para ativar o assistente, toque em **🔑 Chave** acima e cole sua chave da API da Anthropic (console.anthropic.com). Após configurar, pode me perguntar sobre treinos, alimentação, suplementos ou qualquer dúvida de saúde!');
+    }else{
+      appendMsgClaude('Olá Rafael! 💪 Estou pronto para ajudar. Pode me perguntar sobre seus treinos, alimentação, suplementos, ou qualquer dúvida relacionada à sua saúde e performance!');
+    }
   }
 }
 
+function appendMsgUser(text){
+  const div = document.createElement('div');
+  div.className = 'msg-user';
+  div.textContent = text;
+  document.getElementById('assist-msgs').appendChild(div);
+  scrollChat();
+}
 
-/* ════ SAÚDE — STORAGE ════ */
-function loadPesoLog(){try{return JSON.parse(localStorage.getItem('gym_ma_peso_log')||'[]')}catch(e){return[]}}
-function savePesoLog(l){try{localStorage.setItem('gym_ma_peso_log',JSON.stringify(l))}catch(e){}}
-function loadHidratHoje(){
-  try{const d=JSON.parse(localStorage.getItem('gym_ma_hidrat')||'null');
-    if(!d||d.data!==today())return{data:today(),feitos:[]};return d}catch(e){return{data:today(),feitos:[]}}
+function appendMsgClaude(text){
+  const div = document.createElement('div');
+  div.className = 'msg-claude';
+  // formata markdown básico
+  div.innerHTML = text
+    .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+    .replace(/\*(.*?)\*/g,'<i>$1</i>')
+    .replace(/\n/g,'<br>');
+  document.getElementById('assist-msgs').appendChild(div);
+  scrollChat();
+  return div;
 }
-function saveHidratHoje(d){try{localStorage.setItem('gym_ma_hidrat',JSON.stringify(d))}catch(e){}}
-function loadSupleHoje(){
-  try{const d=JSON.parse(localStorage.getItem('gym_ma_suple')||'null');
-    if(!d||d.data!==today())return{data:today(),feitos:[]};return d}catch(e){return{data:today(),feitos:[]}}
+
+function showTyping(){
+  const div = document.createElement('div');
+  div.className = 'msg-typing';
+  div.id = 'typing-indicator';
+  div.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  document.getElementById('assist-msgs').appendChild(div);
+  scrollChat();
 }
-function saveSupleHoje(d){try{localStorage.setItem('gym_ma_suple',JSON.stringify(d))}catch(e){}}
-function loadDiasCompletos(){try{return JSON.parse(localStorage.getItem('gym_ma_dias_completos')||'{}')}catch(e){return{}}}
-function saveDiasCompletos(d){try{localStorage.setItem('gym_ma_dias_completos',JSON.stringify(d))}catch(e){}}
-function loadAvaliacoes(){
+function hideTyping(){
+  const t = document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+function scrollChat(){
+  const msgs = document.getElementById('assist-msgs');
+  if(msgs) setTimeout(()=>msgs.scrollTop=msgs.scrollHeight, 50);
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+
+function assistKeydown(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem()}
+}
+
+function buildSystemPrompt(){
+  const sess = loadSessoes();
+  return `Você é um assistente pessoal de treino e saúde da Maria Aline, integrado ao app de treino dele.
+
+CONTEXTO DO RAFAEL:
+- Idade: 41 anos | Altura: 186cm | Peso: 92.5kg | Meta: 82kg
+- Treina de segunda a sexta às 08h na academia
+- Plano atual (desde 12/08/2026): Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps/Abdômen), C (Pernas/Glúteos), D (Ombros/Peito/Bíceps/Tríceps/Core) — ${META_SESSOES} sessões cada até ${PRAZO.toLocaleDateString('pt-BR')}
+- Sessões concluídas: A=${sess.A||0}/${META_SESSOES}, B=${sess.B||0}/${META_SESSOES}, C=${sess.C||0}/${META_SESSOES}, D=${sess.D||0}/${META_SESSOES}
+- Pré-treino: mix próprio em partes iguais (30g cada) de guaraná, beterraba, farinha de uva, maca peruana e tribulus terrestre — total 150g. Linhaça dourada e psyllium são consumidos separados (fora do pré-treino) + creatina 5g + própolis 70
+- Pós-treino: tapioca + 50g frango desfiado + 1 ovo + mussarela + 2 ovos cozidos (~40g proteína)
+- Suplementos: creatina 5g (pré-treino), D3+K2 Ecomev 1 cápsula (manhã), Nutrends 5 Magnésio + Treonina 2 cápsulas (22h-23h)
+- Avaliação física mais recente (12/08/2026): pontuação 80, gordura visceral 8 (melhorou de 9), massa muscular esquelética 41kg (excelente). Evolução desde 11/05: peso -0.5kg, massa gorda -1kg
+- Meta proteína: 167-204g/dia | Meta calórica: 2300-2400 kcal/dia
+
+Responda de forma direta, prática e personalizada. Use os dados do Rafael para respostas específicas. Seja conciso mas completo. Escreva em português brasileiro.`;
+}
+
+async function enviarMensagem(){
+  const input = document.getElementById('assist-input');
+  const text = input.value.trim();
+  if(!text) return;
+  const key = getApiKey();
+  if(!key){ abrirConfigApi(); return; }
+
+  input.value=''; input.style.height='42px';
+  appendMsgUser(text);
+  assistMsgs.push({role:'user', content:text});
+  showTyping();
+
+  const btn = document.getElementById('assist-send');
+  if(btn) btn.disabled=true;
+
   try{
-    const a=JSON.parse(localStorage.getItem('gym_ma_avaliacoes')||'null');
-    if(a&&a.length)return a;
-  }catch(e){}
-  return[{
-    data:'2026-07-27',dataStr:'27/07/2026',pontuacao:69,peso:73.5,imc:25.1,
-    aguaCorporal:34.7,massaGorda:26.2,massaProteica:9.3,minerais:3.3,
-    massaMuscular:47.3,massaMuscularEsq:25.8,gorduraVisceral:12,
-    gorduraSubcutanea:22.8,massaLivreGordura:47.3,
-  }];
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': key,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model: ASSIST_MODEL,
+        max_tokens: 1024,
+        system: buildSystemPrompt(),
+        messages: assistMsgs.slice(-10) // últimas 10 mensagens de contexto
+      })
+    });
+    const data = await resp.json();
+    hideTyping();
+    if(data.error){
+      appendMsgClaude('❌ Erro: '+data.error.message+'\n\nVerifique se sua chave API está correta.');
+      assistMsgs.pop();
+    }else{
+      const reply = data.content[0].text;
+      assistMsgs.push({role:'assistant', content:reply});
+      appendMsgClaude(reply);
+    }
+  }catch(e){
+    hideTyping();
+    appendMsgClaude('❌ Erro de conexão. Verifique sua internet e tente novamente.');
+    assistMsgs.pop();
+  }finally{
+    if(btn) btn.disabled=false;
+    input.focus();
+  }
 }
-function saveAvaliacoes(a){try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(a))}catch(e){}}
+
+function abrirConfigApi(){
+  const existing=document.getElementById('modal-api');if(existing)existing.remove();
+  const key=getApiKey();
+  const div=document.createElement('div');
+  div.id='modal-api';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`
+    <div style="background:var(--surface);border-radius:24px;padding:20px">
+      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔑 Chave API Anthropic</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
+        <b style="color:var(--text)">Como obter:</b><br>
+        1. Acesse <b>console.anthropic.com</b><br>
+        2. Crie conta → API Keys → Create Key<br>
+        3. Adicione crédito mínimo de $5 (dura meses)<br>
+        4. Cole a chave abaixo<br><br>
+        <span style="color:var(--amber)">⚠️ A chave fica salva só no seu celular</span>
+      </div>
+      <input id="inp-api-key" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${key}">
+      <button onclick="salvarApiKey()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar chave</button>
+      ${key?`<button onclick="limparApiKey()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:13px;font-family:var(--sans);cursor:pointer;margin-bottom:8px">Remover chave</button>`:''}
+      <button onclick="document.getElementById('modal-api').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
+    </div>`;
+  document.body.appendChild(div);
+}
+function salvarApiKey(){
+  const k=document.getElementById('inp-api-key').value.trim();
+  if(!k){mostrarToast('Cole a chave antes de salvar');return}
+  setApiKey(k);
+  document.getElementById('modal-api').remove();
+  mostrarToast('✅ Chave salva!');
+  assistInited=false;
+  initAssist();
+}
+function limparApiKey(){
+  try{localStorage.removeItem('gym_api_key')}catch(e){}
+  document.getElementById('modal-api').remove();
+  assistInited=false;
+  document.getElementById('assist-msgs').innerHTML='';
+  assistMsgs=[];
+  initAssist();
+  mostrarToast('Chave removida');
+}
+
+/* ════ ESTOQUE DE SUPLEMENTOS — aviso de quando vai acabar ════ */
+function loadEstoque(){
+  try{
+    const e=JSON.parse(localStorage.getItem('gym_ma_estoque')||'null');
+    if(e)return e;
+  }catch(err){}
+  // seed inicial baseado no que você já tem
+  return[
+    {id:'d3k2',nome:'Vitamina D3+K2 Ecomev',inicio:'2026-06-01',duracaoDias:120,dosesPorDia:1},
+    {id:'magnesio',nome:'Nutrends 5 Magnésio + Treonina',inicio:'2026-06-17',duracaoDias:30,dosesPorDia:2},
+    {id:'creatina',nome:'Creatina monohidratada',inicio:null,duracaoDias:null,dosesPorDia:1},
+  ];
+}
+function saveEstoque(e){try{localStorage.setItem('gym_ma_estoque',JSON.stringify(e))}catch(err){}}
+function diasRestantesEstoque(item){
+  if(!item.inicio||!item.duracaoDias)return null;
+  const inicio=new Date(item.inicio);
+  const fim=new Date(inicio);fim.setDate(fim.getDate()+item.duracaoDias);
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const diff=Math.ceil((fim-hoje)/86400000);
+  return diff;
+}
+function renderEstoqueLista(){
+  const el=document.getElementById('estoque-lista');
+  if(!el)return;
+  const estoque=loadEstoque();
+  el.innerHTML=estoque.map(item=>{
+    const dias=diasRestantesEstoque(item);
+    let statusHtml='';
+    if(dias===null){
+      statusHtml='<span style="font-size:11px;color:var(--muted)">sem data definida</span>';
+    }else if(dias<=0){
+      statusHtml='<span class="tag tag-red">acabou! repor</span>';
+    }else if(dias<=10){
+      statusHtml=`<span class="tag" style="background:var(--amber2);color:var(--amber)">⚠️ ${dias} dias restantes</span>`;
+    }else{
+      statusHtml=`<span style="font-size:11px;color:var(--green)">${dias} dias restantes</span>`;
+    }
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px">${item.nome}</span>
+      ${statusHtml}
+    </div>`;
+  }).join('');
+}
+
+/* ════ NOTIFICAÇÕES LOCAIS — lembrete magnésio 22h ════ */
 function getNotifPref(){try{return localStorage.getItem('gym_ma_notif_ativa')==='1'}catch(e){return false}}
 function setNotifPref(v){try{localStorage.setItem('gym_ma_notif_ativa',v?'1':'0')}catch(e){}}
 
-/* ════ SAÚDE — STREAKS ════ */
-function registrarDiaCompleto(tipo){
-  const dc=loadDiasCompletos();
-  if(!dc[tipo])dc[tipo]=[];
-  const hoje=today();
-  if(!dc[tipo].includes(hoje))dc[tipo].push(hoje);
-  saveDiasCompletos(dc);
-}
-function calcularStreak(tipo){
-  const dc=loadDiasCompletos();
-  const dias=(dc[tipo]||[]).slice().sort().reverse();
-  if(!dias.length)return 0;
-  let streak=0;
-  let cursor=new Date();cursor.setHours(0,0,0,0);
-  for(let i=0;i<dias.length;i++){
-    const cursorStr=cursor.toISOString().slice(0,10);
-    if(dias[i]===cursorStr){streak++;cursor.setDate(cursor.getDate()-1);}
-    else if(streak===0&&i===0){
-      const ontem=new Date();ontem.setDate(ontem.getDate()-1);ontem.setHours(0,0,0,0);
-      if(dias[i]===ontem.toISOString().slice(0,10)){streak++;cursor=ontem;cursor.setDate(cursor.getDate()-1);}
-      else break;
-    }else break;
+async function pedirPermissaoNotificacao(){
+  if(!('Notification' in window)){
+    mostrarToast('Seu navegador não suporta notificações');
+    return false;
   }
-  return streak;
-}
-
-/* ════ SAÚDE — PESO ════ */
-function registrarPeso(){
-  const input=document.getElementById('peso-input');
-  const cInput=document.getElementById('cintura-input');
-  const valor=parseFloat(input.value);
-  const cintura=parseFloat(cInput.value)||null;
-  if(!valor||valor<30||valor>250){mostrarToast('Informe um peso válido');return}
-  const log=loadPesoLog();
-  const hoje=today();
-  const idx=log.findIndex(p=>p.data===hoje);
-  if(idx>=0){log[idx].peso=valor;if(cintura)log[idx].cintura=cintura;}
-  else log.push({data:hoje,dataStr:todayStr(),peso:valor,cintura,ts:Date.now()});
-  log.sort((a,b)=>a.ts-b.ts);
-  savePesoLog(log);
-  input.value='';cInput.value='';
-  mostrarToast('✓ Registrado: '+valor+'kg'+(cintura?' · '+cintura+'cm':''));
-  renderPesoTracker();
-  if(getToken())sincronizarGitHub();
-}
-function excluirPeso(ts){
-  if(!confirm('Excluir este registro?'))return;
-  savePesoLog(loadPesoLog().filter(p=>p.ts!==ts));
-  renderPesoTracker();
-  if(getToken())sincronizarGitHub();
-}
-function renderPesoTracker(){
-  const chartWrap=document.getElementById('peso-chart-wrap');
-  const lista=document.getElementById('peso-lista');
-  if(!chartWrap||!lista)return;
-  const log=loadPesoLog();
-  if(!log.length){
-    chartWrap.innerHTML='<p style="color:var(--muted);font-size:12px;text-align:center;padding:12px 0">Registre seu peso semanalmente para ver o gráfico de evolução.</p>';
-    lista.innerHTML='';return;
+  if(Notification.permission==='granted'){setNotifPref(true);agendarNotificacaoMagnesio();return true}
+  if(Notification.permission==='denied'){
+    mostrarToast('Notificações bloqueadas — ative nas configurações do Safari');
+    return false;
   }
-  const pesos=log.map(p=>p.peso);
-  const META=61.5;
-  const min=Math.min(...pesos,META)-1, max=Math.max(...pesos,73.5)+1;
-  const w=280,h=90,pad=10;
-  const pts=log.map((p,i)=>{
-    const x=log.length>1?pad+(i/(log.length-1))*(w-pad*2):w/2;
-    const y=pad+(1-(p.peso-min)/(max-min))*(h-pad*2);
-    return[x,y];
-  });
-  const pathD=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
-  const dots=pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--accent2)"/>`).join('');
-  const metaY=pad+(1-(META-min)/(max-min))*(h-pad*2);
-  chartWrap.innerHTML=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:90px">
-    <line x1="0" y1="${metaY}" x2="${w}" y2="${metaY}" stroke="var(--green)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
-    <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2"/>
-    ${dots}
-  </svg>
-  <div style="font-size:9px;color:var(--muted);text-align:right;font-family:var(--mono)">--- meta ${META}kg</div>`;
-  const recentes=log.slice(-5).reverse();
-  lista.innerHTML=recentes.map(p=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
-      <span style="font-size:12px;color:var(--muted)">${p.dataStr}</span>
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:13px;font-family:var(--mono);font-weight:500">${p.peso}kg</span>
-        ${p.cintura?`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">${p.cintura}cm</span>`:''}
-        <button onclick="excluirPeso(${p.ts})" style="background:none;border:none;color:var(--red);font-size:11px;cursor:pointer;padding:2px 6px;touch-action:manipulation">✕</button>
-      </div>
-    </div>`).join('');
-}
-
-/* ════ SAÚDE — HIDRATAÇÃO ════ */
-const HIDRAT_ETAPAS=[
-  {id:'acordar',  label:'300–500ml ao acordar (em jejum)',     icon:'🌅'},
-  {id:'pretreino',label:'500ml 30min antes do treino',          icon:'💪'},
-  {id:'treino',   label:'Gole a cada série durante o treino',   icon:'🏋️'},
-  {id:'postreino',label:'500ml em até 1h após o treino',        icon:'🍽️'},
-  {id:'dia',      label:'Completar 2L ao longo do dia',         icon:'☀️'},
-];
-function toggleHidrat(id){
-  const d=loadHidratHoje();
-  const i=d.feitos.indexOf(id);
-  if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
-  saveHidratHoje(d);
-  if(d.feitos.length===HIDRAT_ETAPAS.length)registrarDiaCompleto('hidrat');
-  renderHidratChecklist();
-  if(getToken())sincronizarGitHub();
-}
-function renderHidratChecklist(){
-  const el=document.getElementById('hidrat-checklist');
-  const totalEl=document.getElementById('hidrat-total');
-  if(!el)return;
-  const d=loadHidratHoje();
-  el.innerHTML=HIDRAT_ETAPAS.map(e=>{
-    const feito=d.feitos.includes(e.id);
-    return`<div onclick="toggleHidrat('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;touch-action:manipulation">
-      <div style="width:22px;height:22px;border-radius:7px;border:1.5px solid ${feito?'var(--green)':'var(--border2)'};background:${feito?'var(--green)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#fff;pointer-events:none">${feito?'✓':''}</div>
-      <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'};pointer-events:none">${e.icon} ${e.label}</span>
-    </div>`;
-  }).join('');
-  const streak=calcularStreak('hidrat');
-  if(totalEl)totalEl.innerHTML=d.feitos.length+' / '+HIDRAT_ETAPAS.length+' etapas'+(streak>0?` · <span style="color:var(--amber)">🔥 ${streak} dia${streak>1?'s':''}</span>`:'');
-}
-
-/* ════ SAÚDE — SUPLEMENTOS ════ */
-const SUPLE_ETAPAS=[
-  {id:'vitamd',   label:'Vitamina D3+K2 — 1 cápsula (manhã c/ refeição)', icon:'☀️'},
-  {id:'omega3',   label:'Ômega 3 — 2g (c/ refeição principal)',            icon:'🐟'},
-  {id:'colageno', label:'Colágeno Hidrolisado — 10g (manhã em jejum)',     icon:'💪'},
-  {id:'pretreino',label:'Mix pré-treino + creatina 5g + própolis 70 — junto com Rafael (07h30)', icon:'⚡'},
-  {id:'magnesio', label:'Magnésio — junto com Rafael (22h)',                icon:'🌙'},
-];
-function toggleSuple(id){
-  const d=loadSupleHoje();
-  const i=d.feitos.indexOf(id);
-  if(i>=0)d.feitos.splice(i,1);else d.feitos.push(id);
-  saveSupleHoje(d);
-  if(d.feitos.length===SUPLE_ETAPAS.length)registrarDiaCompleto('suple');
-  renderSupleChecklist();
-  if(getToken())sincronizarGitHub();
-}
-function renderSupleChecklist(){
-  const el=document.getElementById('suple-checklist');
-  const streakEl=document.getElementById('suple-streak');
-  if(!el)return;
-  const d=loadSupleHoje();
-  el.innerHTML=SUPLE_ETAPAS.map(e=>{
-    const feito=d.feitos.includes(e.id);
-    return`<div onclick="toggleSuple('${e.id}')" style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;touch-action:manipulation">
-      <div style="width:22px;height:22px;border-radius:7px;border:1.5px solid ${feito?'var(--accent)':'var(--border2)'};background:${feito?'var(--accent)':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;color:#fff;pointer-events:none">${feito?'✓':''}</div>
-      <span style="font-size:13px;color:${feito?'var(--muted)':'var(--text)'};text-decoration:${feito?'line-through':'none'};pointer-events:none">${e.icon} ${e.label}</span>
-    </div>`;
-  }).join('');
-  const streak=calcularStreak('suple');
-  if(streakEl)streakEl.innerHTML=streak>0?`<span style="color:var(--amber)">🔥 ${streak} dia${streak>1?'s':''} seguidos completando 100%</span>`:'';
-}
-
-/* ════ SAÚDE — NOTIFICAÇÃO MAGNÉSIO ════ */
-function renderNotifBtn(){
-  const btn=document.getElementById('notif-btn');
-  const lbl=document.getElementById('notif-btn-label');
-  if(!btn||!lbl)return;
-  const ativa=getNotifPref();
-  btn.style.background=ativa?'var(--green2)':'var(--surface2)';
-  btn.style.borderColor=ativa?'var(--green)':'var(--border2)';
-  btn.style.color=ativa?'var(--green)':'var(--muted)';
-  lbl.textContent=ativa?'🔔 Lembrete magnésio às 22h ✓':'🔕 Ativar lembrete magnésio às 22h';
-}
-function toggleNotificacao(){
-  if(!('Notification' in window)){mostrarToast('⚠️ Notificações não disponíveis');return}
-  if(getNotifPref()){
-    setNotifPref(false);clearTimeout(window._notifMagTimer);
-    mostrarToast('🔕 Lembrete desativado');renderNotifBtn();return;
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){
+    setNotifPref(true);
+    agendarNotificacaoMagnesio();
+    mostrarToast('✅ Lembrete às 22h ativado!');
+    return true;
   }
-  Notification.requestPermission().then(p=>{
-    if(p==='granted'){
-      setNotifPref(true);agendarNotifMagnesio();
-      mostrarToast('🔔 Lembrete às 22h ativado!');
-    }else{mostrarToast('⚠️ Permissão negada');}
-    renderNotifBtn();
-  });
+  mostrarToast('Permissão não concedida');
+  return false;
 }
-function agendarNotifMagnesio(){
+
+function desativarNotificacao(){
+  setNotifPref(false);
+  if(_notifTimeout)clearTimeout(_notifTimeout);
+  mostrarToast('Lembrete desativado');
+}
+
+let _notifTimeout=null;
+function agendarNotificacaoMagnesio(){
+  if(!getNotifPref())return;
+  if(Notification.permission!=='granted')return;
+  clearTimeout(_notifTimeout);
   const agora=new Date();
-  const alvo=new Date();alvo.setHours(22,0,0,0);
-  if(alvo<=agora)alvo.setDate(alvo.getDate()+1);
-  clearTimeout(window._notifMagTimer);
-  window._notifMagTimer=setTimeout(()=>{
-    const s=loadSupleHoje();
-    if(!s.feitos.includes('magnesio')){
-      new Notification('💊 Lembrete — Magnésio',{body:'Hora de tomar o magnésio noturno junto com o Rafael!'});
+  const alvo=new Date();
+  alvo.setHours(22,0,0,0);
+  if(alvo<=agora)alvo.setDate(alvo.getDate()+1); // se já passou das 22h hoje, agenda pra amanhã
+  const ms=alvo-agora;
+  _notifTimeout=setTimeout(()=>{
+    // só notifica se ainda não marcou o magnésio hoje
+    const d=loadSupleHoje();
+    if(!d.feitos.includes('magnesio')){
+      try{
+        new Notification('💊 Hora do Magnésio',{
+          body:'Não esqueça: Nutrends 5 Magnésio + Treonina, 2 cápsulas antes de dormir.',
+          icon:'',
+          tag:'magnesio-lembrete'
+        });
+      }catch(e){}
     }
-    agendarNotifMagnesio();
-  },alvo-agora);
+    agendarNotificacaoMagnesio(); // reagenda pro dia seguinte
+  },ms);
 }
 
-/* ════ SAÚDE — AVALIAÇÕES ════ */
-function buildMetricRow(nome,valor,ideal,status){
-  const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!']};
-  const[bg,cor,icone]=cores[status]||cores.ok;
-  return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
-    <div style="flex:1">
-      <div style="font-size:12px;font-weight:500">${nome}</div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">ideal: ${ideal}</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-size:13px;font-family:var(--mono);font-weight:500">${valor}</span>
-      <span style="background:${bg};color:${cor};border-radius:6px;padding:2px 7px;font-size:10px;font-family:var(--mono)">${icone}</span>
-    </div>
-  </div>`;
-}
-function renderAvaliacoesLista(){
-  const el=document.getElementById('avaliacoes-lista');
-  if(!el)return;
-  const avals=loadAvaliacoes();
-  el.innerHTML=avals.map((a,i)=>{
-    const anterior=avals[i-1];
-    let diffPeso='';
-    if(anterior){
-      const d=+(a.peso-anterior.peso).toFixed(1);
-      diffPeso=d<0?`<span style="color:var(--green)">▼ ${Math.abs(d)}kg</span>`:d>0?`<span style="color:var(--red)">▲ ${d}kg</span>`:'<span style="color:var(--muted)">→</span>';
-    }
-    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;${i<avals.length-1?'border-bottom:1px solid var(--border)':''}">
-      <div>
-        <div style="font-size:13px;font-weight:500">${a.dataStr} · ${a.local||'Unique Health'}</div>
-        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}</div>
-      </div>
-      <div style="text-align:right">
-        <div style="font-size:15px;font-family:var(--mono);font-weight:600">${a.peso}kg</div>
-        <div style="font-size:11px">${diffPeso}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-/* ════ SAÚDE — RESUMO SEMANAL ════ */
-function getSemanaAtualId(){
-  const d=new Date();
-  const onejan=new Date(d.getFullYear(),0,1);
-  const diasPassados=Math.floor((d-onejan)/86400000);
-  const semana=Math.ceil((diasPassados+onejan.getDay()+1)/7);
-  return d.getFullYear()+'-S'+semana;
-}
-function calcularDadosSemanais(segundaMs,sextaMs){
-  const hist=loadHist();
-  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=segundaMs&&h.inicio<=sextaMs);
-  const totalTreinos=treinosSemana.length;
-  const totalKcal=treinosSemana.reduce((a,h)=>{
-    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+(x.peso*(x.reps||0))+(x.peso2||0)*(x.reps2||0),0);
-    return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
-  },0);
-  const pesoLogSemana=loadPesoLog().filter(p=>{const t=new Date(p.data).getTime();return t>=segundaMs&&t<=sextaMs;});
-  let diffPeso=null;
-  if(pesoLogSemana.length>=2)diffPeso=+(pesoLogSemana[pesoLogSemana.length-1].peso-pesoLogSemana[0].peso).toFixed(1);
-  return{totalTreinos,totalKcal,diffPeso,pesoFinal:pesoLogSemana.length?pesoLogSemana[pesoLogSemana.length-1].peso:null};
-}
-function renderResumoSemanal(){
-  const el=document.getElementById('home-weekly-summary');
-  if(!el)return;
-  const semanaAtual=getSemanaAtualId();
-  let visto=null;try{visto=localStorage.getItem('gym_ma_resumo_visto')}catch(e){}
-  const hoje=new Date();
-  if(hoje.getDay()!==1||visto===semanaAtual){el.innerHTML='';return}
-  const seg=new Date(hoje);seg.setDate(hoje.getDate()-7);seg.setHours(0,0,0,0);
-  const sex=new Date(hoje);sex.setDate(hoje.getDate()-3);sex.setHours(23,59,59,999);
-  const dados=calcularDadosSemanais(seg.getTime(),sex.getTime());
-  if(!dados.totalTreinos){el.innerHTML='';return}
-  let diffHtml='';
-  if(dados.diffPeso!==null){
-    diffHtml=dados.diffPeso<0?`<span style="color:var(--green)">▼ ${Math.abs(dados.diffPeso)}kg</span>`:dados.diffPeso>0?`<span style="color:var(--red)">▲ ${dados.diffPeso}kg</span>`:'<span style="color:var(--muted)">estável</span>';
-  }
-  el.innerHTML=`<div class="card" style="background:linear-gradient(135deg,rgba(124,106,247,.1),rgba(62,207,142,.08));border:1px solid rgba(124,106,247,.2);padding:14px;margin-bottom:12px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span style="font-size:12px;font-family:var(--mono);letter-spacing:1px;color:var(--accent2);text-transform:uppercase">📊 Resumo da semana passada</span>
-      <button onclick="fecharResumoSemanal()" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;touch-action:manipulation">✕</button>
-    </div>
-    <div style="display:flex;gap:8px">
-      <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
-        <div style="font-size:18px;font-weight:600">${dados.totalTreinos}/5</div>
-        <div style="font-size:10px;color:var(--muted)">treinos</div>
-      </div>
-      <div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
-        <div style="font-size:18px;font-weight:600">~${dados.totalKcal}</div>
-        <div style="font-size:10px;color:var(--muted)">kcal total</div>
-      </div>
-      ${diffHtml?`<div style="flex:1;text-align:center;background:var(--surface);border-radius:10px;padding:10px">
-        <div style="font-size:14px;font-weight:600">${diffHtml}</div>
-        <div style="font-size:10px;color:var(--muted)">peso</div>
-      </div>`:''}
-    </div>
-  </div>`;
-  try{localStorage.setItem('gym_ma_resumo_visto',semanaAtual)}catch(e){}
-}
-function fecharResumoSemanal(){
-  try{localStorage.setItem('gym_ma_resumo_visto',getSemanaAtualId())}catch(e){}
-  const el=document.getElementById('home-weekly-summary');if(el)el.innerHTML='';
-}
-
-/* ════ SAÚDE — RENDER (chamado no showNav) ════ */
-function renderSaude(){
-  const metricas=[
-    ['Água corporal total','34.7kg','28.6~35.0','excelente'],
-    ['Massa gorda','26.2kg','8.4~17.4','ruim'],
-    ['Massa proteica','9.3kg','8.6~10.5','ok'],
-    ['Minerais','3.3kg','2.9~3.6','ok'],
-    ['Massa livre de gordura','47.3kg','44.9~54.9','ok'],
-    ['Massa muscular esquelética','25.8kg','23.3~28.5','ok'],
-    ['Gordura visceral','12','1~9','ruim'],
-    ['Gordura subcutânea','22.8kg','5.4~10.8','ruim'],
-    ['Relação de gordura','35.6%','18.0~28.0','ruim'],
-    ['IMC','25.1','18.5~23.0','ok'],
-    ['Pontuação saúde','69 pts','> 80','ok'],
-  ];
-  const el=document.getElementById('comp-body');
-  if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
-  renderPesoTracker();
-  renderHidratChecklist();
-  renderSupleChecklist();
-  renderAvaliacoesLista();
+function toggleNotificacao(){
+  if(getNotifPref()){desativarNotificacao()}
+  else{pedirPermissaoNotificacao()}
   renderNotifBtn();
 }
-
-/* ════ SAÚDE — ESTENDER PAYLOAD GITHUB ════ */
-function montarPayloadCompleto(treinos){
-  return{
-    treinos,
-    sess:loadSessoes(),
-    peso:loadPesoLog(),
-    hidratacao:loadHidratHoje(),
-    suplementos:loadSupleHoje(),
-    avaliacoes:loadAvaliacoes(),
-    diasCompletos:loadDiasCompletos(),
-    updated:Date.now()
-  };
+function renderNotifBtn(){
+  const el=document.getElementById('notif-btn-label');
+  if(!el)return;
+  const ativa=getNotifPref()&&'Notification' in window&&Notification.permission==='granted';
+  el.textContent=ativa?'🔔 Lembrete 22h ativado':'🔕 Ativar lembrete às 22h';
 }
-// Restaura dados de saúde ao sincronizar
-const _normRemotoOrig=normalizarRemoto;
-function normalizarRemoto(rc){
-  const base=_normRemotoOrig(rc);
-  if(rc&&typeof rc==='object'&&!Array.isArray(rc)){
-    if(rc.peso&&rc.peso.length)savePesoLog(rc.peso);
-    if(rc.avaliacoes&&rc.avaliacoes.length)saveAvaliacoes(rc.avaliacoes);
-    if(rc.diasCompletos)saveDiasCompletos(rc.diasCompletos);
+
+/* ════ TEMA ════ */
+function aplicarTema(tema){
+  if(tema==='light'){
+    document.body.classList.add('light');
+    document.getElementById('theme-icon').textContent='🌙';
+    document.getElementById('theme-label').textContent='Escuro';
+  }else{
+    document.body.classList.remove('light');
+    document.getElementById('theme-icon').textContent='☀️';
+    document.getElementById('theme-label').textContent='Claro';
   }
-  return base;
+}
+function toggleTema(){
+  const isLight=document.body.classList.contains('light');
+  const novoTema=isLight?'dark':'light';
+  try{localStorage.setItem('gym_ma_tema',novoTema)}catch(e){}
+  aplicarTema(novoTema);
+}
+function carregarTema(){
+  try{
+    const t=localStorage.getItem('gym_ma_tema')||'dark';
+    aplicarTema(t);
+  }catch(e){}
 }
 
 /* ════ INIT ════ */
-function inicializarSessoesIniciais(){
-  const CHAVE_INIT = 'gym_ma_init_v4';
-  if(localStorage.getItem(CHAVE_INIT)) return;
-  // Novo plano A/B/C — zera sessões para começar do zero
-  localStorage.setItem('gym_sess_v6', JSON.stringify({A:0,B:0,C:0}));
-  localStorage.setItem(CHAVE_INIT, '1');
-}
-
-inicializarSessoesIniciais();
-
-// Seed avaliação inicial se não existir
-(function(){
-  const avals=loadAvaliacoes();
-  if(!avals.length){
-    saveAvaliacoes([{
-      data:'2026-07-27',dataStr:'27/07/2026',local:'Unique Health',
-      pontos:69,peso:73.5,imc:25.1,gordura:35.6,muscEsq:25.8,gordVisceral:12,
-      obs:'Tipo muscular acima do peso. Meta: −12kg de gordura, manter músculo.'
-    }]);
-  }
-})();
-
-// Reagendar notificação de magnésio se estava ativa
-if(getNotifPref()&&'Notification' in window&&Notification.permission==='granted'){
-  agendarNotifMagnesio();
-}
-
 carregarTema();
+migrarHistoricoAntigo();
+migrarPlanoV2();
 renderHome();
 
-// Atualiza ícone do backup conforme token salvo
-if(getToken()) document.getElementById('backup-cloud-btn').textContent='✅ Backup';
+atualizarStatusBackup();
+setInterval(atualizarStatusBackup,60000); // atualiza o texto a cada minuto
 
-// Sincroniza ao abrir se tiver token
-if(getToken()){
-  syncDoGitHub(true).then(()=>renderHome());
+// reagenda notificação do magnésio se já estava ativada
+if(getNotifPref()&&'Notification' in window&&Notification.permission==='granted'){
+  agendarNotificacaoMagnesio();
 }
 
+// sincroniza histórico com GitHub ao abrir (se tiver token)
+if(getToken()){
+  sincronizarGitHub();
+}
+
+/* ════ INDICADOR ONLINE/OFFLINE ════ */
+function atualizarStatusConexao(){
+  const bar=document.getElementById('offline-bar');
+  if(!bar)return;
+  bar.style.display=navigator.onLine?'none':'block';
+}
+window.addEventListener('online',()=>{
+  atualizarStatusConexao();
+  mostrarToast('✅ Conexão restaurada — sincronizando...');
+  if(getToken())sincronizarGitHub();
+});
+window.addEventListener('offline',atualizarStatusConexao);
+atualizarStatusConexao();
+
+/* ════ SPLASH SCREEN ════ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{
+    const splash=document.getElementById('splash');
+    if(splash){
+      splash.style.opacity='0';
+      setTimeout(()=>splash.remove(),400);
+    }
+  },400);
+});
+// fallback: garante que o splash some mesmo se 'load' já tiver disparado
+setTimeout(()=>{
+  const splash=document.getElementById('splash');
+  if(splash){splash.style.opacity='0';setTimeout(()=>splash&&splash.remove(),400)}
+},1200);
+
+/* ════ SERVICE WORKER (offline) ════ */
 if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
+  navigator.serviceWorker.register('./sw.js',{scope:'./'})
+    .then(()=>console.log('Service Worker registrado — app funciona offline'))
+    .catch(e=>console.log('SW não registrado:',e));
 }
 </script>
-<!-- ══ MODAL BACKUP ══ -->
-<div class="modal-overlay hidden" id="modal-backup" onclick="if(event.target===this)fecharModalBackup()">
-  <div class="modal-sheet">
-    <div class="modal-header">
-      <h3>☁️ Backup GitHub</h3>
-      <button class="modal-close" onclick="fecharModalBackup()">✕</button>
-    </div>
-    <div class="modal-body" style="padding:18px">
-      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">Cole o seu <b style="color:var(--text)">Personal Access Token</b> do GitHub. Ele fica salvo só no seu celular — nunca vai para o código.</p>
-      <div class="field" style="margin-bottom:12px">
-        <label>Token do GitHub</label>
-        <input type="password" id="backup-token-input" placeholder="ghp_..." style="font-size:13px;padding:10px">
-      </div>
-      <button class="btn btn-primary" onclick="salvarToken()" style="margin-bottom:8px">Salvar token</button>
-      <button class="btn btn-green" onclick="restaurarDoGitHub()" style="margin-bottom:8px">Restaurar histórico do GitHub</button>
-      <button class="btn btn-ghost" onclick="fecharModalBackup()">Fechar</button>
-      <p id="backup-status" style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px;min-height:18px"></p>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>
