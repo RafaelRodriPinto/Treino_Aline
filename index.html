@@ -16,9 +16,6 @@
   --sans: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 }
 
-/* ── ANDROID COMPAT ── */
-button *{pointer-events:none}
-button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-sizing:border-box}
 </style>
 <style>
 :root{
@@ -220,6 +217,24 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 .hist-tabs{display:flex;gap:8px;margin-bottom:14px}
 .hist-tab{flex:1;padding:8px;border-radius:var(--r);font-size:12px;font-family:var(--mono);border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;text-align:center}
 .hist-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* tabelas de comparação (aba Saúde) */
+.cmp{width:100%;border-collapse:collapse;font-size:12px}
+.cmp th{font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;text-align:right;padding:6px 4px;border-bottom:1px solid var(--border2);font-weight:400}
+.cmp td{padding:7px 4px;border-bottom:1px solid var(--border);text-align:right;font-family:var(--mono);font-size:11px}
+.cmp th:first-child,.cmp td:first-child{text-align:left}
+.cmp td:first-child{font-family:var(--sans);font-size:12px;color:var(--text)}
+
+/* ── ANDROID COMPAT (Chrome / PWA) ── */
+button *{pointer-events:none}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn{min-height:52px}
+.rest-skip{min-height:52px}
+.nav-btn{min-height:56px}
+.hist-tab{min-height:44px}
+.ex-list-btn{min-height:48px}
+.modal-close{width:38px;height:38px}
+.hint-carga{font-size:11px;color:var(--muted);font-family:var(--mono);line-height:1.5;margin:-2px 0 10px}
 </style>
 </head>
 <body>
@@ -260,6 +275,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
   <div class="sess-grid" id="sess-grid"></div>
   <div class="section-title">Treino de hoje</div>
   <div class="treino-grid-new" id="treino-grid"></div>
+  <div id="home-versao" style="text-align:center;font-size:10px;color:var(--muted);font-family:var(--mono);padding:4px 0 16px"></div>
 </div>
 
 <!-- ══ EXERCICIO ══ -->
@@ -356,33 +372,47 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
         <div>
           <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:4px">Avaliação Física · Unique Health</div>
           <div style="font-size:22px;font-weight:600">Maria Aline</div>
-          <div style="font-size:12px;color:var(--muted)">27/07/2026 · 45 anos · 171cm</div>
+          <div style="font-size:12px;color:var(--muted)">05/11/2026 · 45 anos · 171cm</div>
         </div>
         <div style="text-align:center;background:var(--surface);border-radius:14px;padding:10px 14px;border:1px solid var(--border)">
-          <div style="font-size:32px;font-weight:700;color:var(--amber)">69</div>
+          <div style="font-size:32px;font-weight:700;color:var(--amber)">74</div>
           <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">PONTOS</div>
+          <div style="font-size:10px;color:var(--green);font-family:var(--mono)">▲ +5</div>
         </div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:4px">
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">73.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">72.6<span style="font-size:10px;color:var(--muted)">kg</span></div>
           <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PESO</div>
         </div>
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--amber)">25.1</div>
+          <div style="font-size:17px;font-weight:600;color:var(--amber)">24.8</div>
           <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IMC</div>
         </div>
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--green)">61.5<span style="font-size:10px;color:var(--muted)">kg</span></div>
-          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">IDEAL</div>
+          <div style="font-size:17px;font-weight:600;color:var(--green)">64.3<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">PADRÃO</div>
         </div>
         <div style="background:var(--surface);border-radius:10px;padding:8px;text-align:center">
-          <div style="font-size:17px;font-weight:600;color:var(--red)">-12<span style="font-size:10px;color:var(--muted)">kg</span></div>
+          <div style="font-size:17px;font-weight:600;color:var(--red)">-8.3<span style="font-size:10px;color:var(--muted)">kg</span></div>
           <div style="font-size:9px;color:var(--muted);font-family:var(--mono)">META</div>
         </div>
       </div>
       <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;padding:8px;background:var(--surface);border-radius:10px">
-        Tipo corporal: <b style="color:var(--text)">Muscular acima do peso</b> — boa base muscular (25.8kg esquelético ✓). O excesso é gordura, não músculo. BMR 1391kcal · Ingestão recomendada 1808kcal/dia.
+        Tipo corporal: <b style="color:var(--text)">Muscular acima do peso</b> — boa base muscular (27.3kg de músculo esquelético, dentro da faixa 23.3~28.5 ✓). O que está acima do ideal é a gordura (23.1kg; faixa 12.3~19.6), não o músculo. BMR 1439kcal · Ingestão recomendada pelo laudo 1870kcal/dia · Idade do corpo 44 anos (real: 45).
+      </div>
+    </div>
+
+    <!-- EVOLUÇÃO DESDE A AVALIAÇÃO ANTERIOR -->
+    <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:8px">📈 Evolução desde 27/07/2026 (14 semanas)</div>
+      <div style="font-size:12px;color:var(--text);line-height:1.8">
+        • Massa gorda <b>26.2 → 23.1kg (−3.1kg)</b><br>
+        • Relação de gordura <b>35.6 → 31.8% (−3.8 pontos)</b><br>
+        • Músculo esquelético <b>25.8 → 27.3kg (+1.5kg)</b><br>
+        • Peso <b>73.5 → 72.6kg (−0.9kg)</b><br>
+        • Gordura visceral <b>12 → 11</b> · Pontuação <b>69 → 74</b><br><br>
+        Ela perdeu gordura e ganhou músculo ao mesmo tempo (recomposição corporal). Por isso o peso na balança caiu pouco, mas a composição melhorou bastante — não se guie só pelo peso.
       </div>
     </div>
 
@@ -392,16 +422,17 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       <div style="display:flex;gap:8px;margin-bottom:12px">
         <div style="flex:1;min-width:0">
           <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Peso (kg)</label>
-          <input type="number" id="peso-input" placeholder="0.0" step="0.1" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+          <input type="number" id="peso-input" placeholder="0.0" step="0.1" inputmode="decimal" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
         </div>
         <div style="flex:1;min-width:0">
           <label style="font-size:10px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:4px">Cintura (cm)</label>
-          <input type="number" id="cintura-input" placeholder="0.0" step="0.5" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
+          <input type="number" id="cintura-input" placeholder="0.0" step="0.5" inputmode="decimal" style="width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:10px;font-size:14px;font-family:var(--mono);color:var(--text);outline:none">
         </div>
       </div>
       <button onclick="registrarPeso()" style="width:100%;box-sizing:border-box;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;border:none;border-radius:10px;padding:14px 16px;min-height:52px;font-size:14px;font-weight:500;cursor:pointer;margin-bottom:12px;touch-action:manipulation">Salvar medidas de hoje</button>
       <div id="peso-chart-wrap"></div>
       <div id="peso-lista" style="margin-top:8px"></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6">Pese 1x por semana, sempre no mesmo dia e horário (em jejum, depois de ir ao banheiro). O alvo de peso é o <b>peso padrão do laudo: 64.3kg</b> (linha tracejada no gráfico); cintura abaixo de 80cm (referência geral para mulheres — não vem do laudo).</div>
     </div>
 
     <!-- HIDRATAÇÃO -->
@@ -409,6 +440,7 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div id="hidrat-checklist"></div>
       <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;font-family:var(--mono)" id="hidrat-total">0 / 5 etapas</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px;line-height:1.6;text-align:center">Total do dia: ~3.1L (500+300+500+300+1500ml), já contando o que ela perde treinando. Urina clara é o melhor sinal de que está bem hidratada.</div>
     </div>
 
     <!-- SUPLEMENTOS -->
@@ -421,16 +453,28 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
       </button>
     </div>
 
+    <!-- ESTOQUE DE SUPLEMENTOS -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📦 Estoque de Suplementos</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      <div id="estoque-lista"></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.6">Aviso em âmbar quando faltarem 10 dias ou menos. O frasco de ômega 3 é dividido com o Rafael (4 cápsulas por dia no total).</div>
+    </div>
+
     <!-- HISTÓRICO AVALIAÇÕES -->
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">📋 Histórico de Avaliações</div>
     <div class="card" style="padding:14px;margin-bottom:14px">
       <div id="avaliacoes-lista"></div>
-      <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">Ao fazer nova avaliação na Unique Health, envie os dados para registrar aqui e comparar a evolução.</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6">Ao fazer nova avaliação na Unique Health (próxima sugerida: ~05/02/2027, fim do plano), envie os dados para registrar aqui e comparar a evolução.</div>
     </div>
 
     <!-- COMPOSIÇÃO CORPORAL -->
-    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal</div>
-    <div class="card" style="padding:14px;margin-bottom:14px" id="comp-body"></div>
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Composição Corporal · 05/11/2026</div>
+    <div class="card" style="padding:14px;margin-bottom:6px" id="comp-body"></div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);line-height:1.6;margin:0 2px 14px">Faixas = as impressas no seu laudo. Onde o laudo não traz faixa, aparece “sem faixa no laudo”. Verde: dentro da faixa · âmbar: até 10% fora · vermelho: mais de 10% fora. Variação (▲▼) em relação a 27/07/2026; verde = melhorou.</div>
+
+    <!-- SEGMENTOS -->
+    <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">Gordura e músculo por segmento</div>
+    <div class="card" style="padding:14px;margin-bottom:14px" id="seg-body"></div>
 
     <div style="font-size:10px;font-family:var(--mono);letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px">O que fazer — por métrica</div>
 
@@ -438,39 +482,57 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:linear-gradient(135deg,rgba(124,106,247,.12),rgba(56,189,248,.08));border:1px solid rgba(124,106,247,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--accent2);margin-bottom:12px">💊 Pré-treino — análise completa</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Maria treina às 08h com pré-treino às 07h30 junto com o Rafael. Mix idêntico, timing perfeito!<br><br>
-        <b>Mistura atual — 5 ingredientes em partes iguais (30g cada, 150g total):</b><br><br>
-        <b>✅ Guaraná em pó (30g)</b> — estimulante natural (cafeína), aumenta foco e energia. Ideal para manhã com cortisol alto. Para mulheres aos 45 anos é especialmente útil pois combate a fadiga hormonal da pré-menopausa.<br><br>
-        <b>✅ Beterraba em pó (30g)</b> — nitratos → óxido nítrico → mais fluxo sanguíneo muscular. Melhora resistência e queima de gordura durante o treino. Excelente para reduzir gordura visceral.<br><br>
-        <b>✅ Farinha de uva (30g)</b> — resveratrol e antioxidantes reduzem inflamação pós-treino. Importante: gordura visceral (nível 12) está associada a inflamação crônica — a farinha de uva ajuda a combater.<br><br>
-        <b>✅ Maca peruana em pó (30g)</b> — adaptógeno que equilibra hormônios femininos. Aos 45 anos (pré-menopausa), a maca ajuda a estabilizar estrogênio, melhora disposição, energia e humor.<br><br>
-        <b>✅ Tribulus terrestre (30g)</b> — estimula hormônios anabólicos naturais. Em mulheres, ajuda na libido, energia e composição corporal.<br><br>
-        <b>✅ Creatina 5g</b> — preserva os 25.8kg de massa muscular esquelética durante o déficit calórico de -12kg. Fundamental para não perder músculo ao perder gordura.<br><br>
-        <b>✅ Própolis 70</b> — anti-inflamatório e imunológico. Complementa a beterraba no combate à inflamação associada à gordura visceral.<br><br>
-        <b>✅ Vitamina D3+K2</b> — 1 cápsula junto ao pré-treino às 07h30. D3 regula metabolismo de gordura e é essencial aos 45 anos. K2 protege os ossos.
+        Maria treina às 08h, de segunda a sexta, com o pré-treino às 07h30 junto com o Rafael — mesmo mix, 30 minutos antes do treino ✓<br><br>
+        <b>Mistura — 5 ingredientes em partes iguais (30g cada, 150g no total):</b><br><br>
+        <b>Guaraná em pó</b> — cafeína natural; é o item do mix com evidência mais sólida (energia, foco e desempenho no treino). Cuidado com a cafeína total do dia: se vier insônia ou coração acelerado, reduza a dose e evite café extra à tarde.<br><br>
+        <b>Beterraba em pó</b> — nitratos → óxido nítrico → mais fluxo de sangue no músculo. Os estudos mostram ganho pequeno a moderado de resistência e uma leve queda da pressão; se tiver pressão baixa ou usar remédio para pressão, avise o médico.<br><br>
+        <b>Farinha de uva</b> — polifenóis (antioxidantes). A evidência para inflamação e desempenho ainda é limitada; entra como apoio.<br><br>
+        <b>Maca peruana</b> — usada para disposição, humor e sintomas da fase da menopausa; os estudos são pequenos e não mostraram mudança nos hormônios nem na gordura corporal. Não conte com ela para emagrecer.<br><br>
+        <b>Tribulus terrestre</b> — evidência fraca e inconsistente; em mulheres os estudos pequenos avaliaram libido/função sexual na menopausa, não composição corporal. Não é essencial — se não notar efeito, pode sair da mistura.<br><br>
+        <b>Creatina 5g</b> — o suplemento de maior evidência para ela: junto com o treino de força ajuda a manter e ganhar músculo (27.3kg, já perto do teto da faixa 28.5) e a manter a força durante o déficit calórico. Tomar todo dia, inclusive no descanso, e manter a hidratação.<br><br>
+        <b>Própolis 70</b> — apoio imunológico e anti-inflamatório (evidência limitada). Atenção se tiver alergia a produtos de abelha.<br><br>
+        <b>Vitamina D3+K2</b> — 1 cápsula junto ao pré-treino / café da manhã (com um pouco de gordura). D3 e K2 cuidam de ossos e imunidade, importantes aos 45 anos. A dose ideal depende do exame de vitamina D (25-OH) — vale pedir ao médico.
+      </div>
+    </div>
+
+    <!-- ÔMEGA 3 -->
+    <div style="background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(62,207,142,.08));border:1px solid rgba(56,189,248,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
+      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">🐟 Ômega 3 — Dark Lab (Ômega Plus, 240 cápsulas)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8">
+        <b>Por que para ela:</b> a gordura visceral nível 11 (faixa geral 1~9) costuma vir junto de inflamação crônica de baixo grau, e o treino 5x/semana gera microlesões que também se beneficiam de um aporte de EPA/DHA. Aos 45 anos ainda ajuda triglicerídeos e saúde cardiovascular.<br><br>
+        <b>Dose:</b> 2 cápsulas por dia = 990mg EPA + 660mg DHA (1.650mg combinados — a porção do rótulo).<br><br>
+        <b>Como tomar:</b><br>
+        • Sempre com comida — ômega 3 é lipossolúvel e absorve melhor com a gordura da refeição<br>
+        • As 2 cápsulas podem ir juntas no almoço ou no jantar, ou 1 no almoço + 1 no jantar — tanto faz<br>
+        • Não precisa ir junto ao pré-treino das 07h30; o melhor horário é almoço ou jantar<br>
+        • Tomar no meio da refeição ajuda a evitar o gosto de peixe na boca<br><br>
+        <b>O que esperar:</b> é um apoio (inflamação, triglicerídeos), não um queimador de gordura. O efeito direto sobre a gordura visceral é modesto — quem derruba o nível 11 é o déficit calórico + treino + sono. Os benefícios aparecem com semanas de uso contínuo.<br><br>
+        <b>Estoque:</b> o frasco de 240 cápsulas é dividido com o Rafael (2 cada por dia = 4 por dia) → dura 60 dias, de 12/10/2026 até cerca de 11/12/2026. O app avisa quando faltarem 10 dias (card Estoque acima).<br><br>
+        <b>Cuidado:</b> se usar anticoagulante ou antiagregante, ou tiver cirurgia/procedimento marcado, avise o médico antes de continuar.
       </div>
     </div>
 
     <!-- ROTINA COMPLETA -->
     <div style="background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.15);border-radius:var(--r2);padding:14px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">🌅 Rotina completa para treino às 08h</div>
+      <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:12px">🌅 Rotina completa para treino às 08h (segunda a sexta)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>06h30:</b> 500ml água temperatura ambiente ao acordar (ativa metabolismo)<br><br>
+        <b>06h30:</b> 500ml de água temperatura ambiente ao acordar (+ colágeno hidrolisado 10g)<br><br>
         <b>07h00:</b> café da manhã leve<br>
         • 1 banana + 2 ovos mexidos + café preto sem açúcar (~300 kcal)<br>
-        • ⚠️ Não treinar em jejum — perde músculo e desempenho cai<br><br>
+        • ⚠️ Melhor não treinar em jejum — o treino rende mais e o músculo fica protegido<br><br>
         <b>07h30:</b> pré-treino completo junto com Rafael — mix 150g + creatina 5g + própolis 70 + D3/K2 ✓<br><br>
-        <b>08h00:</b> treino ✓<br><br>
+        <b>08h00:</b> treino A, B ou C ✓ (esteira 10min + musculação + esteira 20min)<br><br>
         <b>09h30:</b> refeição pós-treino — foco em proteína<br>
-        • Opção A: 150g frango grelhado + arroz integral + salada (~45g proteína) ✓<br>
-        • Opção B: omelete 3 ovos + legumes + iogurte grego (~35g proteína) ✓<br>
+        • Opção A: 150g frango grelhado + arroz integral + salada (~400 kcal, ~45g proteína) ✓<br>
+        • Opção B: omelete 3 ovos + legumes + iogurte grego (~380 kcal, ~35g proteína) ✓<br>
         • Meta pós-treino: <b>≥35g proteína</b> nas primeiras 2h<br><br>
-        <b>12h30:</b> almoço — arroz integral + feijão + 150g frango + salada (~550 kcal)<br><br>
+        <b>12h30:</b> almoço — arroz integral + feijão + 120-150g frango + salada (~500 kcal) + ômega 3<br><br>
         <b>15h30:</b> lanche — iogurte grego 200g + castanhas (~250 kcal, 17g proteína)<br><br>
-        <b>19h00:</b> jantar — proteína leve + legumes (~400 kcal)<br>
+        <b>19h00:</b> jantar — proteína leve + legumes (~350 kcal)<br>
         • 150g peixe ou frango + salada + 1 ovo<br><br>
         <b>22h00:</b> Magnésio junto com Rafael — 2 cápsulas antes de dormir ✅<br><br>
-        <b>Meta calórica diária: 1500–1600 kcal</b> (déficit moderado para -12kg em ~6 meses sem perder músculo)
+        <b>Meta calórica diária: 1700–1850 kcal</b> — déficit moderado de ~400–500 kcal (BMR 1439 + treino 5x/semana ≈ 2200 kcal de gasto estimado; o laudo recomenda até 1870). O dia acima soma ~1800 kcal e ~150g de proteína: é um modelo, ajuste as porções.<br>
+        <b>Meta de proteína: 115–150g/dia</b> (1.6–2.0g por kg).
       </div>
     </div>
 
@@ -478,33 +540,33 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--red2);border:1px solid rgba(239,68,68,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px">🔴 Prioridade — Reduzir gordura</div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (atual: 12 — alta, meta &lt;10)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa gorda (23.1kg — faixa 12.3~19.6) · Relação de gordura (31.8% — faixa 18.0~28.0)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
-        A gordura visceral nível 12 é a métrica mais importante a reduzir — está ligada a risco cardiovascular e síndrome metabólica.<br><br>
+        Está 3.5kg acima do limite da faixa de massa gorda e 3.8 pontos acima da faixa de relação de gordura. O laudo indica <b>−8.3kg de controle de gordura e 0kg de músculo</b>: ou seja, perder só gordura.<br><br>
+        <b>Ritmo real:</b> de 27/07 a 05/11 perdeu 3.1kg de gordura (≈ 0.2kg por semana) e ainda ganhou músculo. Para chegar à faixa mais rápido, o caminho é um déficit moderado e constante:<br>
+        • <b>1700–1850 kcal/dia</b> (déficit de ~400–500 kcal) → 0.3 a 0.5kg de gordura por semana<br>
+        • Não ficar abaixo de ~1500 kcal (perto do BMR de 1439): déficit maior faz perder músculo<br>
+        • Proteína 115–150g/dia + treino de força 5x/semana protegem o músculo durante o déficit<br>
+        • App para montar cardápio: Lifesum ou MyFitnessPal — use por 2-3 semanas para calibrar porções
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura visceral (11 — faixa geral 1~9; era 12)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
+        Falta reduzir 2 níveis para entrar na faixa (caiu 1 em 14 semanas). É a gordura mais ligada a risco cardiovascular e metabólico, por isso segue no topo da lista.<br><br>
         <b>Esteira — zona 2 (prioridade):</b><br>
-        • Velocidade 4.5 a 5.5 km/h, inclinação 1-2%, 20-25 minutos<br>
-        • Nessa velocidade consegue conversar — zona 2, ideal para gordura visceral<br>
-        • As esteiras do treino (aquecimento 10min + finalização 20min) já ajudam muito<br>
-        • Pré-treino com guaraná + beterraba potencializa a queima de gordura matinal<br><br>
-        <b>Sono — fundamental:</b><br>
-        • Menos de 6h eleva cortisol → deposita gordura na região abdominal<br>
-        • Magnésio às 22h (junto com Rafael) melhora qualidade do sono ✅<br><br>
+        • Velocidade 4.5 a 5.5 km/h, inclinação 1-2%, onde ainda consegue conversar<br>
+        • A esteira do treino (aquecimento 10min + finalização 20min) já entrega 30 minutos por dia<br>
+        • O pré-treino com guaraná + beterraba ajuda a render melhor no cardio da manhã<br><br>
+        <b>Sono — fundamental:</b> dormir menos de 6h eleva o cortisol e favorece gordura na região abdominal. Meta: 7h ou mais. O magnésio às 22h (junto com Rafael) entra como apoio à rotina de sono.<br><br>
         <b>Cortar da alimentação:</b><br>
         • Açúcar simples: refrigerante, suco industrializado, biscoito recheado, pão branco<br>
-        • Frituras e alimentos ultraprocessados<br>
-        • Álcool — interrompe a queima de gordura por até 48h
+        • Frituras e ultraprocessados<br>
+        • Álcool — atrapalha a recuperação, o sono e a queima de gordura
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Gordura corporal total (35.6% — alta, meta ~25%)</div>
-      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px">
-        26.2kg de massa gorda (ideal seria 8-17kg para mulheres ativas). A estratégia é déficit calórico moderado (1500-1600 kcal/dia) com treino 5x/semana para preservar os 25.8kg de músculo.<br><br>
-        <b>Déficit calórico:</b> BMR 1391kcal + atividade = ~2000-2100kcal gastos. Meta 1500-1600 kcal → déficit de ~500 kcal → 0.5kg/semana de gordura.<br>
-        <b>App para montar cardápio:</b> Lifesum ou MyFitnessPal — use por 2-3 semanas para calibrar.
-      </div>
-
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Relação cintura/quadril (0.9 — alta, meta &lt;0.85)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Onde a gordura está: tronco (208.7% da referência)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        Concentração de gordura na região abdominal. Reduz com o mesmo protocolo de cardio + déficit calórico. Os abdominais dos treinos (Twist, Paralela, Canivete) fortalecem o core mas a gordura local sai pela dieta.
+        Por segmento, a gordura está em 130% nos braços, 115–123% nas pernas e 208.7% no tronco (era 236.8%) — o tronco é onde mais sobra e também onde mais caiu. Não dá para escolher onde a gordura sai: ela cai no corpo todo, pelo déficit + cardio + sono. Os abdominais do plano (máquina no A, bicicleta no B, sky prancha no C) fortalecem o core, mas não “queimam” a barriga sozinhos.
       </div>
     </div>
 
@@ -512,18 +574,23 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--amber2);border:1px solid rgba(245,158,11,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:12px">🟡 Atenção — Melhorar</div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa proteica (9.3kg — abaixo do ideal 11-13.9kg)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Peso (72.6kg — faixa 52.2~70.6) · IMC (24.8 — faixa 18.5~23.0)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Meta: <b>100-130g proteína/dia</b> (1.4-1.8g por kg de peso corporal).<br>
-        Fontes práticas: frango 100g=31g · ovo=7g · iogurte grego 200g=17g · atum 100g=26g · queijo cottage 100g=12g<br>
-        A creatina no pré-treino ajuda a reter e usar melhor a proteína disponível. ✓
+        Faltam 2.0kg para entrar na faixa de peso. Mas a balança sozinha engana: ela perdeu gordura e ganhou músculo (que pesa). Acompanhe também a cintura (tracker acima) e o próximo laudo. A adiposidade (118 — faixa 90~110) cai junto com a massa gorda.
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Pontuação de saúde (69 pts — moderada, meta &gt;80)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Proteína na dieta (massa proteica 9.8kg, era 9.3 — o laudo não traz faixa)</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Meta: <b>115-150g de proteína/dia</b> (1.6-2.0g por kg de peso corporal), distribuídos em 4-5 refeições de 25-40g. Em déficit calórico, é a proteína alta + o treino de força que garantem que o que sai seja gordura.<br>
+        Fontes práticas: frango 100g=31g · ovo=7g · iogurte grego 200g=17g · atum 100g=26g · queijo cottage 100g=12g<br>
+        A creatina no pré-treino ajuda a manter força e músculo no déficit. ✓
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Pontuação de saúde (74 pts, era 69 — o laudo não traz faixa)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        A pontuação sobe automaticamente com a redução de gordura e melhora da composição corporal. Com 3-4 meses de consistência, a projeção é chegar a 78-82 pts.<br>
-        • Progressão de carga nos treinos: quando completar todas as séries facilmente, aumente 2.5kg<br>
-        • 70% do crescimento muscular acontece nas primeiras 3h de sono profundo
+        A pontuação sobe com a redução de gordura e a melhora da composição corporal — subiu 5 pontos em 14 semanas.<br>
+        • Plano novo (4 séries): vários exercícios trazem a observação “aumentando a carga” — quando completar todas as séries com facilidade, suba 2 a 2.5kg<br>
+        • A maior parte da recuperação muscular acontece no sono profundo — proteja as 7h ou mais
       </div>
     </div>
 
@@ -531,29 +598,30 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--green2);border:1px solid rgba(62,207,142,.25);border-radius:var(--r2);padding:14px;margin-bottom:10px">
       <div style="font-size:13px;font-weight:600;color:var(--green);margin-bottom:12px">🟢 Pontos fortes — Manter e evoluir</div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa muscular esquelética (25.8kg — dentro do normal ✓)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Músculo esquelético (27.3kg, +1.5kg — dentro da faixa 23.3~28.5 ✓)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Excelente base muscular para 45 anos! A creatina + o treino 5x/semana garantem que ela seja mantida durante a perda de 12kg de gordura. Não corte abaixo de 1500 kcal — perde músculo junto. Continue todos os suplementos. ✓
+        Ótima base muscular para 45 anos, e todos os segmentos subiram (tronco 21.1→22.0kg, pernas 7.5→8.0 e 7.1→7.4kg, braços 2.3→2.5 e 2.3→2.4kg). Já está a 1.2kg do teto da faixa: o ganho tende a desacelerar e o foco passa a ser perder gordura mantendo esse músculo. Treino 5x/semana + creatina + proteína sustentam isso. Não corte as calorias abaixo de ~1500 kcal. ✓
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Água corporal total (34.7kg — Excelente ✓)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Massa livre de gordura (49.5kg, +2.2kg) e metabolismo basal (1439kcal, +48)</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
-        Hidratação excelente! Manter e reforçar nos dias de treino:<br>
+        Mais massa magra = metabolismo de repouso mais alto. A idade do corpo caiu de 45 para 44 anos.
+      </div>
+
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Água corporal (36.2kg, +1.5kg) — o laudo não traz faixa</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:12px">
+        Subiu junto com a massa magra (o músculo guarda água). Manter e reforçar nos dias de treino:<br>
         • 06h30: 500ml temperatura ambiente | 07h30: 300ml com pré-treino<br>
-        • 08h-09h: 500ml durante treino | 09h30: 300ml pós-treino<br>
-        • Resto do dia: 1.5L → <b>Total: ~2.6L ✓</b><br>
-        • Água gelada durante o treino pode causar cãibras — prefira fresca (~15-18°C)
+        • Durante o treino: 500ml | 09h30: 300ml pós-treino<br>
+        • Resto do dia: 1.5L → <b>Total: ~3.1L ✓</b>
       </div>
 
-      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (3.3kg — Excelente ✓)</div>
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px">Minerais (3.5kg, +0.2kg) — o laudo não traz faixa</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
         <b>Magnésio às 22h (junto com Rafael) ✅</b><br>
-        • Reduz cortisol (hormônio que deposita gordura na barriga)<br>
-        • Melhora qualidade do sono (fundamental para perda de gordura e equilíbrio hormonal aos 45 anos)<br>
-        • Efeito em 2-3 semanas: sono mais profundo + menos dor muscular<br>
+        • Apoia o relaxamento muscular e a rotina de sono (efeito modesto, mas vale pelo hábito)<br>
         • Alimentos ricos: castanha-do-pará, amêndoas, banana, abacate, chocolate amargo 70%+<br><br>
-        <b>Vitamina D3+K2 ✅</b> — 1 cápsula junto ao pré-treino (manhã com refeição leve).<br>
-        Deficiência de D3 é muito comum em mulheres de 45 anos e está diretamente ligada ao acúmulo de gordura visceral. K2 protege os ossos durante a perda de peso.
+        <b>Vitamina D3+K2 ✅</b> — 1 cápsula junto ao pré-treino (manhã com refeição leve). D3 e K2 cuidam de ossos e imunidade, importantes aos 45 anos.
       </div>
     </div>
 
@@ -561,23 +629,25 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
     <div style="background:var(--blue2);border:1px solid rgba(56,189,248,.2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
       <div style="font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px">🎯 Protocolo completo + projeção</div>
       <div style="font-size:13px;color:var(--text);line-height:1.8">
-        <b>O que já faz bem ✅:</b> treino 5x/semana às 08h, pré-treino igual ao Rafael (mix 150g + creatina + própolis), magnésio às 22h, D3+K2<br><br>
-        <b>O que adicionar ➕:</b><br>
-        • Vitamina D3+K2 — 1 cápsula junto ao pré-treino ✅<br>
-        • Ômega 3 — 2g com refeição principal (anti-inflamatório, reduz gordura visceral)<br>
-        • Colágeno Hidrolisado — 10g manhã em jejum (preserva músculo durante perda de peso)<br>
-        • Meta proteína: ≥100g/dia em 4-5 refeições<br>
-        • 1500-1600 kcal/dia com déficit moderado<br><br>
+        <b>O que já faz bem ✅:</b> treino de segunda a sexta às 08h (agora com conjugados e 4 séries), pré-treino igual ao Rafael (mix 150g + creatina + própolis), magnésio às 22h, D3+K2, ômega 3<br><br>
+        <b>O que manter/adicionar ➕:</b><br>
+        • Ômega 3 Dark Lab — 2 cápsulas/dia com almoço ou jantar (apoio anti-inflamatório; não substitui déficit + treino)<br>
+        • Colágeno hidrolisado — 10g/dia (apoio a pele, tendões e articulações; conta pouco como proteína)<br>
+        • Proteína 115-150g/dia em 4-5 refeições<br>
+        • 1700-1850 kcal/dia com déficit moderado<br>
+        • Sono de 7h ou mais<br>
+        • Pesar 1x/semana + medir a cintura (tracker acima)<br>
+        • Check-up com o médico (glicemia, colesterol e triglicerídeos, vitamina D, TSH, ferritina) — as balanças de bioimpedância não são dispositivos médicos<br><br>
         <b>O que reduzir ❌:</b> açúcar simples, frituras, ultraprocessados, álcool<br><br>
-        <b>Projeção (com consistência):</b><br>
-        • Em 2 meses (27/09): -4 a 5kg → ~68-69kg, gordura visceral 12→10<br>
-        • Em 4 meses (27/11): ~66-67kg, gordura visceral →8-9, pontuação ~74-76<br>
-        • Em 6 meses (27/01): ~62-63kg, gordura visceral →6-7, pontuação <b>~80+</b>
+        <b>Projeção até o fim do plano (05/02/2027, ~13 semanas) — estimativas, não promessas:</b><br>
+        • <b>Se mantiver o ritmo real</b> (−0.2kg de gordura/semana): peso ~70-71kg, massa gorda ~20.4kg, relação de gordura ~29%<br>
+        • <b>Com déficit constante de ~450 kcal/dia</b> (−0.4kg de gordura/semana) e proteína ≥115g: peso ~68kg, massa gorda ~18kg (dentro da faixa 12.3~19.6), relação de gordura ~26.5% (dentro da faixa 18.0~28.0)<br>
+        • Peso padrão do laudo (64.3kg): ~mar-abr/2027 no segundo cenário; só o próximo laudo confirma
       </div>
     </div>
 
     <div style="font-size:11px;color:var(--muted);text-align:center;padding:8px 0 16px;line-height:1.6">
-      Baseado na avaliação Unique Health de 27/07/2026 · Treino matinal às 08h.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
+      Baseado na avaliação Unique Health de 05/11/2026 (comparada com a de 27/07/2026) · Treino matinal às 08h, de segunda a sexta.<br>Quando realizar nova avaliação, envie os dados para atualizar as sugestões.
     </div>
   </div>
 </div>
@@ -602,25 +672,144 @@ body{display:flex;flex-direction:column;height:100%;max-height:100vh}
 /* ════════════════════════════════════════════
    DADOS DOS TREINOS
 ════════════════════════════════════════════ */
-const AVALIACAO_INICIAL={
+/* ── Laudos Unique Health (valores impressos no relatório de medição) ── */
+const AVALIACAO_ANTERIOR={
   data:'2026-07-27', dataStr:'27/07/2026', local:'Unique Health',
   peso:73.5, altura:171, imc:25.1, pontuacao:69,
   aguaCorporal:34.7, massaGorda:26.2, massaProteica:9.3, minerais:3.3,
   massaMuscEsq:25.8, gorduraVisceral:12, gorduraSubcut:22.8,
   massaLivreGordura:47.3, bmr:1391, kcalRecomendada:1808,
-  relacaoGordura:35.6, tipoCorporal:'Muscular acima do peso',
-  obs:'Tipo muscular acima do peso. Foco: reduzir gordura visceral (12→<10) e gordura total (35.6%→~25%). Manter massa muscular (25.8kg). Meta: −12kg em 6 meses.'
+  relacaoGordura:35.6, adiposidade:119, idadeCorporal:45, pesoPadrao:61.5,
+  tipoCorporal:'Muscular acima do peso',
+  seg:{
+    gordura:{bracoE:[1.4,140],bracoD:[1.5,150],tronco:[13.5,236.8],pernaE:[3.4,130.7],pernaD:[3.7,142.3]},
+    musculo:{bracoE:2.3,bracoD:2.3,tronco:21.1,pernaE:7.5,pernaD:7.1}
+  }
 };
-const META_PESO=61.5, META_CINTURA=80;
-const PRAZO = new Date('2026-10-27T23:59:59');
+const AVALIACAO_ATUAL={
+  data:'2026-11-05', dataStr:'05/11/2026', local:'Unique Health',
+  peso:72.6, altura:171, imc:24.8, pontuacao:74,
+  aguaCorporal:36.2, massaGorda:23.1, massaProteica:9.8, minerais:3.5,
+  massaMuscEsq:27.3, gorduraVisceral:11, gorduraSubcut:20,
+  massaLivreGordura:49.5, bmr:1439, kcalRecomendada:1870,
+  relacaoGordura:31.8, adiposidade:118, idadeCorporal:44, pesoPadrao:64.3,
+  tipoCorporal:'Muscular acima do peso',
+  seg:{
+    gordura:{bracoE:[1.3,130],bracoD:[1.3,130],tronco:[11.9,208.7],pernaE:[3.0,115.3],pernaD:[3.2,123]},
+    musculo:{bracoE:2.5,bracoD:2.4,tronco:22,pernaE:8.0,pernaD:7.4}
+  }
+};
+/* faixas normais impressas no laudo (peso, IMC, massa gorda, relação de gordura, músculo esquelético, adiposidade) */
+const FAIXAS_LAUDO={
+  peso:[52.2,70.6], imc:[18.5,23.0], massaGorda:[12.3,19.6],
+  relacaoGordura:[18.0,28.0], massaMuscEsq:[23.3,28.5], adiposidade:[90,110]
+};
+const FAIXA_VISCERAL_GERAL=[1,9]; // referência geral de balanças de bioimpedância — NÃO consta no laudo
+const META_PESO=64.3, META_CINTURA=80; // peso padrão do laudo de 05/11/2026 · cintura: referência geral p/ mulheres
+
+/* Plano de treino atual (05/11/2026). Cada treino salvo carrega planoId. */
+const PLANO_ATUAL_ID='2026-11-05';
+const PLANO_ANTERIOR_ID='2026-07-27';
+const PLANO_MAIO_ID='2026-05';
+const PRAZO = new Date('2027-02-05T23:59:59');
 const META_SESSOES = 21;
-const INICIO_PLANO = new Date('2026-07-27T00:00:00');
+const INICIO_PLANO = new Date('2026-11-05T00:00:00');
+const INICIO_PLANO_ANTERIOR = new Date('2026-07-27T00:00:00');
+const APP_VERSAO = 'v5.0 · plano 05/11/2026';
 
 // tipo: 'esteira_inicio'|'esteira_fim'|'normal'|'conjugado'
-// conjugado = dois exercícios no mesmo slot
+// conjugado = dois exercícios no mesmo slot (curto/curto2 = rótulo curto de cada um)
 const TREINOS = {
   A:{
     nome:'Treino A', info:'Pernas · Tríceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Agachamento Máquina Pêndulo', series:4, reps:10},
+      {tipo:'conjugado', nome:'Agachamento Hack', nome2:'Agachamento com Salto', curto:'Hack', curto2:'Salto',
+       series:4, reps:10, reps2:12,
+       link:'https://youtu.be/sNYyzEiOZdI'},
+      {tipo:'normal', nome:'Leg Press 45', series:4, reps:10,
+       obs:'Aumentando a carga',
+       link:'https://youtu.be/-BDtKDpL-Cg'},
+      {tipo:'normal', nome:'Abdução com Bola', series:4, reps:20,
+       link:'https://youtu.be/_AmM4s0Kj2w'},
+      {tipo:'normal', nome:'Cadeira Extensora', series:4, reps:10,
+       obs:'10 (2T) + 10" + 6',
+       link:'https://youtu.be/KpXT1dzKUUQ'},
+      {tipo:'normal', nome:'Tríceps Mergulho Máquina', series:4, reps:10,
+       obs:'Pegada neutra'},
+      {tipo:'normal', nome:'Tríceps Barra Cross', series:4, reps:10,
+       obs:'Aumentando a carga'},
+      {tipo:'normal', nome:'Abdominal Máquina', series:4, reps:20,
+       link:'https://youtu.be/qpNAYQ8044M'},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  B:{
+    nome:'Treino B', info:'Costas · Peito · Ombros · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Puxada Aberta', series:4, reps:10,
+       link:'https://youtu.be/WEEnNiJwV-8'},
+      {tipo:'normal', nome:'Remada Baixa Triângulo', series:4, reps:10},
+      {tipo:'normal', nome:'Crucifixo Invertido Máquina', series:4, reps:10,
+       link:'https://youtu.be/6vJHWnfmmi0'},
+      {tipo:'normal', nome:'Remada Curvada Máquina', series:4, reps:10,
+       link:'https://youtu.be/5w-VrSUAV84'},
+      {tipo:'normal', nome:'Supino Inclinado Máquina', series:4, reps:10},
+      {tipo:'normal', nome:'Crucifixo Inclinado Halter', series:4, reps:10,
+       link:'https://youtu.be/ZMFCua60Gus'},
+      {tipo:'normal', nome:'Desenvolvimento Arnold', series:4, reps:10,
+       link:'https://youtu.be/_VmbOirKF-A'},
+      {tipo:'normal', nome:'Elevação Lateral Sentado', series:3, reps:6,
+       obs:'Aumentando a carga',
+       link:'https://youtu.be/Y-oDA1AfYTU'},
+      {tipo:'normal', nome:'Abdominal Bicicleta', series:4, reps:20},
+      {tipo:'esteira_fim'},
+    ]
+  },
+  C:{
+    nome:'Treino C', info:'Pernas · Glúteos · Bíceps · Abdômen',
+    exercicios:[
+      {tipo:'esteira_inicio'},
+      {tipo:'normal', nome:'Agachamento Máquina Pêndulo', series:4, reps:10,
+       obs:'Pés altos'},
+      {tipo:'normal', nome:'Hack Invertido Articulado', series:4, reps:10,
+       obs:'Bom dia e variação do búlgaro',
+       link:'https://youtu.be/KY8edn9d1QM'},
+      {tipo:'conjugado', nome:'Glúteo 4 Apoios com Caneleiras', nome2:'Extensão de Quadril 4 Apoios', curto:'Glúteo', curto2:'Ext. quadril',
+       series:4, reps:10, reps2:10},
+      {tipo:'normal', nome:'Abdução no Solo com Caneleira', series:4, reps:10,
+       link:'https://youtu.be/PGB_zcVYsAQ'},
+      {tipo:'normal', nome:'Flexora Unilateral em Pé', series:4, reps:10,
+       link:'https://youtu.be/EU4whQqeSZ8'},
+      {tipo:'normal', nome:'Panturrilha Unilateral', series:4, reps:15,
+       link:'https://youtu.be/ZRv5U7qOJzQ'},
+      {tipo:'normal', nome:'Rosca Neutra Barra H', series:4, reps:10,
+       link:'https://youtu.be/gFLxX1YQAWg'},
+      {tipo:'normal', nome:'Rosca Direta Cross', series:4, reps:10,
+       obs:'Aumentando a carga',
+       link:'https://youtu.be/PmEeeLV4Dxs'},
+      {tipo:'normal', nome:'Sky Prancha Ventral', series:3, reps:40, isTime:true,
+       link:'https://youtu.be/ypA5NH4hqTU'},
+      {tipo:'esteira_fim'},
+    ]
+  }
+};
+
+const ORDEM = ['A','B','C'];
+const REST_SERIE = 50, REST_EX = 60;
+
+/* ════ STATE ════ */
+let E = null;
+let serieTickInterval=null, esteiraTickInterval=null, restTickInterval=null;
+let _restCb=null;
+let _histTab='atual';
+
+/* ════ PLANO DE 27/07 A 04/11/2026 (referência para histórico) ════ */
+const TREINOS_ANTIGOS_V3 = {
+  A:{
+    nome:'Treino A (27/07 a 04/11)', info:'Pernas · Tríceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Agachamento Smith', series:3, reps:15,
@@ -642,7 +831,7 @@ const TREINOS = {
     ]
   },
   B:{
-    nome:'Treino B', info:'Peito · Costas · Ombros · Abdômen',
+    nome:'Treino B (27/07 a 04/11)', info:'Peito · Costas · Ombros · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Supino Máquina', series:3, reps:12,
@@ -666,7 +855,7 @@ const TREINOS = {
     ]
   },
   C:{
-    nome:'Treino C', info:'Pernas · Glúteos · Bíceps · Abdômen',
+    nome:'Treino C (27/07 a 04/11)', info:'Pernas · Glúteos · Bíceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal', nome:'Agachamento Sumô Máquina', series:3, reps:15,
@@ -690,19 +879,10 @@ const TREINOS = {
   }
 };
 
-const ORDEM = ['A','B','C'];
-const REST_SERIE = 50, REST_EX = 60;
-
-/* ════ STATE ════ */
-let E = null;
-let serieTickInterval=null, esteiraTickInterval=null, restTickInterval=null;
-let _restCb=null;
-let _histTab='atual';
-
-/* ════ TREINOS ANTIGOS (referência para histórico) ════ */
+/* ════ TREINOS ANTIGOS — plano de maio/2026 e anteriores (referência para histórico) ════ */
 const TREINOS_ANTIGOS = {
   A:{
-    nome:'Treino A (anterior)', info:'Pernas · Peito · Ombros · Tríceps · Abdômen',
+    nome:'Treino A (maio)', info:'Pernas · Peito · Ombros · Tríceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'conjugado',nome:'Agachamento',nome2:'Cadeira Extensora',series:3,reps:15,reps2:12},
@@ -720,7 +900,7 @@ const TREINOS_ANTIGOS = {
     ]
   },
   B:{
-    nome:'Treino B (anterior)', info:'Pernas · Glúteos · Costas · Bíceps · Abdômen',
+    nome:'Treino B (maio)', info:'Pernas · Glúteos · Costas · Bíceps · Abdômen',
     exercicios:[
       {tipo:'esteira_inicio'},
       {tipo:'normal',nome:'Leg 180° Convergente',series:3,reps:15},
@@ -751,20 +931,26 @@ function setToken(t){try{localStorage.setItem('gym_ma_gh_token',t)}catch(e){}}
 function save(){try{localStorage.setItem('gym_v6',JSON.stringify(E))}catch(e){}}
 function load(){
   try{const d=JSON.parse(localStorage.getItem('gym_v6')||'null');
-    if(!d||d.data!==today())return null; return d}catch(e){return null}
+    if(!d||d.data!==today()||d.planoId!==PLANO_ATUAL_ID)return null; return d}catch(e){return null}
 }
 
 /* LOCAL — sempre rápido, usado em runtime */
 function saveHistLocal(entry){
   try{
     const h=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
-    h.unshift(entry); if(h.length>120)h.splice(120);
+    h.unshift(entry); if(h.length>400)h.splice(400);
     localStorage.setItem('gym_hist_v6',JSON.stringify(h));
   }catch(e){}
 }
 function loadHist(){try{return JSON.parse(localStorage.getItem('gym_hist_v6')||'[]')}catch(e){return[]}}
 
 /* GITHUB — backup assíncrono */
+function ghDecode(b64){
+  const bin=atob(b64.replace(/\n/g,''));
+  let txt;
+  try{txt=decodeURIComponent(escape(bin))}catch(e){txt=bin}
+  return repararDeep(JSON.parse(txt));
+}
 async function ghGet(){
   const token=getToken(); if(!token)return null;
   try{
@@ -775,7 +961,7 @@ async function ghGet(){
     if(r.status===404)return {content:[],sha:null};
     if(!r.ok)return null;
     const d=await r.json();
-    const content=JSON.parse(atob(d.content.replace(/\n/g,'')));
+    const content=ghDecode(d.content);
     return {content, sha:d.sha};
   }catch(e){return null}
 }
@@ -836,12 +1022,13 @@ function montarPayloadCompleto(treinos){
     diasCompletos: loadDiasCompletos(),
     estoque: loadEstoque(),
     resumosSemanais: loadResumosSemana(),
+    cargas: loadCargas(),
   };
 }
 
 function normalizarRemoto(remotoContent){
   if(Array.isArray(remotoContent)){
-    return {treinos:remotoContent,peso:[],hidratacao:null,suplementos:null,avaliacoes:null,diasCompletos:null,estoque:null,resumosSemanais:[]};
+    return {treinos:remotoContent,peso:[],hidratacao:null,suplementos:null,avaliacoes:null,diasCompletos:null,estoque:null,resumosSemanais:[],cargas:{}};
   }
   return {
     treinos: remotoContent.treinos||[],
@@ -852,111 +1039,115 @@ function normalizarRemoto(remotoContent){
     diasCompletos: remotoContent.diasCompletos||null,
     estoque: remotoContent.estoque||null,
     resumosSemanais: remotoContent.resumosSemanais||[],
+    cargas: remotoContent.cargas||{},
   };
 }
 
 function sincronizarGitHub(){
   // debounce — espera 3s antes de sincronizar (evita múltiplas chamadas seguidas)
   clearTimeout(_syncTimeout);
-  _syncTimeout=setTimeout(async()=>{
-    const token=getToken(); if(!token)return;
-    const localTreinos=loadHist();
-    const remoto=await ghGet();
-    if(!remoto)return;
-    const r=normalizarRemoto(remoto.content);
-
-    // merge treinos: une local + remoto, remove duplicatas por inicio+tipo
-    const todos=[...localTreinos,...r.treinos];
-    const vistos=new Set();
-    const mergedTreinos=todos.filter(h=>{
-      const k=(h.inicio||0)+'_'+h.tipo;
-      if(vistos.has(k))return false;
-      vistos.add(k);return true;
-    });
-    mergedTreinos.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
-    if(mergedTreinos.length>120)mergedTreinos.splice(120);
-    try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
-
-    // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
-    const localPeso=loadPesoLog();
-    const pesoPorData={};
-    r.peso.forEach(p=>pesoPorData[p.data]=p);
-    localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
-    const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
-    savePesoLog(mergedPeso);
-
-    // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
-    const localHidrat=loadHidratHoje();
-    const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
-    saveHidratHoje(mergedHidrat);
-
-    const localSuple=loadSupleHoje();
-    const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
-    saveSupleHoje(mergedSuple);
-
-    // avaliações: une por data, local tem prioridade
-    const localAvals=loadAvaliacoes();
-    const avalsPorData={};
-    (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
-    localAvals.forEach(a=>avalsPorData[a.data]=a);
-    const mergedAvals=Object.values(avalsPorData).sort((a,b)=>new Date(a.data)-new Date(b.data));
-    try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
-
-    // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
-    const localDC=loadDiasCompletos();
-    const remotoDC=r.diasCompletos||{};
-    const mergedDC={};
-    ['hidrat','suple'].forEach(tipo=>{
-      const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
-      mergedDC[tipo]=Array.from(setDias).sort();
-    });
-    saveDiasCompletos(mergedDC);
-
-    // estoque: local tem prioridade
-    const localEstoque=loadEstoque();
-    const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_ma_estoque'))?r.estoque:localEstoque;
-    saveEstoque(mergedEstoque);
-
-    // resumos semanais: une por semId (identificador único da semana)
-    const localResumosMap={};
-    loadResumosSemana().forEach(x=>localResumosMap[x.semId]=x);
-    (r.resumosSemanais||[]).forEach(x=>{if(!localResumosMap[x.semId])localResumosMap[x.semId]=x;});
-    const mergedResumos=Object.values(localResumosMap).sort((a,b)=>b.ts-a.ts).slice(0,52);
-    saveResumosSemana(mergedResumos);
-
-    // salva tudo no GitHub
-    const payload=montarPayloadCompleto(mergedTreinos);
-    const ok=await ghPut(payload, remoto.sha);
-    if(ok){
-      setUltimaSinc(Date.now());
-      atualizarStatusBackup();
-    }
-  },3000);
+  _syncTimeout=setTimeout(()=>{_sincronizarAgora()},3000);
 }
 
-/* Restaura histórico do GitHub para o localStorage (usado na tela de config) */
+function mesclarCargas(a,b){
+  // memória de últimas cargas: mantém o registro mais recente de cada exercício
+  const out={};
+  [a||{},b||{}].forEach(src=>Object.keys(src).forEach(k=>{
+    if(!out[k]||(src[k].ts||0)>(out[k].ts||0))out[k]=src[k];
+  }));
+  return out;
+}
+
+/* Mescla local + remoto (nunca substitui) e devolve o resultado ao GitHub.
+   Usada pela sincronização automática e pelo botão "Restaurar histórico". */
+async function _sincronizarAgora(){
+  const token=getToken(); if(!token)return null;
+  const localTreinos=loadHist();
+  const remoto=await ghGet();
+  if(!remoto)return null;
+  const r=normalizarRemoto(remoto.content);
+
+  // merge treinos: une local + remoto, remove duplicatas por inicio+tipo
+  const todos=[...localTreinos,...r.treinos];
+  const vistos=new Set();
+  const mergedTreinos=todos.filter(h=>{
+    const k=(h.inicio||0)+'_'+h.tipo;
+    if(vistos.has(k))return false;
+    vistos.add(k);return true;
+  });
+  mergedTreinos.sort((a,b)=>(b.inicio||0)-(a.inicio||0));
+  if(mergedTreinos.length>400)mergedTreinos.splice(400);
+  try{localStorage.setItem('gym_hist_v6',JSON.stringify(mergedTreinos))}catch(e){}
+
+  // merge peso: une por data (local tem prioridade se houver conflito no mesmo dia)
+  const localPeso=loadPesoLog();
+  const pesoPorData={};
+  r.peso.forEach(p=>pesoPorData[p.data]=p);
+  localPeso.forEach(p=>pesoPorData[p.data]=p); // local sobrescreve
+  const mergedPeso=Object.values(pesoPorData).sort((a,b)=>a.ts-b.ts);
+  savePesoLog(mergedPeso);
+
+  // hidratação e suplementos: só do dia atual — local sempre ganha se for hoje, senão usa remoto se mais recente
+  const localHidrat=loadHidratHoje();
+  const mergedHidrat=(r.hidratacao&&r.hidratacao.data===today()&&!localHidrat.feitos.length)?r.hidratacao:localHidrat;
+  saveHidratHoje(mergedHidrat);
+
+  const localSuple=loadSupleHoje();
+  const mergedSuple=(r.suplementos&&r.suplementos.data===today()&&!localSuple.feitos.length)?r.suplementos:localSuple;
+  saveSupleHoje(mergedSuple);
+
+  // avaliações: une por data, local tem prioridade; descarta as que não são dela
+  const localAvals=loadAvaliacoes();
+  const avalsPorData={};
+  (r.avaliacoes||[]).forEach(a=>avalsPorData[a.data]=a);
+  localAvals.forEach(a=>avalsPorData[a.data]=a);
+  const mergedAvals=limparAvaliacoes(Object.values(avalsPorData)).sort((a,b)=>new Date(a.data)-new Date(b.data));
+  try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(mergedAvals))}catch(e){}
+
+  // dias completos (streaks): une os arrays de cada tipo (hidrat/suple)
+  const localDC=loadDiasCompletos();
+  const remotoDC=r.diasCompletos||{};
+  const mergedDC={};
+  ['hidrat','suple'].forEach(tipo=>{
+    const setDias=new Set([...(localDC[tipo]||[]),...(remotoDC[tipo]||[])]);
+    mergedDC[tipo]=Array.from(setDias).sort();
+  });
+  saveDiasCompletos(mergedDC);
+
+  // estoque: local tem prioridade; itens novos (ex: ômega 3) são acrescentados sem apagar nada
+  const localEstoque=loadEstoque();
+  const mergedEstoque=(r.estoque&&r.estoque.length&&!localStorage.getItem('gym_ma_estoque'))?r.estoque:localEstoque;
+  saveEstoque(garantirItensEstoque(mergedEstoque));
+
+  // últimas cargas por exercício: mantém a mais recente de cada um
+  saveCargas(mesclarCargas(loadCargas(),r.cargas));
+
+  // resumos semanais: une por semId (identificador único da semana)
+  const localResumosMap={};
+  loadResumosSemana().forEach(x=>localResumosMap[x.semId]=x);
+  (r.resumosSemanais||[]).forEach(x=>{if(!localResumosMap[x.semId])localResumosMap[x.semId]=x;});
+  const mergedResumos=Object.values(localResumosMap).sort((a,b)=>b.ts-a.ts).slice(0,52);
+  saveResumosSemana(mergedResumos);
+
+  // reclassifica atual/anterior pela data e recompõe contadores (sem disparar nova sync)
+  reconciliarPlano(true);
+
+  // salva tudo no GitHub
+  const payload=montarPayloadCompleto(loadHist());
+  const ok=await ghPut(payload, remoto.sha);
+  if(ok){
+    setUltimaSinc(Date.now());
+    atualizarStatusBackup();
+  }
+  return {treinos:payload.treinos.length, ok};
+}
+
+/* Restaurar histórico do GitHub — faz MERGE (nunca substitui o que já está no aparelho) */
 async function restaurarDoGitHub(){
   mostrarToast('Buscando histórico no GitHub...');
-  const remoto=await ghGet();
-  if(!remoto){mostrarToast('❌ Token inválido ou erro de conexão');return}
-  const r=normalizarRemoto(remoto.content);
-  if(!r.treinos.length&&!r.peso.length){mostrarToast('Nenhum dado encontrado no GitHub');return}
-
-  try{localStorage.setItem('gym_hist_v6',JSON.stringify(r.treinos))}catch(e){}
-  // recalcula sessões
-  const sess={A:0,B:0,C:0};
-  r.treinos.filter(h=>h.plano==='novo').forEach(h=>{if(sess[h.tipo]!==undefined)sess[h.tipo]++});
-  try{localStorage.setItem('gym_sess_v6',JSON.stringify(sess))}catch(e){}
-
-  if(r.peso.length)savePesoLog(r.peso);
-  if(r.hidratacao)saveHidratHoje(r.hidratacao);
-  if(r.suplementos)saveSupleHoje(r.suplementos);
-  if(r.avaliacoes&&r.avaliacoes.length){try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(r.avaliacoes))}catch(e){}}
-  if(r.diasCompletos)saveDiasCompletos(r.diasCompletos);
-  if(r.estoque&&r.estoque.length)saveEstoque(r.estoque);
-  if(r.resumosSemanais&&r.resumosSemanais.length)saveResumosSemana(r.resumosSemanais);
-
-  mostrarToast('✓ '+r.treinos.length+' treinos e dados de saúde restaurados!');
+  const res=await _sincronizarAgora();
+  if(!res){mostrarToast('❌ Token inválido ou erro de conexão');return}
+  mostrarToast('✓ '+res.treinos+' treinos e dados de saúde restaurados!');
   setTimeout(()=>{renderHome();renderHist(_histTab);if(document.getElementById('page-saude').classList.contains('active'))showNav('saude')},1500);
 }
 
@@ -1031,30 +1222,43 @@ function migrarHistoricoAntigo(){
   if(importados>0) console.log('Migrados '+importados+' treinos do histórico anterior.');
 }
 
-/* Migração de plano — quando os exercícios do treino mudam (nova avaliação física),
-   arquiva o plano anterior como "antigo" e zera o contador de sessões do novo ciclo */
-const PLANO_VERSAO = '2026-08-12'; // muda toda vez que TREINOS é substituído por um novo plano
-function migrarPlanoV2(){
-  let versaoSalva=null;
-  try{versaoSalva=localStorage.getItem('gym_plano_versao')}catch(e){}
-  if(versaoSalva===PLANO_VERSAO)return; // já está na versão atual, nada a fazer
+/* ─── PLANOS DE TREINO ───
+   Cada treino salvo carrega um planoId explícito (atual: PLANO_ATUAL_ID). A classificação
+   "atual" × "anterior" compara esse identificador — não depende de comparar nomes de exercício.
+   Registros salvos antes do planoId existir são carimbados na primeira abertura:
+   plano:'novo' (app anterior) = plano de 27/07/2026; o restante = plano de maio e anteriores. */
+function planoDoRegistro(h){
+  if(h&&h.planoId)return h.planoId;
+  if(h&&h.plano==='novo')return PLANO_ANTERIOR_ID;
+  if(h&&h.inicio&&h.inicio>=INICIO_PLANO_ANTERIOR.getTime())return PLANO_ANTERIOR_ID;
+  return PLANO_MAIO_ID;
+}
+function ehPlanoAtual(h){return planoDoRegistro(h)===PLANO_ATUAL_ID}
 
+/* Carimba planoId em cada treino (atual → plano:'novo'; demais → plano:'antigo') e recalcula os
+   contadores de sessões A/B/C a partir do histórico: as sessões do plano atual começam em 0 e o
+   contador sempre bate com o que está salvo. Idempotente — roda em toda abertura e após cada sincronização. */
+function reconciliarPlano(semSync){
   try{
     const hist=JSON.parse(localStorage.getItem('gym_hist_v6')||'[]');
+    const cont={A:0,B:0,C:0};
     let mudou=false;
     hist.forEach(h=>{
-      if(h.plano==='novo'){h.plano='antigo';mudou=true}
+      const pid=planoDoRegistro(h);
+      if(h.planoId!==pid){h.planoId=pid;mudou=true}
+      const alvo=pid===PLANO_ATUAL_ID?'novo':'antigo';
+      if(h.plano!==alvo){h.plano=alvo;mudou=true}
+      if(pid===PLANO_ATUAL_ID&&cont[h.tipo]!==undefined)cont[h.tipo]++;
     });
     if(mudou)localStorage.setItem('gym_hist_v6',JSON.stringify(hist));
+    const sess=loadSessoes();
+    let mudouSess=false;
+    ORDEM.forEach(t=>{if((sess[t]||0)!==cont[t]){sess[t]=cont[t];mudouSess=true}});
+    if(mudouSess)localStorage.setItem('gym_sess_v6',JSON.stringify(sess));
+    if((mudou||mudouSess)&&!semSync&&getToken())sincronizarGitHub();
   }catch(e){}
-
-  // zera sessões — novo ciclo de treino começa do zero
-  try{localStorage.setItem('gym_sess_v6',JSON.stringify({A:0,B:0,C:0}))}catch(e){}
-
-  try{localStorage.setItem('gym_plano_versao',PLANO_VERSAO)}catch(e){}
-  if(getToken())sincronizarGitHub();
 }
-// sessões concluídas por tipo (apenas treinos novos A-D)
+// sessões concluídas por tipo (plano atual)
 function loadSessoes(){try{return JSON.parse(localStorage.getItem('gym_sess_v6')||'{"A":0,"B":0,"C":0}')}catch(e){return{A:0,B:0,C:0}}}
 function addSessao(tipo){
   const s=loadSessoes(); s[tipo]=(s[tipo]||0)+1;
@@ -1062,6 +1266,86 @@ function addSessao(tipo){
 }
 function today(){return new Date().toDateString()}
 function todayStr(){return new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})}
+
+/* ════ TEXTO — reparo de acentos corrompidos (UTF-8 lido como Latin-1) ════ */
+function repararTexto(t){
+  let cur=t;
+  for(let i=0;i<4;i++){
+    if(!/[\u00C2-\u00F4][\u0080-\u00BF]/.test(cur))break;
+    let dec;
+    try{dec=decodeURIComponent(escape(cur))}catch(e){break}
+    if(dec===cur)break;
+    cur=dec;
+  }
+  return cur;
+}
+function repararDeep(x){
+  if(typeof x==='string')return repararTexto(x);
+  if(Array.isArray(x))return x.map(repararDeep);
+  if(x&&typeof x==='object'){const o={};Object.keys(x).forEach(k=>{o[k]=repararDeep(x[k])});return o}
+  return x;
+}
+const CHAVES_REPARO=['gym_hist_v6','gym_ma_estoque','gym_resumos_semanais','gym_ma_avaliacoes','gym_ma_peso_log','gym_ma_hidrat','gym_ma_suple','gym_ma_dias_completos'];
+function repararDadosSalvos(){
+  CHAVES_REPARO.forEach(k=>{
+    try{
+      const raw=localStorage.getItem(k);
+      if(!raw||!/[\u00C2-\u00F4][\u0080-\u00BF]/.test(raw))return;
+      const novo=JSON.stringify(repararDeep(JSON.parse(raw)));
+      if(novo!==raw)localStorage.setItem(k,novo);
+    }catch(e){}
+  });
+}
+function normNome(t){
+  return repararTexto(String(t||'')).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+}
+const ehForca=e=>!!e&&(e.tipo==='normal'||e.tipo==='conjugado'||e.tipo==='progressivo');
+const ehProg=s=>!!s&&(s.prog1!==undefined||s.prog2!==undefined||s.prog3!==undefined);
+function volSerie(s){
+  if(!s)return 0;
+  if(ehProg(s))return (s.reps||0)*((s.prog1||0)+(s.prog2||0)+(s.prog3||0));
+  return (s.peso||0)*(s.reps||0)+(s.peso2||0)*(s.reps2||0);
+}
+function maxCarga(s){
+  if(!s)return 0;
+  return Math.max(s.peso||0,s.prog1||0,s.prog2||0,s.prog3||0);
+}
+function pillSerieTxt(s,j){
+  if(ehProg(s))return 'S'+(j+1)+': '+(s.prog1||0)+'/'+(s.prog2||0)+'/'+(s.prog3||0)+'kg×'+(s.reps||0);
+  if(s.isTime)return 'S'+(j+1)+': '+(s.tempo||0)+'s'+(s.reps?' (meta '+s.reps+'s)':'')+((s.peso||0)>0?' +'+s.peso+'kg':'');
+  return 'S'+(j+1)+': '+(s.peso||0)+'kg×'+(s.reps||0);
+}
+function pillTempo(s){return s.isTime?'':` <span style="color:var(--muted)">${s.tempo}s</span>`}
+// texto de repetições do exercício (conjugado com reps diferentes: "10 + 12 reps"; por tempo: "40s")
+function repsTxt(ex){
+  if(ex.tipo==='conjugado'){
+    const r2=ex.reps2||ex.reps;
+    return ex.reps===r2?ex.reps+' reps cada':ex.reps+' + '+r2+' reps';
+  }
+  return ex.isTime?ex.reps+'s':ex.reps+' reps';
+}
+// rótulo curto de cada exercício do conjugado
+function curtoNome(ex,n){
+  if(n===2)return ex.curto2||String(ex.nome2||'').split(' ')[0];
+  return ex.curto||String(ex.nome||'').split(' ')[0];
+}
+
+/* Modal de confirmação próprio — confirm() é bloqueado em PWA no Android */
+function confirmarModal(titulo,msg,okLabel,cb){
+  const old=document.getElementById('modal-confirm');if(old)old.remove();
+  const div=document.createElement('div');
+  div.id='modal-confirm';
+  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:80;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
+  div.innerHTML=`<div style="background:var(--surface);border-radius:24px;padding:20px">
+    <div style="font-size:15px;font-weight:600;margin-bottom:8px">${titulo}</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px">${msg}</div>
+    <button id="mc-ok" style="width:100%;min-height:52px;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">${okLabel}</button>
+    <button id="mc-cancel" style="width:100%;min-height:48px;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Cancelar</button>
+  </div>`;
+  document.body.appendChild(div);
+  document.getElementById('mc-ok').onclick=()=>{div.remove();if(cb)cb()};
+  document.getElementById('mc-cancel').onclick=()=>div.remove();
+}
 
 /* ════ UTILS ════ */
 function pad(n){return String(Math.max(0,n)).padStart(2,'0')}
@@ -1079,8 +1363,8 @@ function diasAtePrazo(){
 // sugestão: próximo treino na rotação A→B→C→D→A...
 function sugerirTreino(){
   const hist=loadHist();
-  // busca último treino concluído nos treinos novos (que tem 'plano':'novo')
-  const ultimo=hist.find(h=>h.plano==='novo');
+  // último treino concluído do plano atual
+  const ultimo=hist.find(ehPlanoAtual);
   if(!ultimo) return 'A';
   const idx=ORDEM.indexOf(ultimo.tipo);
   return ORDEM[(idx+1)%ORDEM.length];
@@ -1141,7 +1425,7 @@ function renderPesoTracker(){
   }
   // gráfico SVG simples de linha
   const pesos=log.map(p=>p.peso);
-  const min=Math.min(...pesos,82)-1, max=Math.max(...pesos,93)+1;
+  const min=Math.min(...pesos,META_PESO)-1, max=Math.max(...pesos,AVALIACAO_ATUAL.peso)+1;
   const w=280,h=90,pad=10;
   const pts=log.map((p,i)=>{
     const x=log.length>1?pad+(i/(log.length-1))*(w-pad*2):w/2;
@@ -1150,13 +1434,13 @@ function renderPesoTracker(){
   });
   const pathD=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
   const dots=pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--accent2)"/>`).join('');
-  const metaY=pad+(1-(82-min)/(max-min))*(h-pad*2);
+  const metaY=pad+(1-(META_PESO-min)/(max-min))*(h-pad*2);
   chartWrap.innerHTML=`<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:90px">
     <line x1="0" y1="${metaY}" x2="${w}" y2="${metaY}" stroke="var(--green)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
     <path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2"/>
     ${dots}
   </svg>
-  <div style="font-size:9px;color:var(--muted);text-align:right;font-family:var(--mono)">--- meta 82kg</div>`;
+  <div style="font-size:9px;color:var(--muted);text-align:right;font-family:var(--mono)">--- meta ${META_PESO}kg</div>`;
   // lista das últimas 5 entradas
   const recentes=log.slice(-5).reverse();
   lista.innerHTML=recentes.map(p=>`
@@ -1214,7 +1498,7 @@ function renderHidratChecklist(){
 /* ════ 4. SUPLEMENTOS DO DIA ════ */
 const SUPLE_ETAPAS=[
   {id:'vitamd',   label:'Vitamina D3+K2 — 1 cápsula (manhã c/ refeição)', icon:'☀️'},
-  {id:'omega3',   label:'Ômega 3 — 2g (c/ refeição principal)',            icon:'🐟'},
+  {id:'omega3',   label:'Ômega 3 Dark Lab — 2 cápsulas (almoço ou jantar, c/ comida)', icon:'🐟'},
   {id:'colageno', label:'Colágeno Hidrolisado — 10g (manhã em jejum)',     icon:'💪'},
   {id:'pretreino',label:'Mix pré-treino + creatina 5g + própolis 70 — junto com Rafael (07h30)', icon:'⚡'},
   {id:'magnesio', label:'Magnésio — junto com Rafael (22h)',                icon:'🌙'},
@@ -1287,73 +1571,167 @@ function calcularStreak(tipo){
 }
 
 /* ════ 3. HISTÓRICO DE AVALIAÇÕES FÍSICAS ════ */
+const AVALS_DO_RAFAEL=['2026-05-11','2026-08-12']; // vieram por engano do arquivo-base
+function limparAvaliacoes(lista){
+  return (lista||[]).filter(a=>!(a&&AVALS_DO_RAFAEL.includes(a.data)&&a.peso>=90));
+}
+function avalDoLaudo(a){
+  // converte a constante do laudo para o formato salvo em gym_ma_avaliacoes
+  return {
+    data:a.data,dataStr:a.dataStr,pontuacao:a.pontuacao,peso:a.peso,imc:a.imc,
+    aguaCorporal:a.aguaCorporal,massaGorda:a.massaGorda,massaProteica:a.massaProteica,minerais:a.minerais,
+    massaMuscularEsq:a.massaMuscEsq,gorduraVisceral:a.gorduraVisceral,gorduraSubcutanea:a.gorduraSubcut,
+    massaLivreGordura:a.massaLivreGordura,relacaoGordura:a.relacaoGordura,adiposidade:a.adiposidade,
+    idadeCorporal:a.idadeCorporal,bmr:a.bmr,kcalRecomendada:a.kcalRecomendada
+  };
+}
 function loadAvaliacoes(){
-  const SEED=[
-    {data:'2026-05-11',dataStr:'11/05/2026',pontuacao:79,peso:93,imc:26.8,
-     aguaCorporal:52.3,massaGorda:21.7,massaProteica:14.2,minerais:4.8,
-     massaMuscular:66.5,massaMuscularEsq:40.7,gorduraVisceral:9,
-     gorduraSubcutanea:19.2,cinturaQuadril:0.9,massaLivreGordura:71.3,
-     aguaIntracelular:32.9,aguaExtracelular:19.4},
-    {data:'2026-08-12',dataStr:'12/08/2026',pontuacao:80,peso:92.5,imc:26.7,
-     aguaCorporal:52.5,massaGorda:20.7,massaProteica:14.2,minerais:5,
-     massaMuscular:66.7,massaMuscularEsq:41,gorduraVisceral:8,
-     gorduraSubcutanea:18.5,cinturaQuadril:0.9,massaLivreGordura:71.7,
-     aguaIntracelular:32.9,aguaExtracelular:19.6},
-  ];
+  const SEED=[avalDoLaudo(AVALIACAO_ANTERIOR),avalDoLaudo(AVALIACAO_ATUAL)];
   try{
     const a=JSON.parse(localStorage.getItem('gym_ma_avaliacoes')||'null');
-    if(a&&a.length){
-      // garante que avaliações novas do SEED (ex: nova avaliação física) entrem mesmo
-      // se o usuário já tinha avaliações salvas de antes
-      const datasExistentes=new Set(a.map(x=>x.data));
-      let mudou=false;
-      SEED.forEach(s=>{if(!datasExistentes.has(s.data)){a.push(s);mudou=true}});
-      if(mudou){
-        a.sort((x,y)=>new Date(x.data)-new Date(y.data));
-        try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(a))}catch(e){}
+    const lista=(a&&a.length)?limparAvaliacoes(a):[];
+    let mudou=!!a&&lista.length!==a.length;
+    // garante as avaliações dela (laudos oficiais) e completa campos que faltavam nas já salvas
+    SEED.forEach(sd=>{
+      const i=lista.findIndex(x=>x.data===sd.data);
+      if(i<0){lista.push(Object.assign({},sd));mudou=true}
+      else{
+        const merged=Object.assign({},lista[i],sd);
+        if(JSON.stringify(merged)!==JSON.stringify(lista[i])){lista[i]=merged;mudou=true}
       }
-      return a;
-    }
-  }catch(e){}
-  return SEED;
+    });
+    lista.sort((x,y)=>new Date(x.data)-new Date(y.data));
+    if(mudou||!a){try{localStorage.setItem('gym_ma_avaliacoes',JSON.stringify(lista))}catch(e){}}
+    return lista;
+  }catch(e){return SEED}
 }
+
+/* variação entre duas medidas — verde quando melhorou (menorMelhor define o sentido) */
+function deltaHtml(novo,velho,menorMelhor,casas,un){
+  if(novo==null||velho==null)return '<span style="color:var(--muted)">—</span>';
+  const d=+(novo-velho).toFixed(casas===undefined?1:casas);
+  if(d===0)return '<span style="color:var(--muted)">→ igual</span>';
+  const bom=menorMelhor?d<0:d>0;
+  const cor=bom?'var(--green)':'var(--red)';
+  return `<span style="color:${cor}">${d>0?'▲ +':'▼ −'}${Math.abs(d)}${un||''}</span>`;
+}
+
 function renderAvaliacoesLista(){
   const el=document.getElementById('avaliacoes-lista');
   if(!el)return;
   const avals=loadAvaliacoes();
-  el.innerHTML=avals.map((a,i)=>{
+  let html=avals.map((a,i)=>{
     const anterior=avals[i-1];
-    let diffPeso='';
+    let dif='';
     if(anterior){
-      const d=+(a.peso-anterior.peso).toFixed(1);
-      diffPeso=d<0?`<span style="color:var(--green)">▼ ${Math.abs(d)}kg</span>`:d>0?`<span style="color:var(--red)">▲ ${d}kg</span>`:'<span style="color:var(--muted)">→</span>';
+      dif=`<div style="font-size:11px;display:flex;gap:8px;justify-content:flex-end;align-items:center">${deltaHtml(a.peso,anterior.peso,true,1,'kg')}${(a.massaGorda!=null&&anterior.massaGorda!=null)?`<span style="color:var(--muted)">gordura</span>${deltaHtml(a.massaGorda,anterior.massaGorda,true,1,'kg')}`:''}</div>`;
     }
     return`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;${i<avals.length-1?'border-bottom:1px solid var(--border)':''}">
       <div>
         <div style="font-size:13px;font-weight:500">${a.dataStr}</div>
-        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}</div>
+        <div style="font-size:11px;color:var(--muted)">Pontuação: ${a.pontuacao} · IMC ${a.imc}${a.massaGorda!=null?' · gordura '+a.massaGorda+'kg':''}</div>
       </div>
       <div style="text-align:right">
         <div style="font-size:15px;font-family:var(--mono);font-weight:600">${a.peso}kg</div>
-        <div style="font-size:11px">${diffPeso}</div>
+        ${dif}
       </div>
     </div>`;
   }).join('');
+  // quadro comparativo: última avaliação × anterior
+  if(avals.length>=2){
+    const u=avals[avals.length-1],p=avals[avals.length-2];
+    const L=[
+      ['Peso','peso','kg',1,true],
+      ['Massa gorda','massaGorda','kg',1,true],
+      ['Relação de gordura','relacaoGordura','%',1,true],
+      ['Músculo esquelético','massaMuscularEsq','kg',1,false],
+      ['Massa livre de gordura','massaLivreGordura','kg',1,false],
+      ['Gordura visceral','gorduraVisceral','',0,true],
+      ['Gordura subcutânea','gorduraSubcutanea','kg',1,true],
+      ['Pontuação','pontuacao','',0,false],
+    ].filter(r=>u[r[1]]!=null&&p[r[1]]!=null);
+    if(L.length){
+      html+=`<div style="margin-top:14px;font-size:10px;font-family:var(--mono);letter-spacing:1px;color:var(--muted);text-transform:uppercase">Comparativo ${p.dataStr} → ${u.dataStr}</div>
+      <table class="cmp"><thead><tr><th></th><th>${p.dataStr.slice(0,5)}</th><th>${u.dataStr.slice(0,5)}</th><th>Variação</th></tr></thead><tbody>
+      ${L.map(r=>`<tr><td>${r[0]}</td><td>${p[r[1]]}${r[2]}</td><td>${u[r[1]]}${r[2]}</td><td>${deltaHtml(u[r[1]],p[r[1]],r[4],r[3],r[2])}</td></tr>`).join('')}
+      </tbody></table>`;
+    }
+  }
+  el.innerHTML=html;
 }
 
-function buildMetricRow(nome,valor,ideal,status){
-  const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!']};
-  const [bg,cor,icone]=cores[status]||cores.ok;
-  return`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
-    <div style="flex:1">
+function buildMetricRow(nome,valor,ideal,status,delta){
+  const cores={excelente:['var(--green2)','var(--green)','✓'],ok:['var(--amber2)','var(--amber)','~'],ruim:['var(--red2)','var(--red)','!'],neutro:['var(--surface2)','var(--muted)','·']};
+  const [bg,cor,icone]=cores[status]||cores.neutro;
+  return`<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+    <div style="flex:1;min-width:0">
       <div style="font-size:12px;font-weight:500">${nome}</div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">ideal: ${ideal}</div>
+      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">${ideal}</div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span style="font-size:13px;font-family:var(--mono);font-weight:500">${valor}</span>
-      <span style="background:${bg};color:${cor};border-radius:6px;padding:2px 7px;font-size:10px;font-family:var(--mono)">${icone}</span>
+    <div style="text-align:right">
+      <div style="font-size:13px;font-family:var(--mono);font-weight:500">${valor}</div>
+      ${delta?`<div style="font-size:10px;font-family:var(--mono)">${delta}</div>`:''}
     </div>
+    <span style="background:${bg};color:${cor};border-radius:6px;padding:2px 7px;font-size:10px;font-family:var(--mono)">${icone}</span>
   </div>`;
+}
+
+/* dentro da faixa → verde; até 10% fora → âmbar; mais de 10% fora → vermelho; sem faixa → neutro */
+function statusFaixa(v,faixa){
+  if(!faixa)return 'neutro';
+  const mn=faixa[0],mx=faixa[1];
+  if(v>=mn&&v<=mx)return 'excelente';
+  const d=v>mx?(v-mx)/mx:(mn-v)/mn;
+  return d<=0.10?'ok':'ruim';
+}
+function renderComposicao(){
+  const el=document.getElementById('comp-body');
+  if(!el)return;
+  const A=AVALIACAO_ATUAL,P=AVALIACAO_ANTERIOR,F=FAIXAS_LAUDO;
+  // [nome, atual, anterior, unidade, faixa, menorMelhor, casas, faixaGeral]
+  const linhas=[
+    ['Peso',A.peso,P.peso,'kg',F.peso,true,1],
+    ['IMC',A.imc,P.imc,'',F.imc,true,1],
+    ['Massa gorda',A.massaGorda,P.massaGorda,'kg',F.massaGorda,true,1],
+    ['Relação de gordura',A.relacaoGordura,P.relacaoGordura,'%',F.relacaoGordura,true,1],
+    ['Adiposidade',A.adiposidade,P.adiposidade,'',F.adiposidade,true,0],
+    ['Músculo esquelético',A.massaMuscEsq,P.massaMuscEsq,'kg',F.massaMuscEsq,false,1],
+    ['Massa livre de gordura',A.massaLivreGordura,P.massaLivreGordura,'kg',null,false,1],
+    ['Gordura subcutânea',A.gorduraSubcut,P.gorduraSubcut,'kg',null,true,1],
+    ['Gordura visceral',A.gorduraVisceral,P.gorduraVisceral,'',FAIXA_VISCERAL_GERAL,true,0,true],
+    ['Água corporal total',A.aguaCorporal,P.aguaCorporal,'kg',null,false,1],
+    ['Massa proteica',A.massaProteica,P.massaProteica,'kg',null,false,1],
+    ['Minerais',A.minerais,P.minerais,'kg',null,false,1],
+    ['Idade do corpo',A.idadeCorporal,P.idadeCorporal,' anos',null,true,0],
+    ['Metabolismo basal (BMR)',A.bmr,P.bmr,'kcal',null,false,0],
+    ['Pontuação de saúde',A.pontuacao,P.pontuacao,' pts',null,false,0],
+  ];
+  el.innerHTML=linhas.map(l=>{
+    const nome=l[0],v=l[1],ant=l[2],un=l[3],faixa=l[4],menorMelhor=l[5],casas=l[6],geral=l[7];
+    const ideal=faixa?(geral?'faixa geral (não consta no laudo): ':'faixa do laudo: ')+faixa[0]+'~'+faixa[1]:'sem faixa no laudo';
+    const udelta=/^ /.test(un)?'':un;
+    return buildMetricRow(nome,v+un,ideal,statusFaixa(v,faixa),deltaHtml(v,ant,menorMelhor,casas,udelta));
+  }).join('');
+}
+function renderSegmentos(){
+  const el=document.getElementById('seg-body');
+  if(!el)return;
+  const A=AVALIACAO_ATUAL.seg,P=AVALIACAO_ANTERIOR.seg;
+  const regs=[['Braço esq.','bracoE'],['Braço dir.','bracoD'],['Tronco','tronco'],['Perna esq.','pernaE'],['Perna dir.','pernaD']];
+  const cab='font-size:10px;font-family:var(--mono);letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:6px';
+  const gord=regs.map(r=>{
+    const a=A.gordura[r[1]],p=P.gordura[r[1]];
+    return `<tr><td>${r[0]}</td><td>${p[0]}kg · ${p[1]}%</td><td>${a[0]}kg · <b>${a[1]}%</b></td><td>${deltaHtml(a[0],p[0],true,1,'kg')}</td></tr>`;
+  }).join('');
+  const musc=regs.map(r=>{
+    const a=A.musculo[r[1]],p=P.musculo[r[1]];
+    return `<tr><td>${r[0]}</td><td>${p}kg</td><td><b>${a}kg</b></td><td>${deltaHtml(a,p,false,1,'kg')}</td></tr>`;
+  }).join('');
+  el.innerHTML=`<div style="${cab}">Gordura por segmento (kg · % da referência)</div>
+    <table class="cmp"><thead><tr><th></th><th>27/07</th><th>05/11</th><th>Variação</th></tr></thead><tbody>${gord}</tbody></table>
+    <div style="${cab};margin-top:16px">Músculo por segmento (kg)</div>
+    <table class="cmp"><thead><tr><th></th><th>27/07</th><th>05/11</th><th>Variação</th></tr></thead><tbody>${musc}</tbody></table>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--mono);line-height:1.6;margin-top:10px">100% = referência do aparelho para cada região; o laudo não traz % para o músculo. Todas as regiões perderam gordura e ganharam músculo desde 27/07.</div>`;
 }
 
 function showNav(tab){
@@ -1362,22 +1740,8 @@ function showNav(tab){
   if(tab==='home'){showPage('home');renderHome()}
   if(tab==='saude'){
     showPage('saude');
-    const metricas=[
-      ['Água corporal total','34.7kg','28.6~35.0','excelente'],
-      ['Massa gorda','26.2kg','8.4~17.4','ruim'],
-      ['Massa proteica','9.3kg','8.6~10.5','ruim'],
-      ['Minerais','3.3kg','2.9~3.6','ok'],
-      ['Massa muscular','47.3kg','44.9~54.9','ok'],
-      ['Massa muscular esquelética','25.8kg','23.3~28.5','ok'],
-      ['Gordura visceral','12','1~9','ruim'],
-      ['Gordura subcutânea','22.8kg','5.4~10.8','ruim'],
-      ['Relação de gordura','35.6%','18.0~28.0','ruim'],
-      ['Massa livre de gordura','47.3kg','44.9~54.9','ok'],
-      ['IMC','25.1','18.5~23.0','ok'],
-      ['Pontuação saúde','69 pts','>80','ruim'],
-    ];
-    const el=document.getElementById('comp-body');
-    if(el)el.innerHTML=metricas.map(m=>buildMetricRow(...m)).join('');
+    renderComposicao();
+    renderSegmentos();
     renderPesoTracker();
     renderHidratChecklist();
     renderSupleChecklist();
@@ -1396,22 +1760,22 @@ function clearAllTicks(){
 }
 
 /* ════ HOME ════ */
-function getSemanaAtualId(){
-  // identifica a semana atual no formato ano-numerosemana, baseado em segunda-feira
-  const d=new Date();
+function semanaIdDe(d){
+  // identifica a semana no formato ano-numerosemana (semanas começando no domingo, como antes)
   const onejan=new Date(d.getFullYear(),0,1);
   const diasPassados=Math.floor((d-onejan)/86400000);
   const semana=Math.ceil((diasPassados+onejan.getDay()+1)/7);
   return d.getFullYear()+'-S'+semana;
 }
+function getSemanaAtualId(){return semanaIdDe(new Date())}
 function calcularDadosSemanais(segundaMs, sextaMs){
   const hist=loadHist();
-  const treinosSemana=hist.filter(h=>h.plano==='novo'&&h.inicio>=segundaMs&&h.inicio<=sextaMs);
+  const treinosSemana=hist.filter(h=>h.inicio>=segundaMs&&h.inicio<=sextaMs); // qualquer treino concluído, independente do plano
   const totalTreinos=treinosSemana.length;
   const totalKcal=treinosSemana.reduce((a,h)=>{
     const kcalSalvo=h.kcal||0;
     if(kcalSalvo)return a+kcalSalvo;
-    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+(x.peso*(x.reps||0))+(x.peso2||0)*(x.reps2||0),0);
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((s,x)=>s+volSerie(x),0);
     return a+estimarCaloriasTreino((h.fim||0)-(h.inicio||0),vol);
   },0);
   const pesoLogSemana=loadPesoLog().filter(p=>{
@@ -1496,8 +1860,53 @@ function salvarResumoSemanalNoHistorico(segunda,sexta,dados){
   if(getToken())sincronizarGitHub();
 }
 
+/* Preenche retroativamente o resumo de qualquer semana (seg-sex) já encerrada que ainda não tenha resumo salvo.
+   Roda em TODA abertura do app (não só às segundas) e nunca mexe na semana em andamento. Conta qualquer
+   treino concluído, independente do plano. O semId segue o mesmo critério do resumo de segunda-feira
+   (identificador da semana seguinte), então não duplica resumos que já existem. */
+function preencherResumosPerdidos(){
+  try{
+    if(!loadHist().length)return;
+    const resumos=loadResumosSemana();
+    const tem=new Set(resumos.map(r=>r.semId));
+    const hoje=new Date();hoje.setHours(0,0,0,0);
+    const segAtual=new Date(hoje);segAtual.setDate(hoje.getDate()-((hoje.getDay()+6)%7));
+    const cur=new Date(INICIO_PLANO_ANTERIOR);cur.setHours(0,0,0,0);
+    cur.setDate(cur.getDate()-((cur.getDay()+6)%7));
+    let criou=false;
+    while(cur<segAtual){
+      const seg=new Date(cur);
+      const sex=new Date(cur);sex.setDate(cur.getDate()+4);sex.setHours(23,59,59,999);
+      const prox=new Date(cur);prox.setDate(cur.getDate()+7);
+      const semId=semanaIdDe(prox);
+      if(!tem.has(semId)){
+        const dados=calcularDadosSemanais(seg.getTime(),sex.getTime());
+        if(dados.totalTreinos>0){
+          resumos.push({
+            semId,
+            dataStr: seg.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}) + ' – ' + sex.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'}),
+            totalTreinos: dados.totalTreinos,
+            totalKcal: dados.totalKcal,
+            diffPeso: dados.diffPeso,
+            pesoFinal: dados.pesoFinal,
+            ts: prox.getTime()
+          });
+          tem.add(semId);criou=true;
+        }
+      }
+      cur.setDate(cur.getDate()+7);
+    }
+    if(criou){
+      resumos.sort((a,b)=>(b.ts||0)-(a.ts||0));
+      if(resumos.length>52)resumos.splice(52);
+      saveResumosSemana(resumos);
+      if(getToken())sincronizarGitHub();
+    }
+  }catch(e){}
+}
+
 function renderHome(){
-  // Alertas de prazo — avisa a partir de 09/05
+  // Alertas de prazo do plano atual
   const dias=diasAtePrazo();
   const now=new Date(); now.setHours(0,0,0,0);
   const inicioPlazo=new Date(INICIO_PLANO); inicioPlazo.setHours(0,0,0,0);
@@ -1523,7 +1932,7 @@ function renderHome(){
     const ex=TREINOS[pend.tipo].exercicios[pend.exIdx];
     document.getElementById('home-pending').innerHTML=`<div class="pending-card">
       <div class="pending-label">● Em andamento</div>
-      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/3</span></div>
+      <div class="pending-name">Treino ${pend.tipo} · ${exNome(ex)}<br><span style="font-size:12px;color:var(--muted)">Série ${(pend.serieIdxs?pend.serieIdxs[pend.exIdx]:pend.serieIdx||0)+1}/${(ex&&ex.series)||3}</span></div>
       <button class="btn btn-primary" onclick="retomar()" style="margin-bottom:6px">↩ Retomar de onde parei</button>
       <button class="btn btn-red" onclick="descartar()">Descartar</button>
     </div>`;
@@ -1565,6 +1974,7 @@ function renderHome(){
     </div>`;
   });
   document.getElementById('treino-grid').innerHTML=tgHtml;
+  const hv=document.getElementById('home-versao');if(hv)hv.textContent=APP_VERSAO;
 }
 
 function descartar(){
@@ -1577,7 +1987,7 @@ function iniciarTreino(tipo){
   if(p&&!p.finalizado){descartar()}
   const tr=TREINOS[tipo];
   E={
-    tipo, plano:'novo', data:today(), exIdx:0,
+    tipo, plano:'novo', planoId:PLANO_ATUAL_ID, data:today(), exIdx:0,
     // serieIdx agora é um array por exercício em vez de global
     serieIdxs:tr.exercicios.map(()=>0),
     series:tr.exercicios.map(ex=>(ex.tipo==='normal'||ex.tipo==='conjugado'||ex.tipo==='progressivo')?Array(ex.series||3).fill(null):[]),
@@ -1650,7 +2060,7 @@ function renderExCard(){
   const exs=TREINOS[E.tipo].exercicios;
   const ex=exs[E.exIdx];
   const normTotal=exs.filter(e=>e.tipo==='normal'||e.tipo==='conjugado'||e.tipo==='progressivo').length;
-  const normDone=exs.slice(0,E.exIdx).filter(e=>e.tipo==='normal'||e.tipo==='conjugado').length;
+  const normDone=exs.slice(0,E.exIdx).filter(ehForca).length;
   document.getElementById('prog-label').textContent='Treino '+E.tipo;
   document.getElementById('prog-count').textContent=(E.exIdx+1)+'/'+exs.length;
   document.getElementById('prog-fill').style.width=Math.round((E.exIdx/exs.length)*100)+'%';
@@ -1668,17 +2078,15 @@ function renderExCard(){
     const n2=ex.link2?`<a href="${ex.link2}" target="_blank">${ex.nome2}</a>`:ex.nome2;
     nomeHtml=`${n1} <span style="color:var(--amber)">+</span> ${n2}`;
     linkHtml=`<div class="link-row">
-      ${ex.link?`<a class="link-btn" href="${ex.link}" target="_blank">▶ Ver ${ex.nome.split(' ')[0]}</a>`:''}
-      ${ex.link2?`<a class="link-btn" href="${ex.link2}" target="_blank">▶ Ver ${ex.nome2.split(' ')[0]}</a>`:''}
+      ${ex.link?`<a class="link-btn" href="${ex.link}" target="_blank">▶ Ver ${curtoNome(ex,1)}</a>`:''}
+      ${ex.link2?`<a class="link-btn" href="${ex.link2}" target="_blank">▶ Ver ${curtoNome(ex,2)}</a>`:''}
     </div>`;
   }else{
     nomeHtml=ex.link?`<a href="${ex.link}" target="_blank">${ex.nome}</a>`:ex.nome;
     if(ex.link)linkHtml=`<div class="link-row"><a class="link-btn" href="${ex.link}" target="_blank">▶ Ver exercício</a></div>`;
   }
 
-  const metaText=ex.tipo==='conjugado'
-    ?`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'} cada`
-    :`${ex.series||3} séries × ${ex.isTime?ex.reps+'s':ex.reps+' reps'}`;
+  const metaText=`${ex.series||3} séries × ${repsTxt(ex)}`;
 
   document.getElementById('ex-card').innerHTML=`
     <div class="ex-tag">Exercício ${normDone+1} de ${normTotal}${ex.tipo==='conjugado'?' · conjugado':''}</div>
@@ -1715,11 +2123,11 @@ function renderSeriesDone(){
           <span style="font-size:10px;color:var(--muted)">✎ editar</span>
         </div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
-          <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${ex.nome.split(' ')[0]}:</span>
+          <span style="font-size:10px;color:var(--accent2);font-family:var(--mono)">${curtoNome(ex,1)}:</span>
           <span class="pill">${s.peso}kg</span><span class="pill">${s.reps} reps</span><span class="pill g">${s.tempo}s</span>
         </div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
-          <span style="font-size:10px;color:var(--amber);font-family:var(--mono)">${ex.nome2.split(' ')[0]}:</span>
+          <span style="font-size:10px;color:var(--amber);font-family:var(--mono)">${curtoNome(ex,2)}:</span>
           <span class="pill">${s.peso2}kg</span><span class="pill">${s.reps2} reps</span>
         </div>
       </div>`;
@@ -1727,8 +2135,8 @@ function renderSeriesDone(){
     return`<div class="serie-row" style="cursor:pointer" onclick="editarSerie(${i})">
       <span class="s-label">S${i+1}</span>
       <div class="s-data">
-        <span class="pill">${s.peso}kg</span>
-        <span class="pill">${ex.isTime?s.tempo+'s':s.reps+' reps'}</span>
+        ${ex.isTime?((s.peso||0)>0?`<span class="pill">${s.peso}kg</span>`:''):`<span class="pill">${s.peso}kg</span>`}
+        ${ex.isTime?`<span class="pill">meta ${s.reps}s</span>`:`<span class="pill">${s.reps} reps</span>`}
         <span class="pill g">${s.tempo}s</span>
         <span style="font-size:10px;color:var(--muted);margin-left:4px">✎</span>
       </div>
@@ -1748,22 +2156,30 @@ function editarSerie(idx){
   div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:75;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
 
   let camposHtml='';
-  if(ex.tipo==='conjugado'){
+  if(ex.tipo==='progressivo'){
+    camposHtml=`
+      <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">⬆️ Progressivo — ${ex.reps} reps em cada mini-set</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">
+        <div class="field"><label>Carga 1</label><input type="number" id="edit-prog1" step="0.5" inputmode="decimal" value="${s.prog1||0}" data-ph="0" ${FOCO}></div>
+        <div class="field"><label>Carga 2</label><input type="number" id="edit-prog2" step="0.5" inputmode="decimal" value="${s.prog2||0}" data-ph="0" ${FOCO}></div>
+        <div class="field"><label>Carga 3</label><input type="number" id="edit-prog3" step="0.5" inputmode="decimal" value="${s.prog3||0}" data-ph="0" ${FOCO}></div>
+      </div>`;
+  }else if(ex.tipo==='conjugado'){
     camposHtml=`
       <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">① ${ex.nome}</div>
       <div class="input-grid" style="margin-bottom:10px">
-        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" value="${s.peso}"></div>
-        <div class="field"><label>Repetições</label><input type="number" id="edit-reps" step="1" value="${s.reps}"></div>
+        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" inputmode="decimal" value="${s.peso||0}" data-ph="0" ${FOCO}></div>
+        <div class="field"><label>Repetições</label><input type="number" id="edit-reps" step="1" inputmode="numeric" value="${s.reps||0}" data-ph="0" ${FOCO}></div>
       </div>
       <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">② ${ex.nome2}</div>
       <div class="input-grid" style="margin-bottom:10px">
-        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso2" step="0.5" value="${s.peso2||0}"></div>
-        <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps2" step="1" value="${s.reps2||0}"></div>
+        <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso2" step="0.5" inputmode="decimal" value="${s.peso2||0}" data-ph="0" ${FOCO}></div>
+        <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps2" step="1" inputmode="numeric" value="${s.reps2||0}" data-ph="0" ${FOCO}></div>
       </div>`;
   }else{
     camposHtml=`<div class="input-grid" style="margin-bottom:10px">
-      <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" value="${s.peso}"></div>
-      <div class="field"><label>${ex.isTime?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps" step="1" value="${s.reps}"></div>
+      <div class="field"><label>Peso (kg)</label><input type="number" id="edit-peso" step="0.5" inputmode="decimal" value="${s.peso||0}" data-ph="0" ${FOCO}></div>
+      <div class="field"><label>${ex.isTime?'Meta (seg)':'Repetições'}</label><input type="number" id="edit-reps" step="1" inputmode="numeric" value="${s.reps||0}" data-ph="0" ${FOCO}></div>
     </div>`;
   }
 
@@ -1771,69 +2187,172 @@ function editarSerie(idx){
     <div style="background:var(--surface);border-radius:24px;padding:20px">
       <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:12px">✎ Corrigir Série ${idx+1}</div>
       ${camposHtml}
-      <button onclick="salvarEdicaoSerie(${idx})" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar correção</button>
-      <button onclick="document.getElementById('modal-edit-serie').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;cursor:pointer">Cancelar</button>
+      <button onclick="salvarEdicaoSerie(${idx})" style="width:100%;min-height:52px;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar correção</button>
+      <button onclick="document.getElementById('modal-edit-serie').remove()" style="width:100%;min-height:48px;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;cursor:pointer">Cancelar</button>
     </div>`;
   document.body.appendChild(div);
 }
 function salvarEdicaoSerie(idx){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const s=E.series[E.exIdx][idx];
-  const peso=parseFloat(document.getElementById('edit-peso').value)||0;
-  const reps=parseInt(document.getElementById('edit-reps').value)||0;
-  s.peso=peso;s.reps=reps;
-  if(ex.tipo==='conjugado'){
-    s.peso2=parseFloat(document.getElementById('edit-peso2').value)||0;
-    s.reps2=parseInt(document.getElementById('edit-reps2').value)||0;
+  if(ex.tipo==='progressivo'){
+    s.prog1=parseFloat(lerCampo('edit-prog1'))||0;
+    s.prog2=parseFloat(lerCampo('edit-prog2'))||0;
+    s.prog3=parseFloat(lerCampo('edit-prog3'))||0;
+  }else{
+    s.peso=parseFloat(lerCampo('edit-peso'))||0;
+    s.reps=parseInt(lerCampo('edit-reps'))||0;
+    if(ex.tipo==='conjugado'){
+      s.peso2=parseFloat(lerCampo('edit-peso2'))||0;
+      s.reps2=parseInt(lerCampo('edit-reps2'))||0;
+    }
   }
   save();
+  // se corrigiu a série mais recente, a memória de última carga acompanha a correção
+  const ultimoIdx=E.series[E.exIdx].reduce((m,x,i)=>x?i:m,-1);
+  if(idx>=ultimoIdx)registrarCarga(ex,s);
   document.getElementById('modal-edit-serie').remove();
   renderSeriesDone();
   mostrarToast('✓ Série corrigida');
   if(getToken())sincronizarGitHub();
 }
 
+/* ════ ÚLTIMA CARGA POR EXERCÍCIO ════
+   O campo já vem preenchido com a última carga usada NAQUELE exercício.
+   Ordem de busca: (1) séries já feitas hoje → (2) memória de cargas (gym_ma_ultimas_cargas,
+   gravada a cada série, mesmo se o treino não for finalizado) → (3) histórico de treinos,
+   do mais novo para o mais antigo, comparando o nome sem acento/maiúscula. */
+const CARGAS_KEY='gym_ma_ultimas_cargas';
+function loadCargas(){try{return JSON.parse(localStorage.getItem(CARGAS_KEY)||'{}')||{}}catch(e){return{}}}
+function saveCargas(c){try{localStorage.setItem(CARGAS_KEY,JSON.stringify(c))}catch(e){}}
+function registrarCarga(ex,serie){
+  if(!ex||!ex.nome||!serie)return;
+  const c=loadCargas(),k=normNome(ex.nome);
+  const r=Object.assign({},c[k]||{});
+  r.nome=ex.nome;
+  if(ex.tipo==='progressivo'){
+    r.prog1=serie.prog1||0;r.prog2=serie.prog2||0;r.prog3=serie.prog3||0;
+  }else{
+    if(serie.peso>0)r.peso=serie.peso;
+    if(ex.tipo==='conjugado'&&serie.peso2>0)r.peso2=serie.peso2;
+  }
+  r.ts=Date.now();
+  c[k]=r;saveCargas(c);
+}
+function _histOrdenado(){return loadHist().slice().sort((a,b)=>(b.inicio||0)-(a.inicio||0))}
+/* percorre as séries do exercício atual (hoje → memória → histórico) e devolve o primeiro valor que o `pick` aceitar */
+function _buscarCarga(pick){
+  const ex=TREINOS[E.tipo].exercicios[E.exIdx];
+  if(!ex||!ex.nome)return null;
+  const ss=E.series[E.exIdx]||[];
+  for(let i=ss.length-1;i>=0;i--){const r=pick(ss[i]);if(r!=null)return r}
+  const k=normNome(ex.nome);
+  const mem=loadCargas()[k];
+  if(mem){const r=pick(mem);if(r!=null)return r}
+  for(const h of _histOrdenado()){
+    if(!h.exNames||!h.series)continue;
+    for(let j=0;j<h.exNames.length;j++){
+      if(normNome(h.exNames[j])!==k)continue;
+      const arr=h.series[j]||[];
+      for(let i=arr.length-1;i>=0;i--){const r=pick(arr[i]);if(r!=null)return r}
+    }
+  }
+  return null;
+}
+function ultimaCarga(campo){
+  const r=_buscarCarga(s=>(s&&s[campo]>0)?s[campo]:null);
+  return r==null?'':r;
+}
+function getUltimoPeso(){return ultimaCarga('peso')}
+function getUltimoPeso2(){return ultimaCarga('peso2')}
+/* progressivo: devolve [carga1,carga2,carga3] da última série registrada desse exercício */
+function ultimasProg(){
+  const r=_buscarCarga(s=>{
+    if(!s)return null;
+    const a=[s.prog1,s.prog2,s.prog3];
+    return a.some(v=>v>0)?a.map(v=>v>0?v:''):null;
+  });
+  if(r)return r;
+  // plano antigo tinha esse exercício com carga única → usa como carga 1
+  const p=ultimaCarga('peso');
+  return [p,'',''];
+}
+/* Auto-preenche reps com base na série anterior DESTE treino (não busca histórico — só dentro da sessão atual) */
+function getUltimaReps(){
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps)return s.reps}
+  return '';
+}
+function getUltimaReps2(){
+  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps2)return s.reps2}
+  return '';
+}
+
+/* Campo já preenchido: ao tocar, limpa (o valor anterior vira dica em cinza); se sair sem digitar, volta o valor.
+   Evita o problema do Android de "concatenar" o que se digita com o valor que já estava no campo. */
+const FOCO='onfocus="cargaFocus(this)" onblur="cargaBlur(this)"';
+function cargaFocus(el){
+  el.dataset.prev=el.value;
+  if(el.value!==''){el.placeholder=el.value;el.value=''}
+}
+function cargaBlur(el){
+  if(el.value===''&&el.dataset.prev)el.value=el.dataset.prev;
+  el.dataset.prev='';
+  el.placeholder=el.dataset.ph||'0';
+}
+/* lê o valor do campo mesmo se ele ainda estiver focado e "limpo" */
+function lerCampo(id){
+  const el=document.getElementById(id);
+  if(!el)return '';
+  if(el.value===''&&el.dataset.prev)return el.dataset.prev;
+  return el.value;
+}
+
 function renderActionArea(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
-  const up=getUltimoPeso();
-  const up2=getUltimoPeso2();
+  const isProg=ex.tipo==='progressivo';
+  const up=isProg?'':getUltimoPeso();
+  const up2=ex.tipo==='conjugado'?getUltimoPeso2():'';
+  const prog=isProg?ultimasProg():['','',''];
   const ur=getUltimaReps();
   const ur2=getUltimaReps2();
   const jaRodando=!!E.serieStartTs;
   const repsLabel=ex.isTime?'Meta (seg)':'Repetições';
   const repsPlaceholder=ex.isTime?ex.reps:'0';
+  const primeiraSerie=(E.serieIdxs[E.exIdx]||0)===0;
+  const preenchido=isProg?prog.some(v=>v!==''):(up!==''||up2!=='');
+  const hintHtml=(preenchido&&primeiraSerie)?`<div class="hint-carga">↺ Carga preenchida com a última usada neste exercício. Toque no campo para trocar.</div>`:'';
+  const estiloProg='width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none';
 
   let inputsHtml='';
-  if(ex.tipo==='progressivo'){
+  if(isProg){
     inputsHtml=`<div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
       <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">⬆️ Progressivo — ${ex.reps} reps em cada mini-set</div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
-        <div class="field"><label>Carga 1 (kg)</label><input type="number" id="inp-prog1" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none"></div>
-        <div class="field"><label>Carga 2 (kg)</label><input type="number" id="inp-prog2" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none"></div>
-        <div class="field"><label>Carga 3 (kg)</label><input type="number" id="inp-prog3" step="0.5" inputmode="decimal" placeholder="0" style="width:100%;box-sizing:border-box;padding:10px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;font-size:16px;font-family:var(--mono);color:var(--text);outline:none"></div>
+        <div class="field"><label>Carga 1 (kg)</label><input type="number" id="inp-prog1" step="0.5" inputmode="decimal" placeholder="0" data-ph="0" value="${prog[0]}" ${FOCO} style="${estiloProg}"></div>
+        <div class="field"><label>Carga 2 (kg)</label><input type="number" id="inp-prog2" step="0.5" inputmode="decimal" placeholder="0" data-ph="0" value="${prog[1]}" ${FOCO} style="${estiloProg}"></div>
+        <div class="field"><label>Carga 3 (kg)</label><input type="number" id="inp-prog3" step="0.5" inputmode="decimal" placeholder="0" data-ph="0" value="${prog[2]}" ${FOCO} style="${estiloProg}"></div>
       </div>
     </div>`;
   }else if(ex.tipo==='conjugado'){
-    // dois blocos separados
     inputsHtml=`
       <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
         <div style="font-size:10px;font-family:var(--mono);color:var(--accent2);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">① ${ex.nome}</div>
         <div class="input-grid">
-          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}" value="${ur}"></div>
+          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" data-ph="0" value="${up}" ${FOCO}></div>
+          <div class="field"><label>Repetições</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${ex.reps||'0'}" data-ph="${ex.reps||'0'}" value="${ur}" ${FOCO}></div>
         </div>
       </div>
       <div style="background:var(--surface2);border-radius:12px;padding:10px;margin-bottom:8px">
         <div style="font-size:10px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">② ${ex.nome2}</div>
         <div class="input-grid">
-          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up2}"></div>
-          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}" value="${ur2}"></div>
+          <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso2" min="0" step="0.5" inputmode="decimal" placeholder="0" data-ph="0" value="${up2}" ${FOCO}></div>
+          <div class="field"><label>${ex.isTime2?'Meta (seg)':'Repetições'}</label><input type="number" id="inp-reps2" min="1" step="1" inputmode="numeric" placeholder="${ex.reps2||ex.reps||'0'}" data-ph="${ex.reps2||ex.reps||'0'}" value="${ur2}" ${FOCO}></div>
         </div>
       </div>`;
   }else{
     inputsHtml=`<div class="input-grid">
-      <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" value="${up}"></div>
-      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}" value="${ur}"></div>
+      <div class="field"><label>Peso (kg)</label><input type="number" id="inp-peso" min="0" step="0.5" inputmode="decimal" placeholder="0" data-ph="0" value="${up}" ${FOCO}></div>
+      <div class="field"><label>${repsLabel}</label><input type="number" id="inp-reps" min="1" step="1" inputmode="numeric" placeholder="${repsPlaceholder}" data-ph="${repsPlaceholder}" value="${ur}" ${FOCO}></div>
     </div>`;
   }
 
@@ -1844,44 +2363,9 @@ function renderActionArea(){
       <div class="timer-pulse" id="stpulse">${jaRodando?'● gravando':''}</div>
     </div>
     ${inputsHtml}
+    ${hintHtml}
     <button class="btn btn-primary" id="btn-start-serie" style="${jaRodando?'display:none':''}" onclick="iniciarSerie()">▶ Iniciar série ${E.serieIdxs[E.exIdx]+1}</button>
     <button class="btn btn-green" id="btn-stop-serie" style="${jaRodando?'':'display:none'}" onclick="finalizarSerie()">■ Finalizar série ${E.serieIdxs[E.exIdx]+1}</button>`;
-}
-
-function getUltimoPeso(){
-  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso)return s.peso}
-  const hist=loadHist();
-  for(const h of hist){
-    if(h.tipo===E.tipo&&h.plano==='novo'){
-      const nome=TREINOS[E.tipo].exercicios[E.exIdx].nome||'';
-      const idx=h.exNames?h.exNames.indexOf(nome):-1;
-      if(idx>=0&&h.series&&h.series[idx]){const last=h.series[idx].filter(Boolean).pop();if(last&&last.peso)return last.peso}
-      break;
-    }
-  }
-  return '';
-}
-function getUltimoPeso2(){
-  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.peso2)return s.peso2}
-  const hist=loadHist();
-  for(const h of hist){
-    if(h.tipo===E.tipo&&h.plano==='novo'){
-      const nome=TREINOS[E.tipo].exercicios[E.exIdx].nome||'';
-      const idx=h.exNames?h.exNames.indexOf(nome):-1;
-      if(idx>=0&&h.series&&h.series[idx]){const last=h.series[idx].filter(Boolean).pop();if(last&&last.peso2)return last.peso2}
-      break;
-    }
-  }
-  return '';
-}
-/* Auto-preenche reps com base na série anterior DESTE treino (não busca histórico — só dentro da sessão atual) */
-function getUltimaReps(){
-  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps)return s.reps}
-  return '';
-}
-function getUltimaReps2(){
-  for(let i=E.serieIdxs[E.exIdx]-1;i>=0;i--){const s=E.series[E.exIdx][i];if(s&&s.reps2)return s.reps2}
-  return '';
 }
 
 /* série */
@@ -1908,54 +2392,46 @@ function retomaSerieCronometro(){
 }
 function finalizarSerie(){
   clearInterval(serieTickInterval);
-  const tempo=E.serieStartTs?elapsed(E.serieStartTs):0;
-  E.serieStartTs=null;
+  const ts0=E.serieStartTs;
+  const tempo=ts0?elapsed(ts0):0;
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
-  const si=E.serieIdxs?E.serieIdxs[E.exIdx]:E.serieIdx;
+  const si=E.serieIdxs[E.exIdx];
+  // dado faltando → avisa, mantém o cronômetro rodando e não perde o tempo já contado
+  const faltou=(msg)=>{mostrarToast(msg);E.serieStartTs=ts0;save();retomaSerieCronometro()};
 
+  let serie;
   if(ex.tipo==='progressivo'){
-    const prog1=parseFloat(document.getElementById('inp-prog1')?.value)||0;
-    const prog2=parseFloat(document.getElementById('inp-prog2')?.value)||0;
-    const prog3=parseFloat(document.getElementById('inp-prog3')?.value)||0;
-    if(!prog1&&!prog2&&!prog3){mostrarToast('Informe ao menos uma carga');iniciarSerie();return}
-    E.series[E.exIdx][si]={prog1,prog2,prog3,reps:ex.reps,tempo};
-    const totalS=ex.series||3;
-    if(si<totalS-1){
-      if(E.serieIdxs)E.serieIdxs[E.exIdx]++;else E.serieIdx++;
-      E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='serie';save();
-      const proxLabel=`${exNome(ex)} — Série ${si+2} de ${totalS}`;
-      iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
-    }else{
-      if(E.serieIdxs)E.serieIdxs[E.exIdx]=0;else E.serieIdx=0;
-      const proxIdx=proximoExPendente(E.exIdx+1);
-      E.restStartTs=Date.now();E.restTotal=REST_EX;E.restTipo='ex';save();
-      let proxLabel='Finalizar treino';
-      if(proxIdx!==-1){const pex=TREINOS[E.tipo].exercicios[proxIdx];proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':`${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;}
-      iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
-    }
-    return;
-  }
-
-  const peso=parseFloat(document.getElementById('inp-peso')?.value)||0;
-  let reps=parseInt(document.getElementById('inp-reps')?.value)||0;
-
-  if(ex.tipo==='conjugado'){
-    const peso2=parseFloat(document.getElementById('inp-peso2').value)||0;
-    let reps2=parseInt(document.getElementById('inp-reps2').value)||0;
-    if(!reps){alert('Informe as repetições do 1º exercício');iniciarSerie();return}
-    if(!reps2){alert('Informe as repetições do 2º exercício');iniciarSerie();return}
-    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={peso,reps,peso2,reps2,tempo};
+    const prog1=parseFloat(lerCampo('inp-prog1'))||0;
+    const prog2=parseFloat(lerCampo('inp-prog2'))||0;
+    const prog3=parseFloat(lerCampo('inp-prog3'))||0;
+    if(!prog1&&!prog2&&!prog3){faltou('Informe ao menos uma carga');return}
+    serie={prog1,prog2,prog3,reps:ex.reps,tempo};
   }else{
-    if(!reps&&!ex.isTime){alert('Informe as repetições');iniciarSerie();return}
-    if(!reps&&ex.isTime)reps=ex.reps;
-    E.series[E.exIdx][E.serieIdxs[E.exIdx]]={peso,reps,tempo};
+    const peso=parseFloat(lerCampo('inp-peso'))||0;
+    let reps=parseInt(lerCampo('inp-reps'))||0;
+    if(ex.tipo==='conjugado'){
+      const peso2=parseFloat(lerCampo('inp-peso2'))||0;
+      const reps2=parseInt(lerCampo('inp-reps2'))||0;
+      if(!reps){faltou('Informe as repetições do 1º exercício');return}
+      if(!reps2){faltou('Informe as repetições do 2º exercício');return}
+      serie={peso,reps,peso2,reps2,tempo};
+    }else{
+      if(!reps&&!ex.isTime){faltou('Informe as repetições');return}
+      if(!reps&&ex.isTime)reps=ex.reps;
+      serie={peso,reps,tempo};
+      if(ex.isTime)serie.isTime=true;
+    }
   }
+
+  E.serieStartTs=null;
+  E.series[E.exIdx][si]=serie;
+  registrarCarga(ex,serie); // memória da última carga desse exercício (vale mesmo se o treino não for finalizado)
 
   const totalS=ex.series||3;
-  if(E.serieIdxs[E.exIdx]<totalS-1){
+  if(si<totalS-1){
     E.serieIdxs[E.exIdx]++;
     E.restStartTs=Date.now();E.restTotal=REST_SERIE;E.restTipo='serie';save();
-    const proxLabel=`${exNome(ex)} — Série ${E.serieIdxs[E.exIdx]+1} de ${totalS}`;
+    const proxLabel=`${exNome(ex)} — Série ${si+2} de ${totalS}`;
     iniciarDescanso(REST_SERIE,'DESCANSO ENTRE SÉRIES','gc','Respire e prepare-se',proxLabel,()=>goExercicio());
   }else{
     E.serieIdxs[E.exIdx]=totalS; // marca como completo (não volta para 0)
@@ -1965,7 +2441,7 @@ function finalizarSerie(){
     if(proxIdx!==-1){
       const pex=TREINOS[E.tipo].exercicios[proxIdx];
       proxLabel=pex.tipo==='esteira_fim'?'Esteira finalização (20 min)':
-        `${exNome(pex)} — ${pex.series||3}×${pex.isTime?pex.reps+'s':pex.reps+' reps'}`;
+        `${exNome(pex)} — ${pex.series||3}×${repsTxt(pex)}`;
     }
     iniciarDescanso(REST_EX,'DESCANSO ENTRE EXERCÍCIOS','ac','Troque de equipamento',proxLabel,()=>avancarExercicio());
   }
@@ -1974,7 +2450,7 @@ function proximoExPendente(from){
   const exs=TREINOS[E.tipo].exercicios;
   for(let i=from;i<exs.length;i++){
     if(exs[i].tipo==='esteira_fim')return i;
-    if((exs[i].tipo==='normal'||exs[i].tipo==='conjugado')&&!exFoiConcluido(i)&&!exFoiPulado(i))return i;
+    if(ehForca(exs[i])&&!exFoiConcluido(i)&&!exFoiPulado(i))return i;
   }
   return -1;
 }
@@ -2019,9 +2495,10 @@ function esconderDescanso(){document.getElementById('rest-overlay').classList.ad
 function pularExercicio(){
   const ex=TREINOS[E.tipo].exercicios[E.exIdx];
   const nome=exNome(ex);
-  if(!confirm('Pular "'+nome+'"?\n\nVocê pode voltar a ele depois pela lista de exercícios.')){return}
-  if(!E.pulados)E.pulados=[];
-  E.pulados.push(E.exIdx);E.serieStartTs=null;save();avancarExercicio();
+  confirmarModal('Pular exercício?','Pular "'+nome+'"?<br>Você pode voltar a ele depois pela lista de exercícios.','Pular',()=>{
+    if(!E.pulados)E.pulados=[];
+    E.pulados.push(E.exIdx);E.serieStartTs=null;save();avancarExercicio();
+  });
 }
 
 /* lista */
@@ -2045,7 +2522,7 @@ function abrirLista(){
     const click=locked?'':`onclick="${pulado?`retornarPulado(${i})`:`irParaEx(${i})`}"`;
     html+=`<div class="modal-item ${cls}" ${click}>
       <span class="mi-num">${i+1}</span>
-      <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span></span>
+      <span class="mi-name">${exNome(ex)}<br><span style="font-size:10px;color:var(--muted)">${ex.series||3}×${repsTxt(ex)}</span></span>
       ${badge}</div>`;
   });
   document.getElementById('modal-items').innerHTML=html;
@@ -2084,12 +2561,12 @@ function avancarExercicio(){
     if(ex.tipo==='esteira_fim'){
       // verifica se ainda há exercícios pendentes (não feitos E não pulados)
       const naoFeitos=exs.filter((e,i)=>
-        (e.tipo==='normal'||e.tipo==='conjugado')&&
+        ehForca(e)&&
         !exFoiConcluido(i)&&!exFoiPulado(i)
       );
       // exercícios pulados que ainda podem ser retomados
       const pulados=exs.filter((e,i)=>
-        (e.tipo==='normal'||e.tipo==='conjugado')&&
+        ehForca(e)&&
         exFoiPulado(i)
       );
       if(naoFeitos.length>0||pulados.length>0){
@@ -2148,9 +2625,9 @@ function voltarAosExercicios(){
   // vai para o primeiro exercício pendente (não feito ou pulado)
   const exs=TREINOS[E.tipo].exercicios;
   const primeiro=exs.findIndex((e,i)=>
-    (e.tipo==='normal'||e.tipo==='conjugado')&&
+    ehForca(e)&&
     (!exFoiConcluido(i)&&!exFoiPulado(i))||
-    ((e.tipo==='normal'||e.tipo==='conjugado')&&exFoiPulado(i))
+    (ehForca(e)&&exFoiPulado(i))
   );
   if(primeiro>=0){
     if(exFoiPulado(primeiro)){E.pulados=E.pulados.filter(p=>p!==primeiro);}
@@ -2230,14 +2707,10 @@ function confirmarPararEsteira(){
   const feito=E.esteiraStartTs?Math.floor((Date.now()-E.esteiraStartTs)/1000):0;
   const min=Math.floor(feito/60), seg=feito%60;
   const tempoTxt=min+'min'+(seg?' '+seg+'s':'');
-  if(confirm('Parar a esteira e salvar '+tempoTxt+' feitos?')){
-    pararEsteira();
-  }
+  confirmarModal('Parar a esteira?','Parar e salvar <b>'+tempoTxt+'</b> feitos?','Parar e salvar',pararEsteira);
 }
 function confirmarPularEsteira(){
-  if(confirm('Pular esta esteira sem fazer nada? Será registrada como pulada (0min).')){
-    pularEsteira();
-  }
+  confirmarModal('Pular esteira?','Pular esta esteira sem fazer nada? Será registrada como pulada (0min).','Pular esteira',pularEsteira);
 }
 function pularEsteira(){
   // pula completamente, sem ter feito nada — registra 0
@@ -2287,10 +2760,10 @@ function finalizarTreino(){
   clearAllTicks();E.finalizado=true;E.fim=Date.now();save();
   addSessao(E.tipo);
   const dur=E.fim-E.inicio;
-  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+volSerie(s),0);
   const kcal=estimarCaloriasTreino(dur,vol);
   saveHist({
-    tipo:E.tipo,plano:'novo',data:today(),dataStr:todayStr(),
+    tipo:E.tipo,plano:'novo',planoId:PLANO_ATUAL_ID,data:today(),dataStr:todayStr(),
     inicio:E.inicio,fim:E.fim,
     exNames:TREINOS[E.tipo].exercicios.map(ex=>ex.nome||exNome(ex)),
     series:E.series,pulados:E.pulados||[],
@@ -2337,7 +2810,7 @@ function renderFinished(){
   const exs=TREINOS[E.tipo].exercicios;
   const dur=E.fim-E.inicio;
   const totalS=E.series.flat().filter(Boolean).length;
-  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+  const vol=E.series.flat().filter(Boolean).reduce((a,s)=>a+volSerie(s),0);
   const sess=loadSessoes();
   const kcal=estimarCaloriasTreino(dur,vol);
   document.getElementById('fin-sub').textContent='Treino '+E.tipo+' · '+todayStr();
@@ -2361,7 +2834,7 @@ function renderFinished(){
           ${pulado?'<span class="tag tag-red">pulado</span>':''}
         </div>
         <div style="font-size:13px;font-weight:500;margin-bottom:5px;color:var(--accent2)">① ${ex.nome}</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px">${ss.map((s,j)=>`<span class="pill">${pillSerieTxt(s,j)}${pillTempo(s)}</span>`).join('')}</div>
         <div style="font-size:13px;font-weight:500;margin-bottom:5px;color:var(--amber)">② ${ex.nome2}</div>
         <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso2||0}kg×${s.reps2||0}</span>`).join('')}</div>
       </div>`;
@@ -2371,7 +2844,7 @@ function renderFinished(){
           <span style="font-size:13px;font-weight:500">${ex.nome}</span>
           ${pulado?'<span class="tag tag-red">pulado</span>':''}
         </div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">${pillSerieTxt(s,j)}${pillTempo(s)}</span>`).join('')}</div>
       </div>`;
     }
   });
@@ -2381,7 +2854,7 @@ function renderFinished(){
 /* ════ HISTÓRICO ════ */
 function switchHistTab(tab){
   _histTab=tab;
-  ['atual','antigo','evol','treinos'].forEach(t=>{
+  ['atual','antigo','evol','semanas','treinos'].forEach(t=>{
     document.getElementById('htab-'+t).classList.toggle('active',t===tab);
   });
   renderHist(tab);
@@ -2391,14 +2864,12 @@ function renderHist(tab){
   const div=document.getElementById('hist-content');
 
   if(tab==='atual'){
-    // treinos novos (plano=novo) mais recentes
-    const novos=hist.filter(h=>h.plano==='novo');
-    if(!novos.length){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Nenhum treino do plano atual ainda.</p>';return}
-    // resumo de sessões
+    // treinos do plano atual (planoId), mais recentes primeiro
+    const novos=hist.filter(ehPlanoAtual);
     const sess=loadSessoes();
     const dias=diasAtePrazo();
     let html=`<div class="card" style="margin-bottom:14px">
-      <div class="section-title" style="margin-bottom:8px">Progresso do plano</div>
+      <div class="section-title" style="margin-bottom:8px">Progresso do plano · 05/11/2026</div>
       <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Prazo: ${PRAZO.toLocaleDateString('pt-BR')} · ${dias>0?'Faltam '+dias+' dias':'Encerrado'}</div>
       ${ORDEM.map(t=>{
         const n=sess[t]||0,pct=Math.min(100,Math.round((n/META_SESSOES)*100));
@@ -2411,15 +2882,26 @@ function renderHist(tab){
         </div>`;
       }).join('')}
     </div>`;
-    novos.slice(0,20).forEach(h=>html+=buildHistCard(h));
+    if(!novos.length){
+      html+='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Nenhum treino do plano atual ainda. Os treinos do plano anterior estão em Anteriores.</p>';
+    }else{
+      novos.slice(0,20).forEach(h=>html+=buildHistCard(h));
+    }
     div.innerHTML=html;
   }else if(tab==='antigo'){
-    const antigos=hist.filter(h=>!h.plano||h.plano==='antigo');
+    const antigos=hist.filter(h=>!ehPlanoAtual(h));
     if(!antigos.length){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Nenhum treino anterior registrado.</p>';return}
-    div.innerHTML=antigos.slice(0,30).map(h=>buildHistCard(h)).join('');
+    let html='';
+    [[PLANO_ANTERIOR_ID,'Plano de 27/07 a 04/11/2026'],[PLANO_MAIO_ID,'Plano de maio/2026 e anteriores']].forEach(g=>{
+      const grupo=antigos.filter(h=>planoDoRegistro(h)===g[0]);
+      if(!grupo.length)return;
+      html+=`<div class="section-title" style="margin:6px 0 10px">${g[1]} · ${grupo.length} treino${grupo.length>1?'s':''}</div>`;
+      html+=grupo.slice(0,30).map(h=>buildHistCard(h)).join('');
+    });
+    div.innerHTML=html;
   }else if(tab==='evol'){
     // evolução de carga
-    const novos=hist.filter(h=>h.plano==='novo');
+    const novos=hist.filter(ehPlanoAtual);
     if(novos.length<2){div.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:24px 0">Registre pelo menos 2 treinos para ver evolução.</p>';return}
     const byEx={};
     novos.forEach(h=>{
@@ -2428,13 +2910,14 @@ function renderHist(tab){
       if(!h.exNames)return;
       const nomesReais=exsAtuais.filter(e=>e.tipo!=='esteira_inicio'&&e.tipo!=='esteira_fim').map(e=>e.nome);
       const nomesHistFiltrado=h.exNames.filter(n=>n&&!n.includes('Esteira'));
-      const bate=nomesReais.length===nomesHistFiltrado.length&&nomesReais.every((n,i)=>n===nomesHistFiltrado[i]);
+      const bate=nomesReais.length===nomesHistFiltrado.length&&nomesReais.every((n,i)=>normNome(n)===normNome(nomesHistFiltrado[i]));
       if(!bate)return; // treino de um plano diferente do atual — não mistura na evolução
       const exs=exsAtuais;
       exs.forEach((ex,i)=>{
         if(ex.tipo==='esteira_inicio'||ex.tipo==='esteira_fim')return;
         const ss=(h.series[i]||[]).filter(Boolean);
         if(!ss.length)return;
+        if(ex.isTime)return; // exercício por tempo (prancha) não tem evolução de carga
         if(ex.tipo==='conjugado'){
           // registra cada exercício do conjugado separado
           const nm1=ex.nome;
@@ -2448,7 +2931,7 @@ function renderHist(tab){
         }else{
           const nm=ex.nome;
           if(!byEx[nm])byEx[nm]={conjugado:false,dados:[]};
-          const mp=Math.max(...ss.map(s=>s.peso||0));
+          const mp=Math.max(...ss.map(maxCarga));
           byEx[nm].dados.push({data:h.dataStr,maxPeso:mp});
         }
       });
@@ -2534,34 +3017,38 @@ function renderHist(tab){
     });
     div.innerHTML=html;
   }else if(tab==='treinos'){
-    // Lista dos treinos antigos A, B, C para referência
+    // Lista dos treinos anteriores (A, B, C) para referência, separados por plano
     let html='<div class="card" style="margin-bottom:14px;background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2)"><div style="font-size:12px;color:var(--amber);line-height:1.6">📋 Lista dos treinos anteriores para consulta. Estes treinos não estão disponíveis para execução — são apenas referência.</div></div>';
-    Object.keys(TREINOS_ANTIGOS).forEach(t=>{
-      const tr=TREINOS_ANTIGOS[t];
-      const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado');
-      html+=`<div class="card">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-          <span style="font-size:22px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${t}</span>
-          <div>
-            <div style="font-size:14px;font-weight:500">${tr.nome}</div>
-            <div style="font-size:11px;color:var(--muted)">${tr.info}</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira aquecimento 10min</span>
-        </div>
-        ${exs.map((ex,i)=>`
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:500">${ex.nome}</div>
-              ${ex.nome2?`<div style="font-size:11px;color:var(--amber);margin-top:2px">+ ${ex.nome2}</div>`:''}
+    [['Plano de 27/07 a 04/11/2026',TREINOS_ANTIGOS_V3],['Plano de maio/2026 e anteriores',TREINOS_ANTIGOS]].forEach(g=>{
+      html+=`<div class="section-title" style="margin:6px 0 10px">${g[0]}</div>`;
+      Object.keys(g[1]).forEach(t=>{
+        const tr=g[1][t];
+        const exs=tr.exercicios.filter(e=>e.tipo==='normal'||e.tipo==='conjugado'||e.tipo==='progressivo');
+        html+=`<div class="card">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+            <span style="font-size:22px;font-weight:600;font-family:var(--mono);background:linear-gradient(135deg,var(--accent2),var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent">${t}</span>
+            <div>
+              <div style="font-size:14px;font-weight:500">${tr.nome}</div>
+              <div style="font-size:11px;color:var(--muted)">${tr.info}</div>
             </div>
-            <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${ex.isTime?ex.reps+'s':ex.reps+' reps'}</span>
-          </div>`).join('')}
-        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
-          <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
-        </div>
-      </div>`;
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
+            <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira aquecimento 10min</span>
+          </div>
+          ${exs.map(ex=>`
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)">
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:500">${ex.nome}${ex.tipo==='progressivo'?' ⬆️':''}</div>
+                ${ex.nome2?`<div style="font-size:11px;color:var(--amber);margin-top:2px">+ ${ex.nome2}</div>`:''}
+                ${ex.obs?`<div style="font-size:10px;color:var(--muted);margin-top:2px">${ex.obs}</div>`:''}
+              </div>
+              <span style="font-size:11px;font-family:var(--mono);color:var(--muted);white-space:nowrap;margin-left:10px">${ex.series||3}×${repsTxt(ex)}</span>
+            </div>`).join('')}
+          <div style="display:flex;align-items:center;gap:6px;margin-top:10px;padding:8px 10px;background:var(--surface2);border-radius:8px">
+            <span style="font-size:11px;color:var(--muted);font-family:var(--mono)">🏃 Esteira finalização 20min</span>
+          </div>
+        </div>`;
+      });
     });
     div.innerHTML=html;
   }
@@ -2576,11 +3063,10 @@ function buildHistCard(h){
     const nomesReais=exs.filter(e=>e.tipo!=='esteira_inicio'&&e.tipo!=='esteira_fim').map(e=>e.nome);
     if(nomesReais.length!==h.exNames.filter(n=>n&&!n.includes('Esteira')).length)return false;
     const nomesHistFiltrado=h.exNames.filter(n=>n&&!n.includes('Esteira'));
-    return nomesReais.every((n,i)=>n===nomesHistFiltrado[i]);
+    return nomesReais.every((n,i)=>normNome(n)===normNome(nomesHistFiltrado[i]));
   }
-  const exsNovos=TREINOS[h.tipo]?TREINOS[h.tipo].exercicios:null;
-  const exsAntigos=TREINOS_ANTIGOS[h.tipo]?TREINOS_ANTIGOS[h.tipo].exercicios:null;
-  const exs = nomesBatem(exsNovos)?exsNovos : (nomesBatem(exsAntigos)?exsAntigos : []);
+  const candidatos=[TREINOS,TREINOS_ANTIGOS_V3,TREINOS_ANTIGOS].map(g=>g[h.tipo]?g[h.tipo].exercicios:null);
+  const exs=candidatos.find(c=>nomesBatem(c))||[];
   let exHtml='';
   // esteiras primeiro, se houver registro
   if(h.esteiraLog&&h.esteiraLog.length){
@@ -2611,14 +3097,14 @@ function buildHistCard(h){
         exHtml+=`<div style="margin-bottom:10px;padding:8px;background:var(--surface2);border-radius:10px">
           <div style="font-size:10px;color:var(--amber);font-family:var(--mono);margin-bottom:5px">⚡ conjugado${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
           <div style="font-size:11px;color:var(--accent2);margin-bottom:3px">① ${ex.nome}</div>
-          <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">${ss.map((s,j)=>`<span class="pill">${pillSerieTxt(s,j)}${pillTempo(s)}</span>`).join('')}</div>
           <div style="font-size:11px;color:var(--amber);margin-bottom:3px">② ${ex.nome2}</div>
           <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso2||0}kg×${s.reps2||0}</span>`).join('')}</div>
         </div>`;
       }else{
         exHtml+=`<div style="margin-bottom:7px">
           <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${ex.nome}${pulado?' <span style="color:var(--red)">(pulado)</span>':''}</div>
-          <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">${pillSerieTxt(s,j)}${pillTempo(s)}</span>`).join('')}</div>
         </div>`;
       }
     });
@@ -2629,7 +3115,7 @@ function buildHistCard(h){
       if(!ss.length)return;
       exHtml+=`<div style="margin-bottom:7px">
         <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${nm}</div>
-        <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">S${j+1}: ${s.peso}kg×${s.reps} <span style="color:var(--muted)">${s.tempo}s</span></span>`).join('')}</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap">${ss.map((s,j)=>`<span class="pill">${pillSerieTxt(s,j)}${pillTempo(s)}</span>`).join('')}</div>
       </div>`;
     });
   }
@@ -2641,7 +3127,7 @@ function buildHistCard(h){
   if(h.kcal){
     kcalHtml=`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">~${h.kcal} kcal</span>`;
   }else if(h.series&&h.fim&&h.inicio){
-    const vol=(h.series||[]).flat().filter(Boolean).reduce((a,s)=>a+(s.peso*(s.reps||0))+(s.peso2||0)*(s.reps2||0),0);
+    const vol=(h.series||[]).flat().filter(Boolean).reduce((a,s)=>a+volSerie(s),0);
     const kcalCalc=estimarCaloriasTreino(h.fim-h.inicio,vol);
     kcalHtml=`<span style="font-size:11px;font-family:var(--mono);color:var(--amber)">~${kcalCalc} kcal</span>`;
   }
@@ -2660,208 +3146,32 @@ document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'&&E&&!E.finalizado)retomar();
 });
 
-/* ════ ASSISTENTE CLAUDE ════ */
-const ASSIST_MODEL = 'claude-haiku-4-5-20251001';
-
-function getApiKey(){try{return localStorage.getItem('gym_api_key')||''}catch(e){return''}}
-function setApiKey(k){try{localStorage.setItem('gym_api_key',k)}catch(e){}}
-
-let assistMsgs = []; // histórico da conversa
-let assistInited = false;
-
-function initAssist(){
-  const key = getApiKey();
-  const statusEl = document.getElementById('assist-status');
-  const keyBtn = document.getElementById('assist-key-btn');
-  if(key){
-    if(statusEl) statusEl.textContent = '✅ Conectado · Claude Haiku';
-    if(keyBtn) keyBtn.textContent = '🔑 Chave ✓';
-  }else{
-    if(statusEl) statusEl.textContent = 'Configure sua chave API para começar';
-  }
-  if(!assistInited){
-    assistInited = true;
-    // mensagem de boas-vindas
-    if(!getApiKey()){
-      appendMsgClaude('Olá Rafael! 👋 Para ativar o assistente, toque em **🔑 Chave** acima e cole sua chave da API da Anthropic (console.anthropic.com). Após configurar, pode me perguntar sobre treinos, alimentação, suplementos ou qualquer dúvida de saúde!');
-    }else{
-      appendMsgClaude('Olá Rafael! 💪 Estou pronto para ajudar. Pode me perguntar sobre seus treinos, alimentação, suplementos, ou qualquer dúvida relacionada à sua saúde e performance!');
-    }
-  }
-}
-
-function appendMsgUser(text){
-  const div = document.createElement('div');
-  div.className = 'msg-user';
-  div.textContent = text;
-  document.getElementById('assist-msgs').appendChild(div);
-  scrollChat();
-}
-
-function appendMsgClaude(text){
-  const div = document.createElement('div');
-  div.className = 'msg-claude';
-  // formata markdown básico
-  div.innerHTML = text
-    .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
-    .replace(/\*(.*?)\*/g,'<i>$1</i>')
-    .replace(/\n/g,'<br>');
-  document.getElementById('assist-msgs').appendChild(div);
-  scrollChat();
-  return div;
-}
-
-function showTyping(){
-  const div = document.createElement('div');
-  div.className = 'msg-typing';
-  div.id = 'typing-indicator';
-  div.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
-  document.getElementById('assist-msgs').appendChild(div);
-  scrollChat();
-}
-function hideTyping(){
-  const t = document.getElementById('typing-indicator');
-  if(t) t.remove();
-}
-
-function scrollChat(){
-  const msgs = document.getElementById('assist-msgs');
-  if(msgs) setTimeout(()=>msgs.scrollTop=msgs.scrollHeight, 50);
-}
-
-function autoResize(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,120)+'px';
-}
-
-function assistKeydown(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensagem()}
-}
-
-function buildSystemPrompt(){
-  const sess = loadSessoes();
-  return `Você é um assistente pessoal de treino e saúde da Maria Aline, integrado ao app de treino dele.
-
-CONTEXTO DO RAFAEL:
-- Idade: 41 anos | Altura: 186cm | Peso: 92.5kg | Meta: 82kg
-- Treina de segunda a sexta às 08h na academia
-- Plano atual (desde 12/08/2026): Treinos A (Peito/Tríceps/Ombros), B (Costas/Bíceps/Abdômen), C (Pernas/Glúteos), D (Ombros/Peito/Bíceps/Tríceps/Core) — ${META_SESSOES} sessões cada até ${PRAZO.toLocaleDateString('pt-BR')}
-- Sessões concluídas: A=${sess.A||0}/${META_SESSOES}, B=${sess.B||0}/${META_SESSOES}, C=${sess.C||0}/${META_SESSOES}, D=${sess.D||0}/${META_SESSOES}
-- Pré-treino: mix próprio em partes iguais (30g cada) de guaraná, beterraba, farinha de uva, maca peruana e tribulus terrestre — total 150g. Linhaça dourada e psyllium são consumidos separados (fora do pré-treino) + creatina 5g + própolis 70
-- Pós-treino: tapioca + 50g frango desfiado + 1 ovo + mussarela + 2 ovos cozidos (~40g proteína)
-- Suplementos: creatina 5g (pré-treino), D3+K2 Ecomev 1 cápsula (manhã), Nutrends 5 Magnésio + Treonina 2 cápsulas (22h-23h)
-- Avaliação física mais recente (12/08/2026): pontuação 80, gordura visceral 8 (melhorou de 9), massa muscular esquelética 41kg (excelente). Evolução desde 11/05: peso -0.5kg, massa gorda -1kg
-- Meta proteína: 167-204g/dia | Meta calórica: 2300-2400 kcal/dia
-
-Responda de forma direta, prática e personalizada. Use os dados do Rafael para respostas específicas. Seja conciso mas completo. Escreva em português brasileiro.`;
-}
-
-async function enviarMensagem(){
-  const input = document.getElementById('assist-input');
-  const text = input.value.trim();
-  if(!text) return;
-  const key = getApiKey();
-  if(!key){ abrirConfigApi(); return; }
-
-  input.value=''; input.style.height='42px';
-  appendMsgUser(text);
-  assistMsgs.push({role:'user', content:text});
-  showTyping();
-
-  const btn = document.getElementById('assist-send');
-  if(btn) btn.disabled=true;
-
-  try{
-    const resp = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': key,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body: JSON.stringify({
-        model: ASSIST_MODEL,
-        max_tokens: 1024,
-        system: buildSystemPrompt(),
-        messages: assistMsgs.slice(-10) // últimas 10 mensagens de contexto
-      })
-    });
-    const data = await resp.json();
-    hideTyping();
-    if(data.error){
-      appendMsgClaude('❌ Erro: '+data.error.message+'\n\nVerifique se sua chave API está correta.');
-      assistMsgs.pop();
-    }else{
-      const reply = data.content[0].text;
-      assistMsgs.push({role:'assistant', content:reply});
-      appendMsgClaude(reply);
-    }
-  }catch(e){
-    hideTyping();
-    appendMsgClaude('❌ Erro de conexão. Verifique sua internet e tente novamente.');
-    assistMsgs.pop();
-  }finally{
-    if(btn) btn.disabled=false;
-    input.focus();
-  }
-}
-
-function abrirConfigApi(){
-  const existing=document.getElementById('modal-api');if(existing)existing.remove();
-  const key=getApiKey();
-  const div=document.createElement('div');
-  div.id='modal-api';
-  div.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:70;display:flex;flex-direction:column;justify-content:flex-end;padding:20px';
-  div.innerHTML=`
-    <div style="background:var(--surface);border-radius:24px;padding:20px">
-      <div style="font-size:11px;font-family:var(--mono);letter-spacing:2px;color:var(--accent2);text-transform:uppercase;margin-bottom:8px">🔑 Chave API Anthropic</div>
-      <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">
-        <b style="color:var(--text)">Como obter:</b><br>
-        1. Acesse <b>console.anthropic.com</b><br>
-        2. Crie conta → API Keys → Create Key<br>
-        3. Adicione crédito mínimo de $5 (dura meses)<br>
-        4. Cole a chave abaixo<br><br>
-        <span style="color:var(--amber)">⚠️ A chave fica salva só no seu celular</span>
-      </div>
-      <input id="inp-api-key" type="password" placeholder="sk-ant-api03-..." style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;margin-bottom:12px;-webkit-appearance:none" value="${key}">
-      <button onclick="salvarApiKey()" style="width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#5b4fcf);color:#fff;font-size:14px;font-family:var(--sans);font-weight:500;border:none;cursor:pointer;margin-bottom:8px">Salvar chave</button>
-      ${key?`<button onclick="limparApiKey()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:13px;font-family:var(--sans);cursor:pointer;margin-bottom:8px">Remover chave</button>`:''}
-      <button onclick="document.getElementById('modal-api').remove()" style="width:100%;padding:12px;border-radius:14px;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:13px;font-family:var(--sans);cursor:pointer">Fechar</button>
-    </div>`;
-  document.body.appendChild(div);
-}
-function salvarApiKey(){
-  const k=document.getElementById('inp-api-key').value.trim();
-  if(!k){mostrarToast('Cole a chave antes de salvar');return}
-  setApiKey(k);
-  document.getElementById('modal-api').remove();
-  mostrarToast('✅ Chave salva!');
-  assistInited=false;
-  initAssist();
-}
-function limparApiKey(){
-  try{localStorage.removeItem('gym_api_key')}catch(e){}
-  document.getElementById('modal-api').remove();
-  assistInited=false;
-  document.getElementById('assist-msgs').innerHTML='';
-  assistMsgs=[];
-  initAssist();
-  mostrarToast('Chave removida');
-}
-
 /* ════ ESTOQUE DE SUPLEMENTOS — aviso de quando vai acabar ════ */
+const ESTOQUE_OMEGA={id:'omega3',nome:'Ômega 3 Dark Lab (240 cáps · frasco dividido c/ Rafael)',inicio:'2026-10-12',duracaoDias:60,dosesPorDia:2};
+/* Acrescenta itens novos ao estoque JÁ SALVO (aparelho/GitHub) sem apagar nada que existe */
+function garantirItensEstoque(lista){
+  const out=Array.isArray(lista)?lista.map(x=>Object.assign({},x)):[];
+  // datas herdadas do arquivo do Rafael não valem para a Aline → sem data até ela informar
+  out.forEach(it=>{
+    if(it.id==='d3k2'&&it.inicio==='2026-06-01'&&it.duracaoDias===120){it.inicio=null;it.duracaoDias=null}
+    if(it.id==='magnesio'&&it.inicio==='2026-06-17'&&it.duracaoDias===30){it.inicio=null;it.duracaoDias=null}
+  });
+  if(!out.some(it=>it.id==='omega3'))out.push(Object.assign({},ESTOQUE_OMEGA));
+  return out;
+}
 function loadEstoque(){
-  try{
-    const e=JSON.parse(localStorage.getItem('gym_ma_estoque')||'null');
-    if(e)return e;
-  }catch(err){}
-  // seed inicial baseado no que você já tem
-  return[
-    {id:'d3k2',nome:'Vitamina D3+K2 Ecomev',inicio:'2026-06-01',duracaoDias:120,dosesPorDia:1},
-    {id:'magnesio',nome:'Nutrends 5 Magnésio + Treonina',inicio:'2026-06-17',duracaoDias:30,dosesPorDia:2},
+  let salvo=null;
+  try{salvo=JSON.parse(localStorage.getItem('gym_ma_estoque')||'null')}catch(err){}
+  if(salvo&&salvo.length){
+    const g=garantirItensEstoque(salvo);
+    if(JSON.stringify(g)!==JSON.stringify(salvo))saveEstoque(g);
+    return g;
+  }
+  return garantirItensEstoque([
+    {id:'d3k2',nome:'Vitamina D3+K2',inicio:null,duracaoDias:null,dosesPorDia:1},
+    {id:'magnesio',nome:'Magnésio + Treonina',inicio:null,duracaoDias:null,dosesPorDia:2},
     {id:'creatina',nome:'Creatina monohidratada',inicio:null,duracaoDias:null,dosesPorDia:1},
-  ];
+  ]);
 }
 function saveEstoque(e){try{localStorage.setItem('gym_ma_estoque',JSON.stringify(e))}catch(err){}}
 function diasRestantesEstoque(item){
@@ -2906,7 +3216,7 @@ async function pedirPermissaoNotificacao(){
   }
   if(Notification.permission==='granted'){setNotifPref(true);agendarNotificacaoMagnesio();return true}
   if(Notification.permission==='denied'){
-    mostrarToast('Notificações bloqueadas — ative nas configurações do Safari');
+    mostrarToast('Notificações bloqueadas — ative nas configurações do Chrome');
     return false;
   }
   const perm=await Notification.requestPermission();
@@ -2991,8 +3301,11 @@ function carregarTema(){
 
 /* ════ INIT ════ */
 carregarTema();
+repararDadosSalvos();
 migrarHistoricoAntigo();
-migrarPlanoV2();
+reconciliarPlano();
+preencherResumosPerdidos();
+loadAvaliacoes();loadEstoque(); // limpa/atualiza dados salvos já na abertura
 renderHome();
 
 atualizarStatusBackup();
